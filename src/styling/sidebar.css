@@ -1,0 +1,26 @@
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: grey;
+}
+.sidebar_item .active{
+    background-color: #1A1A1A;
+    border-radius: 8px;
+    color: white;
+}
+.list_item_icon {
+  margin-bottom: 3px;
+  margin-left: 0.5rem;
+  margin-right: 2rem;
+}
+
+.list_header {
+  color: #747475;
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  margin-left: 10px;
+}

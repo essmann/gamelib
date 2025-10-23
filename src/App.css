@@ -1,0 +1,72 @@
+@import "tailwindcss";
+:root {
+  --color-dark: #202020;
+  --color-dark-hex: #202020; /* if you want a separate variable for hex */
+  --color-hover: #2d2d2d;
+  --rating-pink: #fc6399;
+  --backloggd-bg: #16181c;
+  --darker-pink: #ea377a;
+  --text-1: #badefc;
+  --white: #fff;
+}
+
+#root {
+  width: 100% !important;
+  height: 100vh !important;
+  
+}
+body {
+  background: var(--color-dark);
+  
+}
+
+.main_container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  overflow-y: scroll;
+
+}
+.main_content{
+  height: 100%;
+  overflow-y: scroll;
+  width: 100%;
+}
+.content_page{
+  overflow-y: scroll;
+  height: 100%;
+}
+.sidebar {
+ padding: 0.25rem;
+  height: 100vh;
+  width: 220px;
+  background: #0C0C0C !important;
+}
+
+.game_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px; /* constant row + column spacing */
+  grid-auto-rows: 230px; /* locks row height */
+  justify-content: center;
+  background: linear-gradient(#141414, rgb(15, 15, 15)) !important;
+}
+
+
+.game_card {
+  height: 230px;
+  width: 150px;
+  background: white;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+.game_card_image {
+  max-width: 100%;
+  border-radius: 8px;
+
+  height: 192px;
+  width: 144px;
+}
+
+
