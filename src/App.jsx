@@ -7,10 +7,10 @@ import Sidebar from './components/Sidebar/Sidebar'
 import MainContent from './components/Main/MainContent'
 function App() {
   const [count, setCount] = useState(0)
-
+  
   return (
     
-      <div className='main_container flex'>
+      <div className='main_container'>
         <Sidebar/>
         <MainContent/>
       </div>
