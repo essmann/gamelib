@@ -1,7 +1,7 @@
 async function getGames(db) {
   try {
     const rows = await new Promise((resolve, reject) => {
-      db.all('SELECT * FROM games', [], (err, rows) => {
+      db.all('SELECT * FROM games LEFT JOIN posters ON games.id = posters.game_id ', [], (err, rows) => {
         if (err) reject(err);
         else resolve(rows);
       });

@@ -8,6 +8,7 @@ const db = new sqlite3.Database(dbPath);
 
 // Initialize table
 db.serialize(() => {
+  db.run('PRAGMA foreign_keys = ON');
   db.run(`
     CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,6 +16,14 @@ db.serialize(() => {
       release TEXT,
       description TEXT
 
+    )
+  `);
+   db.run(`
+    CREATE TABLE IF NOT EXISTS posters (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      game_id int,
+      poster BLOB NOT NULL,
+      FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
     )
   `);
 });
