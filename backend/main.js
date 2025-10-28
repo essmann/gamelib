@@ -31,8 +31,11 @@ ipcMain.handle('delete-game', async (event, id) => {
     return await deleteUserGame.deleteUserGame(db, id);
 });
 ipcMain.handle('get-games', async () => {
+    const now = Date.now();
   const rows = await getGames.getGames(db);
   const games = rows.map(row => new Game(row));
+  const elapsed_time =  Date.now() - now;
+  console.log("Time taken: " + elapsed_time/1000 + " seconds");
   return games;
 });
 

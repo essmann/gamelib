@@ -13,11 +13,14 @@ import { getGames } from './api/endpoints/getGames'
 function App() {
   const [games, setGames] = useState(0)
   useEffect(() => {
+    const before = Date.now();
+    console.log("Before");
     const fetchGames = async () => {
       const gamesList =  await getGames();
       console.log(gamesList);
       setGames(gamesList);
-
+      const after = Date.now();
+      console.log("Time taken to fetch games in App.jsx: " + (after - before)/1000 + " seconds");
     }
     fetchGames();
   }, [])

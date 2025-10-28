@@ -15,7 +15,7 @@ async function getGames(db) {
 
 
 
-    console.log(`Fetched ${rows.length} rows from the games database. Rows:`, rows);
+    console.log(`Fetched ${rows.length} rows from the games database. `); 
     return rows;
 
   } catch (err) {
