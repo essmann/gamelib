@@ -38,6 +38,7 @@ db.serialize(() => {
   games.forEach(game => insertGame.run(game.title, game.release, game.description));
   insertGame.finalize();
 
+  
   // Insert dummy posters
   const posters = [
     { game_id: 1, poster: Buffer.from('DummyImage1') },

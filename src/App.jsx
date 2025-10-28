@@ -6,7 +6,7 @@ import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
 import MainContent from './components/Main/MainContent'
 function App() {
-  const [count, setCount] = useState(0)
+  const [games, setGames] = useState(0)
   
   return (
     

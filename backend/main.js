@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron')
+const { ipcMain } = require('electron')
+const fs = require('fs')
 
 const path = require('path');
 
@@ -6,8 +8,29 @@ const path = require('path');
 const db = require('./api/sqlite/game_database.js');
 
 // Importing API endpoints
-const getGames = require('./api/endpoints/getGames.js');
-const deleteGame = require('./api/endpoints/deleteGame.js');
+const addGame = require('./api/endpoints/addGame.js')
+const updateGame = require('./api/endpoints/updateGame.js')
+const deleteGame = require('./api/endpoints/deleteGame.js')
+const getGames = require('./api/endpoints/getGames.js')
+
+
+
+ipcMain.handle('add-game', async (game) => {
+    return await addGame(db, game);
+})
+
+ipcMain.handle('update-game', async (game) => {
+    return await updateUserGame(db, game);
+})
+
+ipcMain.handle('delete-game', async (id) => {
+    return await deleteUserGame(db, id);
+});
+ipcMain.handle('get-games', async () => {
+  return await getGames(db);
+})
+
+
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
