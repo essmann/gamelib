@@ -4,7 +4,7 @@ function GameGrid({ games }) {
     return (
         <div className="content_page game_grid flex flex-wrap gap-4 p-4 justify-start">
            <AddGameCard/>
-            {games.map((game, index) => (
+            {Array.from(games).map((game, index) => (
                 <GameCard key={index} game={game}/>
             ))}
         </div>

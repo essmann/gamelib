@@ -13,23 +13,29 @@ const updateGame = require('./api/endpoints/updateGame.js')
 const deleteGame = require('./api/endpoints/deleteGame.js')
 const getGames = require('./api/endpoints/getGames.js')
 
-
+// Importing game class. All responses from the backend will be wrapped in this class for standardization. We will also wrap incoming objects in this class to ensure they have the correct structure.
+const Game = require('./api/game.js').Game;
 
 ipcMain.handle('add-game', async (event, game) => {
     console.log("add-game handler called with game: " + JSON.stringify(game));
-    return await addGame.addGame(db, game);
+    const gameObject = new Game(game);
+    return await addGame.addGame(db, gameObject);
 })
 
 ipcMain.handle('update-game', async (event, game) => {
-    return await updateGame.updateGame(db, game);
+    const gameObject = new Game(game);
+    return await updateGame.updateGame(db, gameObject);
 })
 
 ipcMain.handle('delete-game', async (event, id) => {
     return await deleteUserGame.deleteUserGame(db, id);
 });
 ipcMain.handle('get-games', async () => {
-  return await getGames.getGames(db);
-})
+  const rows = await getGames.getGames(db);
+  const games = rows.map(row => new Game(row));
+  return games;
+});
+
 
 
 const createWindow = () => {
