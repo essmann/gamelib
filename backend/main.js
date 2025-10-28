@@ -25,10 +25,10 @@ ipcMain.handle('update-game', async (event, game) => {
 })
 
 ipcMain.handle('delete-game', async (event, id) => {
-    return await deleteUserGame(db, id);
+    return await deleteUserGame.deleteUserGame(db, id);
 });
 ipcMain.handle('get-games', async () => {
-  return await getGames(db);
+  return await getGames.getGames(db);
 })
 
 

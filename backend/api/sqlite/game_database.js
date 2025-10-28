@@ -22,7 +22,7 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS posters (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       game_id int,
-      poster BLOB NOT NULL,
+      poster BLOB,
       FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
     )
   `);

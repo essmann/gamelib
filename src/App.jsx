@@ -11,7 +11,7 @@ function App() {
   const [games, setGames] = useState(0)
   useEffect(()=>{
     const dummyGame = {
-      id: 1,
+      id: Math.floor(Math.random()*1e9),
       title: "Test Game",
       release: "2025-12-12",
       description: "This is a test game",
