@@ -1,4 +1,26 @@
-.game_card_add{
+
+
+.game_card {
     display: flex;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 230px;
+  width: 150px;
+  background: white;
+  box-sizing: border-box;
+}
+.game_footer {
+  background: red;
+  padding: 1rem;
+  width: 144px;
+}
+
+.game_card_image {
+  max-width: 100%;
+  border-radius: 8px 8px 0px 0px;
+
+  height: 192px;
+  width: 144px;
 }

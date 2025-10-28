@@ -53,20 +53,6 @@ body {
 }
 
 
-.game_card {
-  height: 230px;
-  width: 150px;
-  background: white;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-}
-.game_card_image {
-  max-width: 100%;
-  border-radius: 8px;
 
-  height: 192px;
-  width: 144px;
-}
 
 
