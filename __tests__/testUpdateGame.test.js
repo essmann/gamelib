@@ -1,0 +1,91 @@
+const sqlite3 = require('sqlite3').verbose();
+const { updateGame } = require('../backend/api/endpoints/updateGame');
+
+function runAsync(db, sql, params = []) {
+    return new Promise((resolve, reject) => {
+        db.run(sql, params, function(err) {
+            if (err) reject(err);
+            else resolve(this);
+        });
+    });
+}
+
+function queryAsync(db, sql, params = []) {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+        });
+    });
+}
+
+describe('addGame endpoint', () => {
+    let db;
+
+    beforeEach(async () => {
+        db = new sqlite3.Database(':memory:');
+
+        // Create tables
+        await runAsync(db, `CREATE TABLE games (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT NOT NULL,
+          release TEXT,
+          description TEXT
+        )`);
+
+        await runAsync(db, `CREATE TABLE posters (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          game_id INTEGER,
+          poster BLOB NOT NULL,
+          FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+        )`);
+
+        // Insert dummy data
+        const gameStmt = db.prepare('INSERT INTO games (title, release, description) VALUES (?, ?, ?)');
+        gameStmt.run('Test Game 1', '2025-01-01', 'Test 1');
+        gameStmt.run('Test Game 2', '2025-01-02', 'Test 2');
+        await new Promise((resolve, reject) => gameStmt.finalize(err => (err ? reject(err) : resolve())));
+
+        const posterStmt = db.prepare('INSERT INTO posters (game_id, poster) VALUES (?, ?)');
+        posterStmt.run(1, Buffer.from('DummyPoster1'));
+        posterStmt.run(2, Buffer.from('DummyPoster2'));
+        await new Promise((resolve, reject) => posterStmt.finalize(err => (err ? reject(err) : resolve())));
+    });
+
+    afterEach(async () => {
+        await new Promise((resolve, reject) => db.close(err => err ? reject(err) : resolve()));
+    });
+
+    test('should update a game with id 2', async () => {
+        // --- Manual query instead of getGames ---
+        let gamesBefore = await queryAsync(db, `
+            SELECT g.id, g.title, g.release, g.description, p.poster
+            FROM games g
+            LEFT JOIN posters p ON g.id = p.game_id
+            ORDER BY g.id
+        `);
+        expect(gamesBefore.length).toBe(2);
+        console.log("Old games: " + JSON.stringify(gamesBefore, null, 2));
+
+        const game = {
+            id: 2,
+            title: 'Updated Test Game 2',
+            release: '2025-01-03',
+            description: 'Test 2 Updated',
+            poster: Buffer.from('DummyPoster3')
+        };
+
+        await updateGame(db, game);
+
+        let gamesAfter = await queryAsync(db, `
+            SELECT g.id, g.title, g.release, g.description, p.poster
+            FROM games g
+            LEFT JOIN posters p ON g.id = p.game_id
+            ORDER BY g.id
+        `);
+        expect(gamesAfter.length).toBe(2);
+        expect(gamesAfter[1].id).toBe(2);
+        console.log("New games: " + JSON.stringify(gamesAfter, null, 2));
+
+    });
+});
