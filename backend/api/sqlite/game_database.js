@@ -11,7 +11,7 @@ db.serialize(() => {
   db.run('PRAGMA foreign_keys = ON');
   db.run(`
     CREATE TABLE IF NOT EXISTS games (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY,
       title TEXT NOT NULL,
       release TEXT,
       description TEXT

@@ -15,15 +15,16 @@ const getGames = require('./api/endpoints/getGames.js')
 
 
 
-ipcMain.handle('add-game', async (game) => {
-    return await addGame(db, game);
+ipcMain.handle('add-game', async (event, game) => {
+    console.log("add-game handler called with game: " + JSON.stringify(game));
+    return await addGame.addGame(db, game);
 })
 
-ipcMain.handle('update-game', async (game) => {
-    return await updateUserGame(db, game);
+ipcMain.handle('update-game', async (event, game) => {
+    return await updateGame.updateGame(db, game);
 })
 
-ipcMain.handle('delete-game', async (id) => {
+ipcMain.handle('delete-game', async (event, id) => {
     return await deleteUserGame(db, id);
 });
 ipcMain.handle('get-games', async () => {

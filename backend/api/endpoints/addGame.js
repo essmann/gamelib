@@ -30,4 +30,4 @@ async function addGame(db, game) {
     }
 }
 
-module.exports = { addGame };
+module.exports.addGame =  addGame;

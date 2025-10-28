@@ -19,36 +19,34 @@ function queryAsync(db, sql, params = []) {
     });
 }
 
-describe('addGame endpoint', () => {
+describe('updateGame endpoint', () => {
     let db;
 
     beforeEach(async () => {
         db = new sqlite3.Database(':memory:');
 
-        // Create tables
         await runAsync(db, `CREATE TABLE games (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY,
           title TEXT NOT NULL,
           release TEXT,
           description TEXT
         )`);
 
         await runAsync(db, `CREATE TABLE posters (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY,
           game_id INTEGER,
           poster BLOB NOT NULL,
           FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
         )`);
 
-        // Insert dummy data
-        const gameStmt = db.prepare('INSERT INTO games (title, release, description) VALUES (?, ?, ?)');
-        gameStmt.run('Test Game 1', '2025-01-01', 'Test 1');
-        gameStmt.run('Test Game 2', '2025-01-02', 'Test 2');
+        const gameStmt = db.prepare('INSERT INTO games (id, title, release, description) VALUES (?, ?, ?, ?)');
+        gameStmt.run(1, 'Test Game 1', '2025-01-01', 'Test 1');
+        gameStmt.run(2, 'Test Game 2', '2025-01-02', 'Test 2');
         await new Promise((resolve, reject) => gameStmt.finalize(err => (err ? reject(err) : resolve())));
 
-        const posterStmt = db.prepare('INSERT INTO posters (game_id, poster) VALUES (?, ?)');
-        posterStmt.run(1, Buffer.from('DummyPoster1'));
-        posterStmt.run(2, Buffer.from('DummyPoster2'));
+        const posterStmt = db.prepare('INSERT INTO posters (id, game_id, poster) VALUES (?, ?, ?)');
+        posterStmt.run(1, 1, Buffer.from('DummyPoster1'));
+        posterStmt.run(2, 2, Buffer.from('DummyPoster2'));
         await new Promise((resolve, reject) => posterStmt.finalize(err => (err ? reject(err) : resolve())));
     });
 
@@ -57,7 +55,6 @@ describe('addGame endpoint', () => {
     });
 
     test('should update a game with id 2', async () => {
-        // --- Manual query instead of getGames ---
         let gamesBefore = await queryAsync(db, `
             SELECT g.id, g.title, g.release, g.description, p.poster
             FROM games g
@@ -86,6 +83,5 @@ describe('addGame endpoint', () => {
         expect(gamesAfter.length).toBe(2);
         expect(gamesAfter[1].id).toBe(2);
         console.log("New games: " + JSON.stringify(gamesAfter, null, 2));
-
     });
 });

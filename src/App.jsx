@@ -1,12 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 //importing components
 import Sidebar from './components/Sidebar/Sidebar'
 import MainContent from './components/Main/MainContent'
+
+import addGame from './api/addGame'
 function App() {
   const [games, setGames] = useState(0)
+  useEffect(()=>{
+    const dummyGame = {
+      id: 1,
+      title: "Test Game",
+      release: "2025-12-12",
+      description: "This is a test game",
+      poster: null
+    }
+    const add =  async () =>{
+      await addGame(dummyGame);
+    } 
+     add();
+  })
   
   return (
     

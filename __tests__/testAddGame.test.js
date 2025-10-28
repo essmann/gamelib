@@ -1,5 +1,5 @@
 const { getGames } = require('../backend/api/endpoints/getGames');
-const {addGame} = require('../backend/api/endpoints/addGame');
+const { addGame } = require('../backend/api/endpoints/addGame');
 const sqlite3 = require('sqlite3').verbose();
 
 function runAsync(db, sql, params = []) {
@@ -17,28 +17,25 @@ describe('addGame endpoint', () => {
     beforeEach(async () => {
         db = new sqlite3.Database(':memory:');
 
-        // Wait for table creation
         await runAsync(db, `CREATE TABLE games (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY,
           title TEXT NOT NULL,
           release TEXT,
           description TEXT
         )`);
 
         await runAsync(db, `CREATE TABLE posters (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY,
           game_id INTEGER,
           poster BLOB NOT NULL,
           FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
         )`);
 
-        // --- Insert dummy game data ---
-        const gameStmt = db.prepare('INSERT INTO games (title, release, description) VALUES (?, ?, ?)');
-        gameStmt.run('Test Game 1', '2025-01-01', 'Test 1');
-        gameStmt.run('Test Game 2', '2025-01-02', 'Test 2');
+        const gameStmt = db.prepare('INSERT INTO games (id, title, release, description) VALUES (?, ?, ?, ?)');
+        gameStmt.run(1, 'Test Game 1', '2025-01-01', 'Test 1');
+        gameStmt.run(2, 'Test Game 2', '2025-01-02', 'Test 2');
         await new Promise((resolve, reject) => gameStmt.finalize(err => (err ? reject(err) : resolve())));
 
-        // --- Insert dummy posters ---
         const posterStmt = db.prepare('INSERT INTO posters (game_id, poster) VALUES (?, ?)');
         posterStmt.run(1, Buffer.from('DummyPoster1'));
         posterStmt.run(2, Buffer.from('DummyPoster2'));
@@ -49,7 +46,7 @@ describe('addGame endpoint', () => {
         await new Promise((resolve, reject) => db.close(err => err ? reject(err) : resolve()));
     });
 
-    test('should add a game ', async () => {
+    test('should add a game with manual ID', async () => {
         const gamesBefore = await getGames(db);
         expect(gamesBefore.length).toBe(2);
 
