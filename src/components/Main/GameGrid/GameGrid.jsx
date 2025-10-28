@@ -7,6 +7,7 @@ function GameGrid({ games }) {
             {Array.from(games).map((game, index) => (
                 <GameCard key={index} game={game}/>
             ))}
+            
         </div>
     );
 }

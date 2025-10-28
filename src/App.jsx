@@ -5,7 +5,7 @@ import './App.css'
 //importing components
 import Sidebar from './components/Sidebar/Sidebar'
 import MainContent from './components/Main/MainContent'
-
+import AddGameMenu from './components/Main/GameGrid/Menu/AddGameMenu'
 //importing api functions
 import addGame from './api/endpoints/addGame'
 import { getGames } from './api/endpoints/getGames'
@@ -30,6 +30,9 @@ function App() {
       <div className='main_container'>
         <Sidebar/>
         <MainContent games={games} setGames = {setGames} />
+        <AddGameMenu>
+          <div>test</div>
+        </AddGameMenu>
       </div>
       
     

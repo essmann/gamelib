@@ -4,7 +4,9 @@ function AddGameCard() {
 
   return (
     <div className="game_card game_card_add">
-      <FloatingActionButtonSize onClick={()=>""} />
+      <FloatingActionButtonSize onClick={()=>{
+        
+      }} />
       <div className="game_card_title"></div>
     </div>
   );
