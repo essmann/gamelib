@@ -32,6 +32,9 @@
 .poster_preview {
   width: 220px;
   height: 330px;
+  max-width: 220px;
+  max-height: 330px;
+  
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
@@ -128,16 +131,22 @@ textarea:hover {
     min-height: 250px;
   }
 
-  .poster_preview {
-    width: 180px;
-    height: 270px;
-  }
+ 
+  
 
   .add_game_inputs_container {
     border-radius: 0 0 12px 12px;
   }
 }
-
+.add_game_empty_poster{
+    background: gray;
+    width: 220px;
+    height: 330px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 .add_game_submit{
     background: rgb(61, 90, 189);
     margin-left: auto !important;

@@ -1,9 +1,9 @@
 import { useState, useRef, useContext } from "react";
 import MenuContainer from "../../../MenuContainer";
-import { GameContext } from '../../../../Context/ContextProvider.jsx';
+import { GameContext } from "../../../../Context/ContextProvider.jsx";
 
 function AddGameMenu() {
-  const {setMenu} = useContext(GameContext);
+  const { setMenu } = useContext(GameContext);
   const [poster, setPoster] = useState(null);
   const [form, setForm] = useState({
     title: "",
@@ -14,7 +14,7 @@ function AddGameMenu() {
     genre: "",
     platform: "",
     rating: "",
-    tags: "",
+    favorite: 0,
   });
 
   const fileInputRef = useRef(null);
@@ -38,16 +38,20 @@ function AddGameMenu() {
   };
 
   return (
-    <MenuContainer onClose={()=>{
+    <MenuContainer
+      onClose={() => {
         setMenu(false);
-    }}>
+      }}
+    >
       <form className="add_game_form" onSubmit={handleSubmit}>
         {/* Poster on Left */}
         <div className="add_game_poster_container" onClick={handlePosterClick}>
           {poster ? (
             <img src={poster} alt="Poster" className="poster_preview" />
           ) : (
-            <div className="upload_hint">Click to upload image</div>
+            <div className="add_game_empty_poster">
+              <div className="upload_hint">Click to upload image</div>
+            </div>
           )}
           <input
             className="file_upload_input"
@@ -83,9 +87,9 @@ function AddGameMenu() {
               onChange={handleChange}
             />
             <input
-              name="platform"
-              placeholder="Platform"
-              value={form.platform}
+              name="genre"
+              placeholder="Genre"
+              value={form.genre}
               onChange={handleChange}
             />
           </div>
@@ -112,7 +116,7 @@ function AddGameMenu() {
               onChange={handleChange}
             />
           </div>
-          
+
           <div className="add_game_submit_container">
             <button type="submit" className="add_game_submit">
               Submit
