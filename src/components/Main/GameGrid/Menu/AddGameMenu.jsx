@@ -1,7 +1,9 @@
 import { useState, useRef, useContext } from "react";
 import MenuContainer from "../../../MenuContainer";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
-
+import StarIcon from "@mui/icons-material/Star";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 function AddGameMenu() {
   const { setMenu } = useContext(GameContext);
   const [poster, setPoster] = useState(null);
@@ -61,6 +63,7 @@ function AddGameMenu() {
             onChange={handlePosterChange}
             style={{ display: "none" }}
           />
+          <GameFooter game={form}/>
         </div>
 
         <div className="add_game_inputs_container">
@@ -129,3 +132,17 @@ function AddGameMenu() {
 }
 
 export default AddGameMenu;
+
+function GameFooter({ game }) {
+  return (
+    <div className="game_add_footer">
+      <div className="game_add_footer_rating ">
+        <StarIcon fontSize="medium" />
+        <span className="rating_label">{`${game?.rating || 0}/10`}</span>
+      </div>
+      <div className="game_footer_favorite">
+        {game?.favorite == 0 ? <FavoriteBorderIcon fontSize="medium"/> : <FavoriteIcon fontSize="medium"/>  }
+      </div>
+    </div>
+  );
+}

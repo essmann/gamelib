@@ -16,6 +16,7 @@
   min-width: 240px;
   padding: 1rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #1a1a1a;
@@ -34,9 +35,9 @@
   height: 330px;
   max-width: 220px;
   max-height: 330px;
-  
+  border-radius: 12px 12px 0px 0px ;
+
   object-fit: cover;
-  border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
 }
 
@@ -142,7 +143,7 @@ textarea:hover {
     background: gray;
     width: 220px;
     height: 330px;
-    border-radius: 10px;
+    border-radius: 12px 12px 0px 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -154,4 +155,28 @@ textarea:hover {
 }
 .add_game_submit_container{
     margin-left: auto;
+}
+
+.game_add_footer{
+  padding: 1rem;
+  background: rgb(37, 36, 36);
+  width: 100%;
+}
+.rating_label{
+  
+}
+.game_add_footer_rating{
+  display: flex; 
+  justify-content: start;
+  align-items: center;
+}
+.game_add_footer{
+  display: flex;
+  justify-content:space-between;
+  color: var(--color-emerald-600);
+  color: #888888;
+  
+}
+.game_footer_favorite:hover{
+  filter: invert();
 }
