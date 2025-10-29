@@ -1,14 +1,34 @@
 // database.js
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
+const { app } = require('electron');
 
-// Store DB in the app's folder
-const dbPath = path.join(__dirname, 'games.db');
+function getDatabasePath() {
+  const dbFileName = 'games.db';
+  const isDev = !app.isPackaged;
+
+  if (isDev) {
+    // Development: use local file
+    return path.join(__dirname, dbFileName);
+  } else {
+   
+    const dbPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'games.db');
+    return dbPath;
+  }
+}
+
+// Determine DB path based on environment
+const dbPath = getDatabasePath();
+console.log('Using SQLite DB at:', dbPath);
+
+// Open DB
 const db = new sqlite3.Database(dbPath);
 
-// Initialize table
+// Initialize tables
 db.serialize(() => {
   db.run('PRAGMA foreign_keys = ON');
+
   db.run(`
     CREATE TABLE IF NOT EXISTS games (
       id INTEGER PRIMARY KEY,
@@ -18,13 +38,13 @@ db.serialize(() => {
       rating REAL,
       favorite INTEGER,
       date_added
-
     )
   `);
-   db.run(`
+
+  db.run(`
     CREATE TABLE IF NOT EXISTS posters (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      game_id int,
+      game_id INTEGER,
       poster BLOB,
       FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
     )

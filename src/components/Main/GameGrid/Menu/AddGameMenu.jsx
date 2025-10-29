@@ -63,7 +63,10 @@ function AddGameMenu() {
             onChange={handlePosterChange}
             style={{ display: "none" }}
           />
-          <GameFooter game={form}/>
+          <GameFooter game={form} onFavorite={()=>{
+            let newValue = form.favorite == 1 ? 0 : 1;
+            setForm((prev) => ({ ...prev, [form.favorite]: newValue }));
+          }}/>
         </div>
 
         <div className="add_game_inputs_container">
@@ -133,15 +136,21 @@ function AddGameMenu() {
 
 export default AddGameMenu;
 
-function GameFooter({ game }) {
+function GameFooter({ game, onFavorite, onRating }) {
   return (
     <div className="game_add_footer">
       <div className="game_add_footer_rating ">
         <StarIcon fontSize="medium" />
         <span className="rating_label">{`${game?.rating || 0}/10`}</span>
       </div>
-      <div className="game_footer_favorite">
-        {game?.favorite == 0 ? <FavoriteBorderIcon fontSize="medium"/> : <FavoriteIcon fontSize="medium"/>  }
+      <div className="game_footer_favorite" onClick={
+        (e)=>{e.stopPropagation(); onFavorite();}
+      }>
+        {game?.favorite == 0 ? (
+          <FavoriteBorderIcon fontSize="medium" />
+        ) : (
+          <FavoriteIcon fontSize="medium" />
+        )}
       </div>
     </div>
   );

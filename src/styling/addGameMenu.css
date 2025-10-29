@@ -175,6 +175,7 @@ textarea:hover {
   justify-content:space-between;
   color: var(--color-emerald-600);
   color: #888888;
+  z-index: 1001;
   
 }
 .game_footer_favorite:hover{
