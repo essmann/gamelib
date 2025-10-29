@@ -1,13 +1,19 @@
 import { useState, useRef } from "react";
 import MenuContainer from "../../../MenuContainer";
 
-function AddGameMenu() {
+function AddGameMenu({setIsOpen}) {
   const [poster, setPoster] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [releaseDate, setReleaseDate] = useState("");
-  const [developer, setDeveloper] = useState("");
-  const [rating, setRating] = useState(0);
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    releaseDate: "",
+    developer: "",
+    publisher: "",
+    genre: "",
+    platform: "",
+    rating: "",
+    tags: "",
+  });
 
   const fileInputRef = useRef(null);
 
@@ -15,29 +21,32 @@ function AddGameMenu() {
 
   const handlePosterChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPoster(URL.createObjectURL(file));
-    }
+    if (file) setPoster(URL.createObjectURL(file));
   };
+
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const gameData = { poster, title, description, releaseDate, developer, rating };
-    console.log(gameData);
+    const gameData = { ...form, poster };
+    console.log("Game Details:", gameData);
+    alert(JSON.stringify(gameData, null, 2)); // optional: show in popup
     // send via IPC or API
   };
 
   return (
     <MenuContainer>
       <form className="add_game_form" onSubmit={handleSubmit}>
-        {/* Poster */}
-        <div className="poster_container" onClick={handlePosterClick}>
+        {/* Poster on Left */}
+        <div className="add_game_poster_container" onClick={handlePosterClick}>
           {poster ? (
-            <img src={poster} alt="Poster Preview" />
+            <img src={poster} alt="Poster" className="poster_preview" />
           ) : (
-            <div className="poster_placeholder">Click to add poster</div>
+            <div className="upload_hint">Click to upload image</div>
           )}
           <input
+            className="file_upload_input"
             type="file"
             accept="image/*"
             ref={fileInputRef}
@@ -46,143 +55,67 @@ function AddGameMenu() {
           />
         </div>
 
-        {/* Game info horizontally */}
-        <div className="info_container">
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="text_input"
-            required
-          />
-          <textarea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="textarea_input"
-          />
-          <input
-            type="date"
-            value={releaseDate}
-            onChange={(e) => setReleaseDate(e.target.value)}
-            className="text_input"
-            placeholder="Release Date"
-          />
-          <input
-            type="text"
-            placeholder="Developer"
-            value={developer}
-            onChange={(e) => setDeveloper(e.target.value)}
-            className="text_input"
-          />
-          <input
-            type="number"
-            placeholder="Rating (1-5)"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            min={1}
-            max={5}
-            className="text_input"
-          />
+        <div className="add_game_inputs_container">
+          <h2>Add New Game</h2>
+          <div className="input_row">
+            <input
+              name="title"
+              placeholder="Title"
+              value={form.title}
+              onChange={handleChange}
+            />
+            <input
+              name="developer"
+              placeholder="Developer"
+              value={form.developer}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="input_row">
+            <input
+              name="releaseDate"
+              placeholder="Release Date"
+              value={form.releaseDate}
+              onChange={handleChange}
+            />
+            <input
+              name="platform"
+              placeholder="Platform"
+              value={form.platform}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="input_row">
+            <input
+              name="rating"
+              placeholder="Rating (1-10)"
+              value={form.rating}
+              onChange={handleChange}
+            />
+            <input
+              name="genre"
+              placeholder="Genre"
+              value={form.genre}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="input_row textarea">
+            <textarea
+              placeholder="Description"
+              className="input_textarea"
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+            />
+          </div>
+          
+          <div className="add_game_submit_container">
+            <button type="submit" className="add_game_submit">
+              Submit
+            </button>
+          </div>
         </div>
-
-        <button type="submit" className="submit_button">
-          Add Game
-        </button>
       </form>
-
-      <style jsx>{`
-        .add_game_form {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1.5rem;
-          max-width: 500px;
-          margin: 2rem auto;
-          padding: 2rem;
-          background: #1c1c1c;
-          border-radius: 12px;
-          color: #fff;
-          font-family: sans-serif;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-        }
-
-        .poster_container {
-          width: 180px;
-          height: 280px;
-          background: #2a2a2a;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          overflow: hidden;
-          flex-shrink: 0;
-        }
-
-        .poster_container img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .poster_placeholder {
-          color: #888;
-          font-size: 1rem;
-          text-align: center;
-        }
-
-        .info_container {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          gap: 1rem;
-          justify-content: center;
-          width: 100%;
-        }
-
-        .text_input,
-        .textarea_input {
-          background: #2a2a2a;
-          border: none;
-          border-radius: 6px;
-          padding: 0.5rem 1rem;
-          color: #fff;
-          font-size: 1rem;
-          flex: 1 1 150px;
-        }
-
-        .textarea_input {
-          min-height: 60px;
-          resize: vertical;
-        }
-
-        .text_input::placeholder,
-        .textarea_input::placeholder {
-          color: #aaa;
-        }
-
-        .text_input:focus,
-        .textarea_input:focus {
-          outline: 2px solid #555;
-        }
-
-        .submit_button {
-          background: #4a90e2;
-          border: none;
-          border-radius: 6px;
-          padding: 0.75rem 2rem;
-          color: #fff;
-          font-weight: bold;
-          cursor: pointer;
-          transition: background 0.3s;
-        }
-
-        .submit_button:hover {
-          background: #357ab7;
-        }
-      `}</style>
     </MenuContainer>
   );
 }

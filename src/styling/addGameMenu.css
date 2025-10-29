@@ -1,0 +1,148 @@
+.add_game_form {
+  display: flex;
+  height: 100%;
+  gap: 1.5rem;
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  color: #fff;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+}
+
+/* Poster section */
+.add_game_poster_container {
+  flex: 1;
+  min-width: 240px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1a1a1a;
+  border-right: 1px solid #222;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add_game_poster_container:hover {
+  background: #1e1e1e;
+}
+
+.poster_preview {
+  width: 220px;
+  height: 330px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Input panel */
+.add_game_inputs_container {
+  flex: 2;
+  background: #1b1919;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+  border-radius: 0 12px 12px 0;
+}
+
+.add_game_inputs_container h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+
+/* Input rows */
+.input_row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.input_row > input {
+  flex: 1;
+  background: #2e2a2a;
+  border: 1px solid #3c3a3a;
+  border-radius: 6px;
+  padding: 0.7rem 0.9rem;
+  color: #f0f0f0;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.input_row > input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background: #353232;
+}
+
+/* Textarea */
+.input_row.textarea {
+  width: 100%;
+}
+
+.input_textarea {
+  width: 100%;
+  background: #2b2727;
+  border: 1px solid #3c3a3a;
+  border-radius: 6px;
+  padding: 1rem;
+  color: #f0f0f0;
+  resize: vertical;
+  min-height: 100px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.input_textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background: #353232;
+}
+
+/* Subtle hover and focus polish */
+input::placeholder,
+textarea::placeholder {
+  color: #888;
+}
+
+input:hover,
+textarea:hover {
+  background: #343030;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .add_game_form {
+    /* flex-direction: column; */
+  }
+
+  .add_game_poster_container {
+    border-right: none;
+    border-bottom: 1px solid #222;
+    width: 100%;
+    min-height: 250px;
+  }
+
+  .poster_preview {
+    width: 180px;
+    height: 270px;
+  }
+
+  .add_game_inputs_container {
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+.add_game_submit{
+    background: rgb(61, 90, 189);
+    margin-left: auto !important;
+    width: 150px;
+}
+.add_game_submit_container{
+    margin-left: auto;
+}

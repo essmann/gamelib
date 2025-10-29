@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import './styling/gameCard.css'
 import './styling/sidebar.css'
+import './styling/addGameMenu.css'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
