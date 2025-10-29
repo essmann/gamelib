@@ -1,7 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import MenuContainer from "../../../MenuContainer";
+import { GameContext } from '../../../../Context/ContextProvider.jsx';
 
-function AddGameMenu({setIsOpen}) {
+function AddGameMenu() {
+  const {setMenu} = useContext(GameContext);
   const [poster, setPoster] = useState(null);
   const [form, setForm] = useState({
     title: "",
@@ -36,7 +38,9 @@ function AddGameMenu({setIsOpen}) {
   };
 
   return (
-    <MenuContainer>
+    <MenuContainer onClose={()=>{
+        setMenu(false);
+    }}>
       <form className="add_game_form" onSubmit={handleSubmit}>
         {/* Poster on Left */}
         <div className="add_game_poster_container" onClick={handlePosterClick}>

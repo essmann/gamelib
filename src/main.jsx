@@ -5,9 +5,12 @@ import './styling/gameCard.css'
 import './styling/sidebar.css'
 import './styling/addGameMenu.css'
 import App from './App.jsx'
+import ContextProvider from './Context/ContextProvider.jsx' // ✅ correct import
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ContextProvider>
+      <App />
+    </ContextProvider>
   </StrictMode>,
 )

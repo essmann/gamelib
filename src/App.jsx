@@ -8,10 +8,12 @@ import MainContent from './components/Main/MainContent'
 import AddGameMenu from './components/Main/GameGrid/Menu/AddGameMenu'
 //importing api functions
 import addGame from './api/endpoints/addGame'
+import { useContext } from 'react'
 import { getGames } from './api/endpoints/getGames'
+import { GameContext } from './Context/ContextProvider'
 
 function App() {
-  const [games, setGames] = useState(0)
+  const {menu, setMenu, games, setGames} = useContext(GameContext);
   useEffect(() => {
     const before = Date.now();
     console.log("Before");
@@ -30,9 +32,7 @@ function App() {
       <div className='main_container'>
         <Sidebar/>
         <MainContent games={games} setGames = {setGames} />
-        <AddGameMenu>
-          <div>test</div>
-        </AddGameMenu>
+        {menu && <AddGameMenu/>}
       </div>
       
     
