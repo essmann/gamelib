@@ -14,7 +14,10 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY,
       title TEXT NOT NULL,
       release TEXT,
-      description TEXT
+      description TEXT,
+      rating REAL,
+      favorite INTEGER,
+      date_added
 
     )
   `);

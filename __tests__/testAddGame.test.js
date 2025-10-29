@@ -15,32 +15,36 @@ describe('addGame endpoint', () => {
     let db;
 
     beforeEach(async () => {
-        db = new sqlite3.Database(':memory:');
+    db = new sqlite3.Database(':memory:');
 
-        await runAsync(db, `CREATE TABLE games (
-          id INTEGER PRIMARY KEY,
-          title TEXT NOT NULL,
-          release TEXT,
-          description TEXT
-        )`);
+    await runAsync(db, `CREATE TABLE games (
+      id INTEGER PRIMARY KEY,
+      title TEXT NOT NULL,
+      release TEXT,
+      description TEXT,
+      rating REAL,
+      favorite INTEGER,
+      date_added TEXT
+    )`);
 
-        await runAsync(db, `CREATE TABLE posters (
-          id INTEGER PRIMARY KEY,
-          game_id INTEGER,
-          poster BLOB NOT NULL,
-          FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
-        )`);
+    await runAsync(db, `CREATE TABLE posters (
+      id INTEGER PRIMARY KEY,
+      game_id INTEGER,
+      poster BLOB NOT NULL,
+      FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+    )`);
 
-        const gameStmt = db.prepare('INSERT INTO games (id, title, release, description) VALUES (?, ?, ?, ?)');
-        gameStmt.run(1, 'Test Game 1', '2025-01-01', 'Test 1');
-        gameStmt.run(2, 'Test Game 2', '2025-01-02', 'Test 2');
-        await new Promise((resolve, reject) => gameStmt.finalize(err => (err ? reject(err) : resolve())));
+    const gameStmt = db.prepare('INSERT INTO games (id, title, release, description, rating, favorite, date_added) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    gameStmt.run(1, 'Test Game 1', '2025-01-01', 'Test 1', 5, 0, '2025-01-10');
+    gameStmt.run(2, 'Test Game 2', '2025-01-02', 'Test 2', 4, 1, '2025-01-11');
+    await new Promise((resolve, reject) => gameStmt.finalize(err => (err ? reject(err) : resolve())));
 
-        const posterStmt = db.prepare('INSERT INTO posters (game_id, poster) VALUES (?, ?)');
-        posterStmt.run(1, Buffer.from('DummyPoster1'));
-        posterStmt.run(2, Buffer.from('DummyPoster2'));
-        await new Promise((resolve, reject) => posterStmt.finalize(err => (err ? reject(err) : resolve())));
-    });
+    const posterStmt = db.prepare('INSERT INTO posters (game_id, poster) VALUES (?, ?)');
+    posterStmt.run(1, Buffer.from('DummyPoster1'));
+    posterStmt.run(2, Buffer.from('DummyPoster2'));
+    await new Promise((resolve, reject) => posterStmt.finalize(err => (err ? reject(err) : resolve())));
+});
+
 
     afterEach(async () => {
         await new Promise((resolve, reject) => db.close(err => err ? reject(err) : resolve()));

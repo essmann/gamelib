@@ -3,8 +3,8 @@ async function addGame(db, game) {
     try {
         await new Promise((resolve, reject) => {
             db.run(
-                'INSERT INTO games (id, title, release, description) VALUES (?, ?, ?, ?)',
-                [game.id, game.title, game.release, game.description],
+                'INSERT INTO games (id, title, release, description, rating, favorite) VALUES (?, ?, ?, ?, ?, ?)',
+                [game.id, game.title, game.release, game.description, game.rating, game.favorite],
                 function (err) {
                     if (err) reject(err);
                     else resolve({ changes: this.changes });

@@ -2,12 +2,15 @@ async function updateGame(db, game) {
     try {
         await new Promise((resolve, reject) => {
             db.run(
-                'UPDATE games SET title = $title, release = $release, description = $description WHERE id = $id',
+                'UPDATE games SET title = $title, release = $release, description = $description, rating = $rating, favorite = $favorite, date_added = $date_added  WHERE id = $id',
                 {
                     $id: game.id,
                     $title: game.title,
                     $release: game.release,
-                    $description: game.description
+                    $description: game.description,
+                    $rating: game.rating,
+                    $favorite: game.favorite,
+                    $date_added: game.date_added
                 },
                 function (err) {
                     if (err) reject(err);

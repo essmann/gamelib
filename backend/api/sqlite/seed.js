@@ -14,7 +14,10 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY,
       title TEXT NOT NULL,
       release TEXT,
-      description TEXT
+      description TEXT,
+      rating REAL,
+      favorite INTEGER,
+      date_added TEXT
     )
   `);
 
@@ -29,14 +32,14 @@ db.serialize(() => {
 
   // Insert sample games
   const games = [
-    { id: 1, title: 'Zelda', release: '1986-02-21', description: 'Adventure game' },
-    { id: 2, title: 'Mario', release: '1985-09-13', description: 'Platformer game' },
-    { id: 3, title: 'Sonic', release: '1991-06-23', description: 'Fast-paced platformer' },
-    { id: 4, title: 'Pac-Man', release: '1980-05-22', description: 'Classic arcade game' }
+    { id: 1, title: 'Zelda', release: '1986-02-21', description: 'Adventure game', rating: 2, favorite: false },
+    { id: 2, title: 'Mario', release: '1985-09-13', description: 'Platformer game', rating: 4.5, favorite: true },
+    { id: 3, title: 'Sonic', release: '1991-06-23', description: 'Fast-paced platformer', rating: 5, favorite: false },
+    { id: 4, title: 'Pac-Man', release: '1980-05-22', description: 'Classic arcade game', rating: 1, favorite: false }
   ];
 
-  const insertGame = db.prepare("INSERT INTO games (title, release, description) VALUES (?, ?, ?)");
-  games.forEach(game => insertGame.run(game.title, game.release, game.description));
+  const insertGame = db.prepare("INSERT INTO games (title, release, description, rating, favorite) VALUES (?, ?, ?, ?, ?)");
+  games.forEach(game => insertGame.run(game.title, game.release, game.description, game.rating, game.favorite));
   insertGame.finalize();
 
   
