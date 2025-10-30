@@ -37,7 +37,7 @@ db.serialize(() => {
       description TEXT,
       rating REAL,
       favorite INTEGER,
-      date_added
+      date_added TEXT
     )
   `);
 

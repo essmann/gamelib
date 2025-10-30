@@ -17,7 +17,7 @@ const Game = require('./api/game.js').Game;
 
 // --- IPC handlers ---
 ipcMain.handle('add-game', async (event, game) => {
-  console.log("add-game handler called with game:", game);
+  // console.log("add-game handler called with game:", game.);
   const gameObject = new Game(game);
   return await addGame.addGame(db, gameObject);
 });

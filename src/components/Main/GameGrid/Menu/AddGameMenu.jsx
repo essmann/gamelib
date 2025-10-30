@@ -4,39 +4,50 @@ import { GameContext } from "../../../../Context/ContextProvider.jsx";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Game from "../../../../api/game.js";
+import addGame from "../../../../api/endpoints/addGame.js";
 function AddGameMenu() {
-  const { setMenu } = useContext(GameContext);
-  const [poster, setPoster] = useState(null);
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    releaseDate: "",
-    developer: "",
-    publisher: "",
-    genre: "",
-    platform: "",
-    rating: "",
-    favorite: 0,
-  });
+  const { setMenu, setGames } = useContext(GameContext);
+  const [posterFile, setPosterFile] = useState(null); // store actual File
+  const [game, setGame] = useState(
+    new Game({
+      id: null,
+      title: "",
+      description: "",
+      release: "",
+      poster: null,
+      rating: "",
+      favorite: 0,
+      date_added: null,
+    })
+  );
 
   const fileInputRef = useRef(null);
-
   const handlePosterClick = () => fileInputRef.current.click();
 
-  const handlePosterChange = (e) => {
+  const handlePosterChange = async (e) => {
     const file = e.target.files[0];
-    if (file) setPoster(URL.createObjectURL(file));
+    if (file) {
+        const arrayBuffer = await file.arrayBuffer();
+        let bytes = new Uint8Array(arrayBuffer);
+      setPosterFile(file);
+      setGame((prev) => new Game({ ...prev, poster: bytes })); // update Game instance
+    }
   };
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setGame((prev) => new Game({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const gameData = { ...form, poster };
-    console.log("Game Details:", gameData);
-    alert(JSON.stringify(gameData, null, 2)); // optional: show in popup
-    // send via IPC or API
+    console.log("Game instance:", game);
+    alert(JSON.stringify(game, null, 2));
+    await addGame(game).then(()=>{
+      setGames((prev)=>[...prev, game])
+    });
+    // TODO: convert poster to Uint8Array if sending to backend
   };
 
   return (
@@ -48,8 +59,8 @@ function AddGameMenu() {
       <form className="add_game_form" onSubmit={handleSubmit}>
         {/* Poster on Left */}
         <div className="add_game_poster_container" onClick={handlePosterClick}>
-          {poster ? (
-            <img src={poster} alt="Poster" className="poster_preview" />
+          {posterFile ? (
+            <img src={game.getPosterURL()} alt="Poster" className="poster_preview" />
           ) : (
             <div className="add_game_empty_poster">
               <div className="upload_hint">Click to upload image</div>
@@ -63,10 +74,13 @@ function AddGameMenu() {
             onChange={handlePosterChange}
             style={{ display: "none" }}
           />
-          <GameFooter game={form} onFavorite={()=>{
-            let newValue = form.favorite == 1 ? 0 : 1;
-            setForm((prev) => ({ ...prev, [form.favorite]: newValue }));
-          }}/>
+          <GameFooter
+            game={game}
+            onFavorite={() => {
+              const newFav = game.favorite === 1 ? 0 : 1;
+              setGame((prev) => new Game({ ...prev, favorite: newFav }));
+            }}
+          />
         </div>
 
         <div className="add_game_inputs_container">
@@ -75,27 +89,13 @@ function AddGameMenu() {
             <input
               name="title"
               placeholder="Title"
-              value={form.title}
+              value={game.title}
               onChange={handleChange}
             />
             <input
-              name="developer"
-              placeholder="Developer"
-              value={form.developer}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_row">
-            <input
-              name="releaseDate"
+              name="release"
               placeholder="Release Date"
-              value={form.releaseDate}
-              onChange={handleChange}
-            />
-            <input
-              name="genre"
-              placeholder="Genre"
-              value={form.genre}
+              value={game.release}
               onChange={handleChange}
             />
           </div>
@@ -103,13 +103,7 @@ function AddGameMenu() {
             <input
               name="rating"
               placeholder="Rating (1-10)"
-              value={form.rating}
-              onChange={handleChange}
-            />
-            <input
-              name="genre"
-              placeholder="Genre"
-              value={form.genre}
+              value={game.rating}
               onChange={handleChange}
             />
           </div>
@@ -118,7 +112,7 @@ function AddGameMenu() {
               placeholder="Description"
               className="input_textarea"
               name="description"
-              value={form.description}
+              value={game.description}
               onChange={handleChange}
             />
           </div>
@@ -136,17 +130,21 @@ function AddGameMenu() {
 
 export default AddGameMenu;
 
-function GameFooter({ game, onFavorite, onRating }) {
+function GameFooter({ game, onFavorite }) {
   return (
     <div className="game_add_footer">
-      <div className="game_add_footer_rating ">
+      <div className="game_add_footer_rating">
         <StarIcon fontSize="medium" />
         <span className="rating_label">{`${game?.rating || 0}/10`}</span>
       </div>
-      <div className="game_footer_favorite" onClick={
-        (e)=>{e.stopPropagation(); onFavorite();}
-      }>
-        {game?.favorite == 0 ? (
+      <div
+        className="game_footer_favorite"
+        onClick={(e) => {
+          e.stopPropagation();
+          onFavorite();
+        }}
+      >
+        {game?.favorite === 0 ? (
           <FavoriteBorderIcon fontSize="medium" />
         ) : (
           <FavoriteIcon fontSize="medium" />

@@ -11,7 +11,7 @@ import addGame from './api/endpoints/addGame'
 import { useContext } from 'react'
 import { getGames } from './api/endpoints/getGames'
 import { GameContext } from './Context/ContextProvider'
-
+import Game from './api/game'
 function App() {
   const {menu, setMenu, games, setGames} = useContext(GameContext);
   useEffect(() => {
@@ -19,8 +19,14 @@ function App() {
     console.log("Before");
     const fetchGames = async () => {
       const gamesList =  await getGames();
-      console.log(gamesList);
-      setGames(gamesList);
+      let arr = [];
+      for(let i = 0; i<gamesList.length; i++){
+           arr[i] = new Game(gamesList[i]);
+
+      }
+      console.log(arr);
+      // console.log(gamesList)
+      setGames(arr);
       const after = Date.now();
       console.log("Time taken to fetch games in App.jsx: " + (after - before)/1000 + " seconds");
     }
