@@ -8,13 +8,13 @@
     border-radius: 8px;
   height: 230px;
   width: 150px;
-  background: rgb(49, 48, 48);
   box-sizing: border-box;
 }
 .game_footer {
-  background: red;
+  background: rgb(36, 35, 35);
   padding: 1rem;
   width: 144px;
+  border-radius: 0px 0px 10px 10px;
 }
 
 .game_card_image {
@@ -36,7 +36,23 @@
     width: 144px;
     text-align: center;
     border-radius: 0px 0px 8px 8px;
+      pointer-events: none; /* ← this makes it non-interactable */
+    
 }
-.game_card:hover{
+
+.game_card_image:hover {
     cursor: pointer;
+    filter: brightness(30%);
+}
+
+.game_card >.game_add_footer{
+  padding: 0.2rem;
+  background: rgb(49, 48, 48);
+  width: 144px;
+  
+  
+}
+.game_card.game_card_add{
+   background: rgb(49, 48, 48);
+   
 }

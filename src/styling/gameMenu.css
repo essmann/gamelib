@@ -1,17 +1,429 @@
-.game_menu_poster_container{
-}
-.game_menu_poster_container > img{
-    box-sizing: border-box;
-    max-height: 400px !important;
+/* ========================================
+   Game Menu - Main Form Layout
+   ======================================== */
+
+.add_game_form {
+  display: flex;
+  gap: 2rem;
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
 }
 
+.add_game_form.edit_mode {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+  border-radius: 12px;
+}
 
-.game_preview_menu{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ========================================
+   Poster Section
+   ======================================== */
+
+.add_game_poster_container {
+  flex-shrink: 0;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.poster_image_wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.poster_image_wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.poster_preview {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.poster_preview.editable_poster {
+  cursor: pointer;
+}
+
+/* Poster overlay for edit mode */
+.poster_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+  font-weight: 500;
+}
+
+.poster_image_wrapper:hover .poster_overlay {
+  opacity: 1;
+}
+
+.poster_overlay svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* ========================================
+   Game Footer (Rating & Favorite)
+   ======================================== */
+
+.game_add_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game_add_footer_rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.rating_star_icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.5));
+}
+
+.rating_label {
+  color: #f3f4f6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.game_footer_favorite {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+
+.game_footer_favorite:hover {
+  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.game_footer_favorite:active {
+  transform: scale(0.95);
+}
+
+.favorite_border_icon {
+  color: #d1d5db;
+}
+
+.favorite_icon {
+  color: #ef4444;
+  filter: drop-shadow(0 1px 3px rgba(239, 68, 68, 0.5));
+}
+
+/* ========================================
+   Game Details Section
+   ======================================== */
+
+.add_game_inputs_container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Title styles */
+.add_game_inputs_container h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f9fafb;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title_input {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 0.75rem !important;
+  border: 2px solid rgba(99, 102, 241, 0.3) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #f9fafb !important;
+  transition: all 0.3s ease !important;
+}
+
+.title_input:focus {
+  outline: none !important;
+  border-color: #6366f1 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Input rows */
+.input_row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.input_row.release_row,
+.input_row.rating_row {
+  align-items: center;
+}
+
+.input_row .label {
+  font-weight: 600;
+  color: #9ca3af;
+  min-width: 100px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input_row input,
+.input_row textarea {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #f3f4f6;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+/* Preview mode - readonly styling */
+.add_game_inputs_container.preview input,
+.add_game_inputs_container.preview textarea {
+  background: transparent !important;
+  border-color: transparent !important;
+  cursor: default;
+  padding-left: 0 !important;
+}
+
+.add_game_inputs_container.preview input:focus,
+.add_game_inputs_container.preview textarea:focus {
+  outline: none !important;
+}
+
+/* Edit mode - interactive styling */
+.add_game_inputs_container.edit input:not([readonly]),
+.add_game_inputs_container.edit textarea:not([readonly]) {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.add_game_inputs_container.edit input:not([readonly]):focus,
+.add_game_inputs_container.edit textarea:not([readonly]):focus {
+  outline: none;
+  border-color: #6366f1;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Textarea specific styles */
+.input_textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.desc_row {
+  align-items: flex-start;
+}
+
+.desc_row .label {
+  padding-top: 0.75rem;
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+
+.add_game_submit_container {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.game_preview_buttons,
+.game_edit_buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Button base styles */
+.edit_btn,
+.delete_btn,
+.save_btn,
+.cancel_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+}
+
+/* Edit button */
+.edit_btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.edit_btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+/* Delete button */
+.delete_btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.delete_btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Save button */
+.save_btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.save_btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.save_btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Cancel button */
+.cancel_btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel_btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancel_btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Active state for all buttons */
+.edit_btn:active,
+.delete_btn:active,
+.save_btn:active:not(:disabled),
+.cancel_btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .add_game_form {
     flex-direction: column;
+    padding: 1rem;
+  }
+
+  .add_game_poster_container {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .add_game_inputs_container h2,
+  .title_input {
+    font-size: 1.5rem !important;
+  }
+
+  .input_row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input_row .label {
+    min-width: auto;
+  }
+
+  .game_preview_buttons,
+  .game_edit_buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .edit_btn,
+  .delete_btn,
+  .save_btn,
+  .cancel_btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
-.game_container{
-    box-sizing: border-box;
+
+/* ========================================
+   Accessibility & Focus States
+   ======================================== */
+
+.edit_btn:focus-visible,
+.delete_btn:focus-visible,
+.save_btn:focus-visible,
+.cancel_btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.file_upload_input {
+  display: none;
 }

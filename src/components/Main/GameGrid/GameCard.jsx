@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Game from "../../../api/game";
 import { GameContext } from "../../../Context/ContextProvider";
 import { useContext } from "react";
+import { GameFooter } from "./Menu/AddGameMenu";
 function GameCard({ game }) {
 const {previewGameData, setPreviewGameData} = useContext(GameContext);
   useEffect(()=>{
@@ -26,6 +27,6 @@ const {previewGameData, setPreviewGameData} = useContext(GameContext);
 
 export default GameCard;
 
-function GameFooter({ game }) {
-  return <div className="game_footer"></div>;
-}
+// function GameFooter({ game }) {
+//   return <div className="game_footer"></div>;
+// }
