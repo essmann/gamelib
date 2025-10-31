@@ -1,10 +1,7 @@
 import GameCard from "./GameCard";
 import AddGameCard from "./AddGameCard";
-
 function GameGrid({ games }) {
-    const gameOnClick = () => {
-
-    }
+    
     return (
         <div className="content_page game_grid flex flex-wrap gap-4 p-4 justify-start">
            <AddGameCard/>

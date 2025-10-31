@@ -14,7 +14,7 @@ import { GameContext } from './Context/ContextProvider'
 import Game from './api/game'
 import GameMenu from './components/Main/GameGrid/Menu/GameMenu'
 function App() {
-  const {gameMenu, setGameMenu, addGameMenu, setAddGameMenu, games, setGames} = useContext(GameContext);
+  const {previewGameData, setPreviewGameData, addGameMenu, setAddGameMenu, games, setGames} = useContext(GameContext);
   useEffect(() => {
     const before = Date.now();
     console.log("Before");
@@ -32,6 +32,7 @@ function App() {
       console.log("Time taken to fetch games in App.jsx: " + (after - before)/1000 + " seconds");
     }
     fetchGames();
+    console.log("Fetched");
   }, [])
   
   return (
@@ -40,7 +41,9 @@ function App() {
         <Sidebar/>
         <MainContent games={games} setGames = {setGames} />
         { addGameMenu && <AddGameMenu/>}
-        {    games[1] && <GameMenu gameData={games[1]}/>}
+        {    previewGameData  && <GameMenu gameData={previewGameData} onClose={()=>{
+            setPreviewGameData(null);
+        }}/>}
       </div>
       
     

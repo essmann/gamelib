@@ -1,16 +1,23 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import MenuContainer from "../../../MenuContainer";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Game from "../../../../api/game.js";
 
-export default function GameMenu({ gameData }) {
+export default function GameMenu({ gameData, onClose }) {
   const fileInputRef = useRef(null);
-  const [game] = useState(new Game(gameData)); // no need to update state
+  const [game, setGame] = useState(new Game(gameData));
+
+  useEffect(() => {
+    setGame(new Game(gameData));
+  }, [gameData]);
   const [edit, setEdit] = useState(false);
+  useEffect(() => {
+    console.log("Re-rendered gameMenu");
+  });
   return (
-    <MenuContainer onClose={() => {}}>
+    <MenuContainer onClose={onClose}>
       <form className="add_game_form">
         {/* Poster on Left */}
         <div className="add_game_poster_container">
