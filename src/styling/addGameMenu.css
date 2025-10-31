@@ -1,182 +1,356 @@
+/* ========================================
+   Add Game Menu - Main Form Layout
+   ======================================== */
+
 .add_game_form {
   display: flex;
-  height: 100%;
-  gap: 1.5rem;
-  background: #111;
-  border-radius: 12px;
-  overflow: hidden;
-  color: #fff;
-  box-sizing: border-box;
-  flex-wrap: nowrap;
-}
-
-/* Poster section */
-.add_game_poster_container {
-  flex: 1;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #1a1a1a;
-  border-right: 1px solid #222;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.add_game_poster_container:hover {
-  background: #1e1e1e;
-}
-
-.poster_preview {
-  width: 220px;
-  height: 330px;
-  max-width: 220px;
-  max-height: 330px;
-  border-radius: 12px 12px 0px 0px ;
-
-  object-fit: cover;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-}
-
-/* Input panel */
-.add_game_inputs_container {
-  flex: 2;
-  background: #1b1919;
+  gap: 2rem;
   padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+/* ========================================
+   Poster Section
+   ======================================== */
+
+.add_game_poster_container {
+  flex-shrink: 0;
+  width: 280px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  box-sizing: border-box;
-  border-radius: 0 12px 12px 0;
 }
 
-.add_game_inputs_container h2 {
-  margin: 0;
-  font-size: 1.6rem;
+.poster_image_wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.poster_image_wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.poster_preview {
+  width: 100%;
+   height: 420px !important;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Empty poster state */
+.add_game_empty_poster {
+  width: 100%;
+  height: 420px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.add_game_empty_poster:hover {
+  background: linear-gradient(135deg, #7c8ff0 0%, #8759b0 100%);
+}
+
+.upload_icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  font-size: 3rem !important;
+}
+
+.upload_hint {
+  font-size: 1rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Poster overlay for changing image */
+.poster_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+  font-weight: 500;
+}
+
+.poster_image_wrapper:hover .poster_overlay {
+  opacity: 1;
+}
+
+.poster_overlay svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* ========================================
+   Game Footer (Rating & Favorite)
+   ======================================== */
+
+.game_add_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game_add_footer_rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 600;
-  color: #f5f5f5;
+  font-size: 1.1rem;
+}
+
+.rating_star_icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 1px 2px rgba(251, 191, 36, 0.5));
+}
+
+.rating_label {
+  color: #f3f4f6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.game_footer_favorite {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+
+.game_footer_favorite:hover {
+  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.game_footer_favorite:active {
+  transform: scale(0.95);
+}
+
+.favorite_border_icon {
+  color: #d1d5db;
+}
+
+.favorite_icon {
+  color: #ef4444;
+  filter: drop-shadow(0 1px 3px rgba(239, 68, 68, 0.5));
+}
+
+/* ========================================
+   Input Section
+   ======================================== */
+
+.add_game_inputs_container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Title input */
+.title_input {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 0.75rem !important;
+  border: 2px solid rgba(99, 102, 241, 0.3) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #f9fafb !important;
+  transition: all 0.3s ease !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.title_input:focus {
+  outline: none !important;
+  border-color: #6366f1 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+}
+
+.title_input::placeholder {
+  color: #6b7280;
 }
 
 /* Input rows */
 .input_row {
   display: flex;
+  align-items: center;
   gap: 1rem;
-  width: 100%;
 }
 
-.input_row > input {
+.input_row .label {
+  font-weight: 600;
+  color: #9ca3af;
+  min-width: 100px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input_row input,
+.input_row textarea {
   flex: 1;
-  background: #2e2a2a;
-  border: 1px solid #3c3a3a;
-  border-radius: 6px;
-  padding: 0.7rem 0.9rem;
-  color: #f0f0f0;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #f3f4f6;
   font-size: 1rem;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  font-family: inherit;
+  transition: all 0.3s ease;
 }
 
-.input_row > input:focus {
+.input_row input:focus,
+.input_row textarea:focus {
   outline: none;
-  border-color: #4a90e2;
-  background: #353232;
+  border-color: #6366f1;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
-/* Textarea */
-.input_row.textarea {
-  width: 100%;
+.input_row input::placeholder,
+.input_row textarea::placeholder {
+  color: #6b7280;
 }
 
+/* Textarea specific styles */
 .input_textarea {
-  width: 100%;
-  background: #2b2727;
-  border: 1px solid #3c3a3a;
-  border-radius: 6px;
-  padding: 1rem;
-  color: #f0f0f0;
+  min-height: 150px;
   resize: vertical;
-  min-height: 100px;
+  line-height: 1.6;
+}
+
+.desc_row {
+  align-items: flex-start;
+}
+
+.desc_row .label {
+  padding-top: 0.75rem;
+}
+
+/* ========================================
+   Submit Button
+   ======================================== */
+
+.add_game_submit_container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.add_game_submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
   font-size: 1rem;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-.input_textarea:focus {
-  outline: none;
-  border-color: #4a90e2;
-  background: #353232;
+.add_game_submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
-/* Subtle hover and focus polish */
-input::placeholder,
-textarea::placeholder {
-  color: #888;
+.add_game_submit:active {
+  transform: translateY(0);
 }
 
-input:hover,
-textarea:hover {
-  background: #343030;
+.add_game_submit:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
-/* Responsive */
-@media (max-width: 800px) {
+/* ========================================
+   Utility
+   ======================================== */
+
+.file_upload_input {
+  display: none;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
   .add_game_form {
-    /* flex-direction: column; */
+    flex-direction: column;
+    padding: 1rem;
   }
 
   .add_game_poster_container {
-    border-right: none;
-    border-bottom: 1px solid #222;
     width: 100%;
-    min-height: 250px;
+    max-width: 300px;
+    margin: 0 auto;
   }
 
- 
-  
-
-  .add_game_inputs_container {
-    border-radius: 0 0 12px 12px;
+  .title_input {
+    font-size: 1.5rem !important;
   }
-}
-.add_game_empty_poster{
-    background: gray;
-    width: 220px;
-    height: 330px;
-    border-radius: 12px 12px 0px 0px;
-    display: flex;
-    align-items: center;
+
+  .input_row {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .input_row .label {
+    min-width: auto;
+  }
+
+  .add_game_submit_container {
+    width: 100%;
+  }
+
+  .add_game_submit {
+    width: 100%;
     justify-content: center;
   }
-.add_game_submit{
-    background: rgb(61, 90, 189);
-    margin-left: auto !important;
-    width: 150px;
-}
-.add_game_submit_container{
-    margin-left: auto;
 }
 
-.game_add_footer{
-  padding: 1rem;
-  background: rgb(37, 36, 36);
-  width: 100%;
+/* ========================================
+   Accessibility & Focus States
+   ======================================== */
+
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
-.rating_label{
-  
-}
-.game_add_footer_rating{
-  display: flex; 
-  justify-content: start;
-  align-items: center;
-}
-.game_add_footer{
-  display: flex;
-  justify-content:space-between;
-  color: var(--color-emerald-600);
-  color: #888888;
-  z-index: 1001;
-  
-}
-.game_footer_favorite:hover{
-  filter: invert();
-}
+
