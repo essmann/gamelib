@@ -13,7 +13,6 @@
 /* Poster section */
 .add_game_poster_container {
   flex: 1;
-  min-width: 240px;
   padding: 1rem;
   display: flex;
   flex-direction: column;

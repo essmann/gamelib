@@ -3,11 +3,11 @@ import FloatingActionButtonSize from "../../MUI/FloatingActionButtonSize";
 import { GameContext } from '../../../Context/ContextProvider.jsx'
 
 function AddGameCard() {
-const {menu, setMenu} = useContext(GameContext);
+const {addGameMenu, setAddGameMenu} = useContext(GameContext);
   return (
     <div className="game_card game_card_add">
       <FloatingActionButtonSize onClick={()=>{
-        setMenu((prev)=>!prev);
+        setAddGameMenu((prev)=>!prev);
       }} />
       <div className="game_card_title"></div>
     </div>

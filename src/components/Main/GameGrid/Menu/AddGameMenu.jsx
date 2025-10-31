@@ -7,7 +7,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import Game from "../../../../api/game.js";
 import addGame from "../../../../api/endpoints/addGame.js";
 function AddGameMenu() {
-  const { setMenu, setGames } = useContext(GameContext);
+  const { setAddGameMenu, setGames } = useContext(GameContext);
   const [posterFile, setPosterFile] = useState(null); // store actual File
   const [game, setGame] = useState(
     new Game({
@@ -53,7 +53,7 @@ function AddGameMenu() {
   return (
     <MenuContainer
       onClose={() => {
-        setMenu(false);
+        setAddGameMenu(false);
       }}
     >
       <form className="add_game_form" onSubmit={handleSubmit}>
@@ -130,7 +130,7 @@ function AddGameMenu() {
 
 export default AddGameMenu;
 
-function GameFooter({ game, onFavorite }) {
+export function GameFooter({ game, onFavorite }) {
   return (
     <div className="game_add_footer">
       <div className="game_add_footer_rating">
@@ -153,3 +153,4 @@ function GameFooter({ game, onFavorite }) {
     </div>
   );
 }
+

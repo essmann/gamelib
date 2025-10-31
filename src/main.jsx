@@ -4,6 +4,7 @@ import './index.css'
 import './styling/gameCard.css'
 import './styling/sidebar.css'
 import './styling/addGameMenu.css'
+import './styling/gameMenu.css'
 import App from './App.jsx'
 import ContextProvider from './Context/ContextProvider.jsx' // ✅ correct import
 

@@ -12,8 +12,9 @@ import { useContext } from 'react'
 import { getGames } from './api/endpoints/getGames'
 import { GameContext } from './Context/ContextProvider'
 import Game from './api/game'
+import GameMenu from './components/Main/GameGrid/Menu/GameMenu'
 function App() {
-  const {menu, setMenu, games, setGames} = useContext(GameContext);
+  const {gameMenu, setGameMenu, addGameMenu, setAddGameMenu, games, setGames} = useContext(GameContext);
   useEffect(() => {
     const before = Date.now();
     console.log("Before");
@@ -38,7 +39,8 @@ function App() {
       <div className='main_container'>
         <Sidebar/>
         <MainContent games={games} setGames = {setGames} />
-        {menu && <AddGameMenu/>}
+        { addGameMenu && <AddGameMenu/>}
+        {    games[1] && <GameMenu gameData={games[1]}/>}
       </div>
       
     

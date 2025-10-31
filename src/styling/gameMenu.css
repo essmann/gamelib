@@ -1,0 +1,17 @@
+.game_menu_poster_container{
+}
+.game_menu_poster_container > img{
+    box-sizing: border-box;
+    max-height: 400px !important;
+}
+
+
+.game_preview_menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.game_container{
+    box-sizing: border-box;
+}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Game from "../../../api/game";
-function GameCard({ game }) {
+function GameCard({ game, onClick }) {
   useEffect(()=>{
 
       game.getPosterURL();

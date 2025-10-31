@@ -1,8 +1,8 @@
 import { ClickAwayListener } from "@mui/material";
-function MenuContainer({ children, onClose }) {
+function MenuContainer({ children, onClose, className = "" }) {
   return (
-    <ClickAwayListener onClickAway={()=>onClose()}>
-      <div className="menu_container">{children}</div>
+    <ClickAwayListener onClickAway={() => onClose()}>
+      <div className={`menu_container ${className}`}>{children}</div>
     </ClickAwayListener>
   );
 }

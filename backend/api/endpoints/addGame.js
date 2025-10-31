@@ -5,7 +5,7 @@ const poster = game.poster instanceof Uint8Array ? Buffer.from(game.poster) : nu
     console.log(poster);
    
         // Always an integer
-game.id = Math.floor(Math.random()+1 *10000);
+game.id = Math.floor(Math.random()*10e9);
 
     
   
