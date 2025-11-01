@@ -43,7 +43,7 @@ function App() {
         const gamesArray = gamesList.map(gameData => new Game(gameData));
         
         setGames(gamesArray);
-        
+        console.log(gamesArray);
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
         console.log(`Games fetched in ${duration} seconds`);
@@ -56,7 +56,7 @@ function App() {
   }, [setGames]);
 
   useEffect(()=>{
-    
+
   }, [deleteGame])
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);

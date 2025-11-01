@@ -10,9 +10,7 @@ class Game {
         this.rating = parseFloat(game_object.rating);
         this.favorite = game_object.favorite;
         this.date_added = game_object.date_added;
-         if (!this.id && this.id !== 0) {
-            throw new Error("Game must have an id"); // id is always required
-        }
+        
         console.log("Game instantiated");
         console.log("Poster: " + Object.prototype.toString.call(this.poster));
     }
