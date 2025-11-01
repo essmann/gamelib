@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import MainContent from "./components/Main/MainContent";
 import AddGameMenu from "./components/Main/GameGrid/Menu/AddGameMenu";
 import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
-
+import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
 // API
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
@@ -28,6 +28,7 @@ function App() {
     addGameMenu,
     games,
     setGames,
+    searchMenu, setSearchMenu
   } = useContext(GameContext);
 
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
@@ -85,6 +86,7 @@ function App() {
           onClose={handleCloseGameMenu}
         />
       )}
+      {!searchMenu && <SearchMenu/>}
     </div>
   );
 }
