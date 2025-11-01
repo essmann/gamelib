@@ -14,7 +14,13 @@ import { GameContext } from './Context/ContextProvider'
 import Game from './api/game'
 import GameMenu from './components/Main/GameGrid/Menu/GameMenu'
 function App() {
+  
   const {previewGameData, setPreviewGameData, addGameMenu, setAddGameMenu, games, setGames} = useContext(GameContext);
+  const [sidebarIndex, setSidebarIndex] = useState(0);
+  const sideBarEnum ={
+    allGames: 0,
+    favorites: 1,
+  }
   useEffect(() => {
     const before = Date.now();
     console.log("Before");
@@ -38,8 +44,8 @@ function App() {
   return (
     
       <div className='main_container'>
-        <Sidebar/>
-        <MainContent games={games} setGames = {setGames} />
+        <Sidebar currentIndex={sidebarIndex} setIndex={setSidebarIndex} indexEnum={sideBarEnum}/>
+        <MainContent games={games} setGames = {setGames} sidebarIndex={sidebarIndex} />
         { addGameMenu && <AddGameMenu/>}
         {    previewGameData  && <GameMenu gameData={previewGameData} onClose={()=>{
             setPreviewGameData(null);

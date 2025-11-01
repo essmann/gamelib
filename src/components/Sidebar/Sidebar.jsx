@@ -1,103 +1,135 @@
+import { useContext, useMemo } from "react";
 import AppsIcon from "@mui/icons-material/Apps";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Icon } from "@mui/material";
+import { GameContext } from "../../Context/ContextProvider";
 
+// List header component for section titles
 function ListHeader({ title }) {
   return (
-    <>
-      <div className="list_header_container">
-        <div className="list_header">{title}</div>
-      </div>
-    </>
+    <div className="list_header_container">
+      <div className="list_header">{title}</div>
+    </div>
   );
 }
-function Sidebar({ selectedRowIndex, setSelectedRowIndex }) {
+
+// Individual list item component
+function ListItem({ 
+  title, 
+  icon, 
+  index, 
+  currentIndex,
+  setIndex, 
+  count,
+  isChild = false 
+}) {
+  const { games } = useContext(GameContext);
+  const isSelected = currentIndex === index;
+  
+  // Calculate count based on item type
+  const itemCount = useMemo(() => {
+    if (!count) return null;
+    
+    if (index === 0) { // All Games
+      return games?.length || 0;
+    } else if (index === 1) { // Favorites
+      return games?.filter(game => game.favorite)?.length || 0;
+    }
+    return 0;
+  }, [games, count, index]);
+
+  const handleClick = () => {
+    setIndex(index);
+    console.log("Clicked index: " + index);
+  };
+
+  return (
+    <div 
+      className={`sidebar_item ${isSelected ? 'selected' : ''} ${isChild ? 'child_item' : ''}`}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick();
+        }
+      }}
+    >
+      <div className="list_item_icon">
+        <Icon component={icon} />
+      </div>
+      <div className="list_item_title">{title}</div>
+      {itemCount !== null && (
+        <div className="list_item_count">{itemCount}</div>
+      )}
+    </div>
+  );
+}
+
+
+
+// Main sidebar component
+function Sidebar({ setIndex, currentIndex, indexEnum }) {
+  const { games } = useContext(GameContext);
+
+  // Validate context
+  if (!games) {
+    console.warn('Games context is not available');
+  }
+
   return (
     <div className="sidebar">
       <div className="sidebar_items_container">
-        {/* <ListItem title="My Games" icon={VideogameAssetIcon} index={0} /> */}
         <ListHeader title="GAMES" />
-        <ListItem title="All Games" icon={AppsIcon} index={0} count={true} />
+        
+        <ListItem 
+          title="All Games" 
+          icon={AppsIcon} 
+          index={indexEnum.allGames} 
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={true}
+        />
+        
         <ListItem
           title="Favorites"
           icon={FavoriteBorderIcon}
-          index={1}
-          favorites={true}
+          index={indexEnum.favorites || 1}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={true}
         />
 
-        {/* <ListParentItem title="Malene" icon={ChatIcon} index={4}>
-          <ListItem isChild={true} title="Child2" icon={ChatIcon} index={5} />
-          <ListItem isChild={true} title="Child3" icon={ChatIcon} index={6} />
-          <ListItem isChild={true} title="Child4" icon={ChatIcon} index={7} />
-
-        </ListParentItem> */}
+        {/* Example of parent item usage - uncomment if needed
+        <ListParentItem 
+          title="Categories" 
+          icon={CategoryIcon}
+          index={indexEnum.categories}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+        >
+          <ListItem 
+            isChild={true} 
+            title="Action" 
+            icon={SportsEsportsIcon}
+            index={indexEnum.action}
+            currentIndex={currentIndex}
+            setIndex={setIndex}
+          />
+          <ListItem 
+            isChild={true} 
+            title="Adventure" 
+            icon={ExploreIcon}
+            index={indexEnum.adventure}
+            currentIndex={currentIndex}
+            setIndex={setIndex}
+          />
+        </ListParentItem>
+        */}
       </div>
     </div>
   );
 }
 
 export default Sidebar;
-
-function ListItem({ title, icon, count }) {
-  return (
-    <div className="sidebar_item">
-      <div className="list_item_icon">
-        <Icon component={icon} />
-      </div>
-      <div className="list_item_title">{title}</div>
-    </div>
-  );
-}
-
-// function ListParentItem({
-//   title,
-//   icon,
-//   onExpand,
-//   onCollapse,
-//   index,
-//   children,
-// }) {
-//   const { selectedListItemIndex, setSelectedListItemIndex } =
-//     useGlobalContext();
-//   const [isExpanded, setIsExpanded] = useState(false);
-//   const selected = selectedListItemIndex === index;
-
-//   // Handles clicking the row
-//   const handleRowClick = () => {
-//     if (!isExpanded) {
-//       setIsExpanded(true);
-//       onExpand?.(index);
-//     }
-//     if (!selected) setSelectedListItemIndex(index);
-//   };
-
-//   // Handles clicking the collapse arrow only
-//   const handleCollapseClick = (e) => {
-//     e.stopPropagation(); // Prevent row click
-//     const next = !isExpanded;
-//     setIsExpanded(next);
-//     next ? onExpand?.(index) : onCollapse?.(index);
-//   };
-
-//   return (
-//     <div className="list_item_parent_container">
-//       <div
-//         className={`list_item list_item_parent ${selected ? "selected" : ""}`}
-//         onClick={handleRowClick}
-//         style={{
-//           background: selected ? "#2D2D2D" : "#202020",
-//           cursor: "pointer",
-//         }}
-//       >
-//         <div className="list_item_icon">
-//           <Icon component={icon} />
-//         </div>
-//         <div className="list_item_title">{title}</div>
-//         <div className="flex collapseBtn" onClick={handleCollapseClick}>
-//           <ArrowDropDownIcon className={isExpanded ? "rotated" : ""} />
-//         </div>
-//       </div>
-//       {isExpanded && children}
-//     </div>
-//   );
-// }

@@ -1,26 +1,279 @@
-.sidebar_item {
-  display: flex;
-  align-items: center;
-  padding: 0.2rem;
-  cursor: pointer;
-  font-weight: 600;
-  color: grey;
+/* Sidebar Container */
+.sidebar {
+  width: 250px;
+  background: #0f0f0f;
+  height: 100vh;
+  border-right: 1px solid #1f1f1f;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-.sidebar_item .active{
-    background-color: #1A1A1A;
-    border-radius: 8px;
-    color: white;
+
+.sidebar_items_container {
+  padding: 0.5rem 0;
 }
-.list_item_icon {
-  margin-bottom: 3px;
-  margin-left: 0.5rem;
-  margin-right: 2rem;
+
+/* List Header */
+.list_header_container {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  padding: 0 0.625rem;
 }
 
 .list_header {
   color: #747475;
-  margin-top: 3rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  margin-left: 10px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-left: 0.5rem;
+}
+
+/* First header should have less top margin */
+.list_header_container:first-child {
+  margin-top: 1rem;
+}
+
+/* Sidebar Items */
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 0.75rem;
+  margin: 0.125rem 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  border-radius: 6px;
+  transition: all 0.15s ease-in-out;
+  user-select: none;
+  position: relative;
+}
+
+/* Hover state */
+.sidebar_item:hover {
+  background: #1a1a1a;
+  color: #d1d5db;
+}
+
+/* Selected/Active state */
+.sidebar_item.selected {
+  background: #1f1f1f;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Alternative active class for compatibility */
+.sidebar_item.active {
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+/* Child items (nested) */
+.sidebar_item.child_item {
+  padding-left: 2.5rem;
+  font-size: 0.8125rem;
+  margin: 0.0625rem 0.5rem;
+}
+
+/* List Item Icon */
+.list_item_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.875rem;
+  min-width: 20px;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+.list_item_icon .MuiIcon-root,
+.list_item_icon .MuiSvgIcon-root {
+  font-size: 1.25rem;
+  opacity: 0.85;
+}
+
+.sidebar_item.selected .list_item_icon .MuiIcon-root,
+.sidebar_item.selected .list_item_icon .MuiSvgIcon-root,
+.sidebar_item.active .list_item_icon .MuiIcon-root,
+.sidebar_item.active .list_item_icon .MuiSvgIcon-root {
+  opacity: 1;
+}
+
+/* List Item Title */
+.list_item_title {
+  flex: 1;
+  font-size: inherit;
+  font-weight: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* List Item Count Badge */
+.list_item_count {
+  color: #636363;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  background: #1a1a1a;
+  border-radius: 4px;
+  min-width: 1.5rem;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.sidebar_item:hover .list_item_count {
+  background: #252525;
+  color: #7a7a7a;
+}
+
+.sidebar_item.selected .list_item_count,
+.sidebar_item.active .list_item_count {
+  background: #2a2a2a;
+  color: #a8a8a8;
+}
+
+/* Parent Item Styles */
+.list_item_parent_container {
+  margin: 0.25rem 0;
+}
+
+.sidebar_item.list_item_parent {
+  font-weight: 600;
+}
+
+.collapse_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  margin-left: 0.25rem;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+  opacity: 0.7;
+}
+
+.collapse_btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 1;
+}
+
+.collapse_icon {
+  transition: transform 0.25s ease;
+  font-size: 1.25rem !important;
+}
+
+.collapse_icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Children Container */
+.list_item_children {
+  animation: slideDown 0.2s ease;
+  padding: 0.25rem 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+/* Scrollbar Styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+/* Firefox scrollbar */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a transparent;
+}
+
+/* Focus styles for accessibility */
+.sidebar_item:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.sidebar_item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Divider (optional, add between sections) */
+.sidebar_divider {
+  height: 1px;
+  background: #1f1f1f;
+  margin: 0.75rem 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  
+  .sidebar_item {
+    padding: 0.5rem 0.625rem;
+    margin: 0.0625rem 0.375rem;
+  }
+  
+  .list_item_icon {
+    margin-right: 0.625rem;
+  }
+  
+  .list_item_title {
+    font-size: 0.8125rem;
+  }
+  
+  .list_item_count {
+    font-size: 0.75rem;
+  }
+}
+
+/* Compact mode (optional) */
+.sidebar.compact .sidebar_item {
+  padding: 0.375rem 0.5rem;
+}
+
+.sidebar.compact .list_item_icon {
+  margin-right: 0.5rem;
+}
+
+.sidebar.compact .list_item_title {
+  font-size: 0.8125rem;
+}
+
+/* Animation for entering items */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar_item {
+  animation: fadeIn 0.3s ease forwards;
 }
