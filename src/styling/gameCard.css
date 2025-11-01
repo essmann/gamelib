@@ -38,19 +38,17 @@
 /* --- OVERLAY TITLE --- */
 .title_overlay {
   position: absolute;
-  bottom: 0;
+  bottom: 50%;
   width: 100%;
   padding: 0.4rem 0.5rem;
   text-align: center;
-  color: #fff;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
   border-radius: 0 0 10px 10px;
   font-weight: 500;
   font-size: 0.9rem;
-  opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
+  color: var(--text-primary);
   visibility: hidden;
 }
 

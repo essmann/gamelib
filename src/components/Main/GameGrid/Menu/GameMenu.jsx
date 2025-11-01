@@ -9,7 +9,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Game from "../../../../api/game.js";
-
+import { useContext } from "react";
+import { GameContext } from "../../../../Context/ContextProvider.jsx";
 // --- Constants ---
 const MAX_RATING = 10;
 
@@ -24,6 +25,7 @@ const MAX_RATING = 10;
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const fileInputRef = useRef(null);
   const [game, setGame] = useState(() => new Game(gameData));
+  const {games, setGames} = useContext(GameContext);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -89,6 +91,8 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     if (window.confirm(`Are you sure you want to delete "${game.title}"?`)) {
       if (onDelete) {
         onDelete(game.id);
+        setGames((prev) => prev.filter((_game) => _game.id !== game.id));
+        
       }
       onClose();
     }

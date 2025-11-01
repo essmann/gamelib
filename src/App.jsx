@@ -1,59 +1,92 @@
-import { use, useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-//importing components
-import Sidebar from './components/Sidebar/Sidebar'
-import MainContent from './components/Main/MainContent'
-import AddGameMenu from './components/Main/GameGrid/Menu/AddGameMenu'
-//importing api functions
-import addGame from './api/endpoints/addGame'
-import { useContext } from 'react'
-import { getGames } from './api/endpoints/getGames'
-import { GameContext } from './Context/ContextProvider'
-import Game from './api/game'
-import GameMenu from './components/Main/GameGrid/Menu/GameMenu'
-function App() {
-  
-  const {previewGameData, setPreviewGameData, addGameMenu, setAddGameMenu, games, setGames} = useContext(GameContext);
-  const [sidebarIndex, setSidebarIndex] = useState(0);
-  const sideBarEnum ={
-    allGames: 0,
-    favorites: 1,
-  }
-  useEffect(() => {
-    const before = Date.now();
-    console.log("Before");
-    const fetchGames = async () => {
-      const gamesList =  await getGames();
-      let arr = [];
-      for(let i = 0; i<gamesList.length; i++){
-           arr[i] = new Game(gamesList[i]);
+import { useEffect, useState, useContext } from "react";
+import "./App.css";
 
+// Components
+import Sidebar from "./components/Sidebar/Sidebar";
+import MainContent from "./components/Main/MainContent";
+import AddGameMenu from "./components/Main/GameGrid/Menu/AddGameMenu";
+import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
+
+// API
+import { getGames } from "./api/endpoints/getGames";
+import deleteGame from "./api/endpoints/deleteGame";
+import Game from "./api/game";
+
+// Context
+import { GameContext } from "./Context/ContextProvider";
+
+// Constants
+const SIDEBAR_INDEX = {
+  allGames: 0,
+  favorites: 1,
+};
+
+function App() {
+  const {
+    previewGameData,
+    setPreviewGameData,
+    addGameMenu,
+    games,
+    setGames,
+  } = useContext(GameContext);
+
+  const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
+
+  // Fetch games on mount
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const startTime = performance.now();
+        const gamesList = await getGames();
+        
+        // Convert to Game instances
+        const gamesArray = gamesList.map(gameData => new Game(gameData));
+        
+        setGames(gamesArray);
+        
+        const endTime = performance.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+        console.log(`Games fetched in ${duration} seconds`);
+      } catch (error) {
+        console.error("Failed to fetch games:", error);
       }
-      console.log(arr);
-      // console.log(gamesList)
-      setGames(arr);
-      const after = Date.now();
-      console.log("Time taken to fetch games in App.jsx: " + (after - before)/1000 + " seconds");
-    }
+    };
+
     fetchGames();
-    console.log("Fetched");
-  }, [])
-  
+  }, [setGames]);
+
+  useEffect(()=>{
+    
+  }, [deleteGame])
+  const handleCloseGameMenu = () => {
+    setPreviewGameData(null);
+  };
+
   return (
-    
-      <div className='main_container'>
-        <Sidebar currentIndex={sidebarIndex} setIndex={setSidebarIndex} indexEnum={sideBarEnum}/>
-        <MainContent games={games} setGames = {setGames} sidebarIndex={sidebarIndex} />
-        { addGameMenu && <AddGameMenu/>}
-        {    previewGameData  && <GameMenu gameData={previewGameData} onClose={()=>{
-            setPreviewGameData(null);
-        }}/>}
-      </div>
+    <div className="main_container">
+      <Sidebar
+        currentIndex={sidebarIndex}
+        setIndex={setSidebarIndex}
+        indexEnum={SIDEBAR_INDEX}
+      />
       
-    
-  )
+      <MainContent
+        games={games}
+        setGames={setGames}
+        sidebarIndex={sidebarIndex}
+      />
+      
+      {addGameMenu && <AddGameMenu />}
+      
+      {previewGameData && (
+        <GameMenu
+          gameData={previewGameData}
+          onDelete={deleteGame}
+          onClose={handleCloseGameMenu}
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;

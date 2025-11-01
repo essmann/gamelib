@@ -1,5 +1,6 @@
 // api/endpoints/deleteGame.js
 async function deleteGame(db, id) {
+  console.log("Trying to delete game with id: " + id);
   try {
     const result = await new Promise((resolve, reject) => {
       db.run('DELETE FROM games WHERE id = ?', [id], function (err) {

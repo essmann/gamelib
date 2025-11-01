@@ -28,6 +28,7 @@ ipcMain.handle('update-game', async (event, game) => {
 });
 
 ipcMain.handle('delete-game', async (event, id) => {
+  console.log("At delete-game endpoint. Received game id : " + id);
   return await deleteGame.deleteGame(db, id);
 });
 

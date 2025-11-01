@@ -14,7 +14,6 @@ class Game{
 
    getPosterURL() {
     if(this.poster == null){return;}
-    console.log(this.poster);
     if (this.poster instanceof Uint8Array) {
         const blob = new Blob([this.poster], { type: 'image/png' });
         return URL.createObjectURL(blob);
