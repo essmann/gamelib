@@ -29,17 +29,23 @@
 }
 
 .search_input{
-    background: red;
+    background: rgb(43, 41, 41);
     width: 100%;
-    border: none;
-    outline: none;
+    outline: none !important;
+
 }
 .add_btn{
     width: 30px;
-    background: black;
     height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.add_btn:hover{
+    background: rgb(61, 58, 58);
+    cursor: pointer;
+}
 .search_input_container{
     background: rgb(31, 30, 30);
     width: 100%;

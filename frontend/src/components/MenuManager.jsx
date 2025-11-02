@@ -10,15 +10,13 @@ function MenuManager() {
     previewGameData,
     setPreviewGameData,
     addGameMenu,
-    games,
-    setGames,
     searchMenu,
     setSearchMenu,
   } = useContext(GameContext);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
   };
-
+ 
   return (
     <>
       {addGameMenu && <AddGameMenu />}

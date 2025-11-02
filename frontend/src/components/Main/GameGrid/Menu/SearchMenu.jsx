@@ -1,5 +1,5 @@
 import MenuContainer from "../../../MenuContainer";
-import { useState, useEffect, useRef } from "react";
+import AddIcon from '@mui/icons-material/Add';import { useState, useEffect, useRef } from "react";
 import getExternalGames from "../../../../api/endpoints/getExternalGames";
 function SearchMenu({ onClose }) {
   const [query, setQuery] = useState("");
@@ -35,13 +35,17 @@ function SearchMenu({ onClose }) {
   return (
     <MenuContainer className="search_menu" onClose={onClose}>
       <div className="search_input_container">
-        <div className="add_btn"></div>
+        
         <input
           className="search_input"
           value={query}
           onChange={handleChange}
           placeholder="Search..."
+          spellCheck={false}
         />
+        <div className="add_btn">
+          <AddIcon fontSize="small"/>
+        </div>
       </div>
       <div className="search_results_container">
         <SearchResults array={results} />
