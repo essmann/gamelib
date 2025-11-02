@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-const { updateGame } = require('../backend/api/endpoints/updateGame');
+const { updateGame } = require('../api/endpoints/updateGame');
 
 function runAsync(db, sql, params = []) {
     return new Promise((resolve, reject) => {

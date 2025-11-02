@@ -4,7 +4,7 @@
   "description": "backend for gamelib",
   "main": "main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron ./src/main.js",
     "test": "jest",
     "build": "electron-builder",
     "package": "electron-forge package",

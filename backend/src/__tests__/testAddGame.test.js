@@ -1,5 +1,5 @@
-const { getGames } = require('../backend/api/endpoints/getGames');
-const { addGame } = require('../backend/api/endpoints/addGame');
+const { getGames } = require('../api/endpoints/getGames');
+const { addGame } = require('../api/endpoints/addGame');
 const sqlite3 = require('sqlite3').verbose();
 
 function runAsync(db, sql, params = []) {
