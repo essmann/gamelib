@@ -16,4 +16,10 @@ class Game {
     }
     
 }
+
+class ExternalGame{
+    constructor (game_object){
+        this.id = game_object.id;
+    }
+}
 module.exports.Game = Game;
