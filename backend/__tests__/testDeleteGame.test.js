@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
-const { deleteGame } = require('../api/endpoints/deleteGame');
-const { getGames } = require('../api/endpoints/getGames');
+const { deleteGame } = require('../src/api/endpoints/deleteGame');
+const { getGames } = require('../src/api/endpoints/getGames');
 
 describe('deleteGame endpoint', () => {
   let db;
