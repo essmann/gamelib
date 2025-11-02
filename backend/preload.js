@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld('api', {
   addGame: ( game) => ipcRenderer.invoke('add-game', game),
   updateGame: ( game) => ipcRenderer.invoke('update-game', game),
   deleteGame: ( id) => ipcRenderer.invoke('delete-game', id),
+  getExternalGames: (prefix) => ipcRenderer.invoke('get-external-games', prefix)
   
 })
