@@ -1,0 +1,33 @@
+@import './variables.css';
+
+.search_menu{
+    width: auto;
+}
+.search_results_container{
+    overflow-y: scroll;
+    max-height: 400px;
+    width: 500px;
+}
+
+.result_item:hover{
+    background: var(--bg-elevated);
+    cursor: pointer;
+}
+
+.result_item{
+    padding: 0.2rem;
+}
+.search_input_container{
+    display:flex;
+
+}
+
+.search_input{
+    flex: 1;
+    margin-left: 0.2rem;
+}
+.add_btn{
+    width: 30px;
+    background: black;
+    height: 30px;
+}
