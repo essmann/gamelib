@@ -14,16 +14,20 @@
   "appId": "com.my-electron-app",
   "productName": "MyElectronApp",
   "files": [
-    "api/**/*",
-    "main.js",
-    "preload.js",
-    "scripts/**/*",
+    "src/api/**/*",
+    "src/main.js",
+    "src/preload.js",
+    "src/scripts/**/*",
     "dist/**/*",
     "node_modules**/*",
-    "api/sqlite/games.db"
+    "src/api/sqlite/games.db",
+    "src/api/sqlite/external_games.db"
+
   ],
   "asarUnpack": [
-    "api/sqlite/games.db"
+    "src/api/sqlite/games.db",
+    "src/api/sqlite/external_games.db"
+
   ],
   "directories": {
     "buildResources": "assets"
