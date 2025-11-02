@@ -7,6 +7,7 @@ import MainContent from "./components/Main/MainContent";
 import AddGameMenu from "./components/Main/GameGrid/Menu/AddGameMenu";
 import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
 import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
+import MenuManager from "./components/MenuManager";
 // API
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
@@ -77,18 +78,7 @@ function App() {
         sidebarIndex={sidebarIndex}
       />
       
-      {addGameMenu && <AddGameMenu />}
-      
-      {previewGameData && (
-        <GameMenu
-          gameData={previewGameData}
-          onDelete={deleteGame}
-          onClose={handleCloseGameMenu}
-        />
-      )}
-      {!searchMenu && <SearchMenu onClose= {()=>{
-        setSearchMenu(false);
-      }}/>}
+     <MenuManager/>
     </div>
   );
 }
