@@ -33,7 +33,7 @@ function SearchMenu({ onClose }) {
   };
 
   return (
-    <MenuContainer className="search_menu">
+    <MenuContainer className="search_menu" onClose={onClose}>
       <div className="search_input_container">
         <div className="add_btn"></div>
         <input

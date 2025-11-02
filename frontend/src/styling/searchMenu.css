@@ -1,5 +1,9 @@
 @import './variables.css';
 
+.menu_container.search_menu{
+    align-items: flex-start;
+    flex-direction: column;
+}
 .search_menu{
     width: auto;
 }
@@ -23,11 +27,21 @@
 }
 
 .search_input{
-    flex: 1;
-    margin-left: 0.2rem;
 }
 .add_btn{
     width: 30px;
     background: black;
     height: 30px;
+}
+
+.search_input_container{
+    background: red;
+    width: 100%;
+    position: absolute;
+    top: -6%;
+}
+.search_results_container{
+}
+.search_results{
+    max-height: 400px;
 }

@@ -86,7 +86,9 @@ function App() {
           onClose={handleCloseGameMenu}
         />
       )}
-      {!searchMenu && <SearchMenu/>}
+      {!searchMenu && <SearchMenu onClose= {()=>{
+        setSearchMenu(false);
+      }}/>}
     </div>
   );
 }
