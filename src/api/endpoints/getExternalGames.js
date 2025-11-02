@@ -1,5 +1,5 @@
 async function getExternalGames(prefix){
-
+console.log("getExternalGames called with prefix: " + prefix);
     try {
       const games = await window.api.getExternalGames(prefix);
       console.log("External games fetched.");

@@ -1,21 +1,51 @@
 import MenuContainer from "../../../MenuContainer";
-import { useState } from "react";
-function SearchMenu({ searchArray, onClose }) {
+import { useState, useEffect, useRef } from "react";
+import getExternalGames from "../../../../api/endpoints/getExternalGames";
+function SearchMenu({ onClose }) {
   const [query, setQuery] = useState("");
-  const search = (query) => {
-    const results = query
-      ? searchArray.filter((item) =>
-          item.toLowerCase().startsWith(query.toLowerCase())
-        )
-      : [];
+  const [results, setResults] = useState([]);
+  const debounceRef = useRef(null);
+
+  
+
+  const handleSearch = async (q) => {
+    if(q==null){
+      setResults([]);
+      return;
+    }
+    const searchResponse = await getExternalGames(q);
+    console.log(searchResponse)
+    setResults(searchResponse);
   };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    setQuery(value);
+
+    // clear previous debounce
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    // set new debounce
+    debounceRef.current = setTimeout(async () => {
+      await handleSearch(value);
+    }, 300); // 300ms delay
+  };
+
   return (
     <MenuContainer className="search_menu">
       <div>
         <div className="add_btn"></div>
-        <input className="search_input" />
+        <input
+          className="search_input"
+          value={query}
+          onChange={handleChange}
+          placeholder="Search..."
+        />
       </div>
-      <div className="search_results_container"></div>
+      <div className="search_results_container">
+        <SearchResults array={results} />
+      </div>
     </MenuContainer>
   );
 }
@@ -23,18 +53,16 @@ function SearchMenu({ searchArray, onClose }) {
 export default SearchMenu;
 
 function Result({ game }) {
-    return (
-        <div className="result_item">
-            
-        </div>
-    )
+  return <div className="result_item">
+    <div className="result_title"> {game.title}</div>
+  </div>;
 }
 
 function SearchResults({ array = [] }) {
   return (
     <div className="search_results">
-      {array.map((game) => (
-        <Result game={game} />
+      {array.map((game, i) => (
+        <Result key={i} game={game} />
       ))}
     </div>
   );

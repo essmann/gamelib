@@ -41,7 +41,8 @@ ipcMain.handle('get-games', async () => {
   return games;
 });
 
-ipcMain.handle('get-external-games', async ( prefix) => {
+ipcMain.handle('get-external-games', async ( event, prefix) => {
+  console.log("get-external-games called with prefix: " + prefix);
   return await getExternalGames(external_db, prefix);
 })
 
