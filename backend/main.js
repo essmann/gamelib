@@ -7,12 +7,13 @@ const isDev = !app.isPackaged;
 
 // --- Database setup ---
 const db = require('./api/sqlite/game_database.js');
-
+const external_db = require('./api/sqlite/external_db.js');
 // --- API endpoints ---
 const addGame = require('./api/endpoints/addGame.js');
 const updateGame = require('./api/endpoints/updateGame.js');
 const deleteGame = require('./api/endpoints/deleteGame.js');
 const getGames = require('./api/endpoints/getGames.js');
+const { getExternalGames } = require('./api/endpoints/getExternalGames.js');
 const Game = require('./api/game.js').Game;
 
 // --- IPC handlers ---
@@ -40,6 +41,10 @@ ipcMain.handle('get-games', async () => {
   return games;
 });
 
+ipcMain.handle('get-external-games', async ( prefix) => {
+  return await getExternalGames(external_db, prefix);
+})
+
 // --- Create window ---
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -51,6 +56,9 @@ const createWindow = () => {
     },
   });
 
+  getExternalGames(external_db, "world").then((res)=>{
+    console.log(res);
+  })
   if (isDev) {
     win.loadURL('http://localhost:5173/');
   } else {
