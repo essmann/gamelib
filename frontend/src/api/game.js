@@ -9,6 +9,11 @@ class Game{
         this.date_added = Date.now().toString();
         this.favorite = game_object.favorite;
         this.rating = game_object.rating;
+        //data for external games only
+        this.genres = game_object.genres || null;
+        this.publisher = game_object.publisher || null;
+        this.developer = game_object.developer || null;
+        this.platforms = game_object.platforms || null;
 
     }
 

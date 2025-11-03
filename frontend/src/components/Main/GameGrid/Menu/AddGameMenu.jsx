@@ -21,8 +21,8 @@ function AddGameMenu({ data, onClose }) {
   const [game, setGame] = useState(() => {
     if (typeof data === "object" && data !== null) {
       try {
-        const existingGame = new Game(data);
-        return existingGame;
+        const externalGame = new Game(data);
+        return externalGame;
       } catch (err) {
         console.error("Invalid game data passed to AddGameMenu:", err);
       }
@@ -110,7 +110,7 @@ function AddGameMenu({ data, onClose }) {
         setAddGameMenu(false);
       }}
     >
-      <div className="game_menu_wrapper edit_mode">
+      <div className="game_menu_wrapper ">
         <form className="game_menu_form" onSubmit={handleSubmit}>
           
           {/* Header */}
@@ -172,7 +172,7 @@ function AddGameMenu({ data, onClose }) {
                       type="date"
                       value={game.release}
                       onChange={handleChange}
-                      className="field_input editable"
+                      className="field_input "
                     />
                   </div>
                 </div>
@@ -202,8 +202,9 @@ function AddGameMenu({ data, onClose }) {
                   name="description"
                   value={game.description}
                   onChange={handleChange}
-                  className="game_description editable"
+                  className="game_description "
                   placeholder="Enter game description..."
+                  spellCheck={false}
                 />
               </div>
 

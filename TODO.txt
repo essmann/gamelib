@@ -1,1 +1,4 @@
-create tests for each API endpoint
+- expand games.db to fit columns from external games. make them nullable.
+
+- fix ghastly styling on menus at some point, make it smaller and more verbose.
+
