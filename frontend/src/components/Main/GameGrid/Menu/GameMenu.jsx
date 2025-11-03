@@ -11,21 +11,13 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Game from "../../../../api/game.js";
 import { useContext } from "react";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
-// --- Constants ---
+
 const MAX_RATING = 10;
 
-/**
- * Main component to display and edit game details.
- * 
- * STRUCTURE CHANGES:
- * - Buttons are now inside GameDetailsSection for better vertical flow
- * - Action buttons appear at the bottom of the inputs container
- * - Maintains two-column layout: poster on left, details+buttons on right
- */
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const fileInputRef = useRef(null);
   const [game, setGame] = useState(() => new Game(gameData));
-  const {games, setGames} = useContext(GameContext);
+  const { games, setGames } = useContext(GameContext);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -43,10 +35,10 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
       updatedProps[name] = value;
       
       if (name === 'rating') {
-          let numValue = parseInt(value, 10);
-          if (isNaN(numValue) || numValue < 0) numValue = 0;
-          if (numValue > MAX_RATING) numValue = MAX_RATING;
-          updatedProps.rating = numValue;
+        let numValue = parseInt(value, 10);
+        if (isNaN(numValue) || numValue < 0) numValue = 0;
+        if (numValue > MAX_RATING) numValue = MAX_RATING;
+        updatedProps.rating = numValue;
       }
       
       return new Game(updatedProps);
@@ -77,7 +69,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 
     try {
       if (onSave) {
-        onSave(game); 
+        onSave(game);
       }
       setEdit(false);
     } catch (error) {
@@ -92,11 +84,10 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
       if (onDelete) {
         onDelete(game.id);
         setGames((prev) => prev.filter((_game) => _game.id !== game.id));
-        
       }
       onClose();
     }
-  }, [game.title, game.id, onDelete, onClose]);
+  }, [game.title, game.id, onDelete, onClose, setGames]);
 
   const handleCancel = useCallback(() => {
     setGame(new Game(gameData));
@@ -105,37 +96,95 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 
   return (
     <MenuContainer onClose={onClose} clickAwayExceptionClass={"game_card_image"}>
-      <form className={`add_game_form ${edit ? 'edit_mode' : 'preview_mode'}`} onSubmit={handleSubmit}>
+      <div className={`game_menu_wrapper ${edit ? 'edit_mode' : 'view_mode'}`}>
+        <form className="game_menu_form" onSubmit={handleSubmit}>
+          
+          {/* Header with Title and Actions */}
+          <div className="game_menu_header">
+            {edit ? (
+              <input
+                type="text"
+                name="title"
+                value={game.title}
+                onChange={handleChange}
+                className="game_title_input"
+                placeholder="Game Title"
+                required
+              />
+            ) : (
+              <h1 className="game_title">{game.title}</h1>
+            )}
+            
+            <ActionButtons
+              isEdit={edit}
+              isSaving={isSaving}
+              onEdit={() => setEdit(true)}
+              onDelete={handleDelete}
+              onCancel={handleCancel}
+            />
+          </div>
 
-        {/* Poster Section on Left */}
-        <GamePosterSection
-          game={game}
-          edit={edit}
-          fileInputRef={fileInputRef}
-          handleImageChange={handleImageChange}
-          handleFavoriteToggle={handleFavoriteToggle}
-        />
+          {/* Main Content Area */}
+          <div className="game_menu_content">
+            
+            {/* Left Column - Poster */}
+            <PosterSection
+              game={game}
+              edit={edit}
+              fileInputRef={fileInputRef}
+              handleImageChange={handleImageChange}
+              handleFavoriteToggle={handleFavoriteToggle}
+            />
 
-        {/* Input/Detail Section on Right - NOW INCLUDES BUTTONS */}
-        <GameDetailsSection
-          game={game}
-          edit={edit}
-          handleChange={handleChange}
-          isSaving={isSaving}
-          onEdit={() => setEdit(true)}
-          onDelete={handleDelete}
-          onCancel={handleCancel}
-        />
+            {/* Right Column - Details */}
+            <div className="game_details_section">
+              
+              {/* Metadata Grid */}
+              <div className="game_metadata">
+                <MetadataField
+                  label="Release Date"
+                  name="release"
+                  type={edit ? "date" : "text"}
+                  value={game.release}
+                  edit={edit}
+                  onChange={handleChange}
+                />
+                
+                <MetadataField
+                  label="Rating"
+                  name="rating"
+                  type="number"
+                  value={game.rating}
+                  edit={edit}
+                  onChange={handleChange}
+                  min="0"
+                  max={MAX_RATING}
+                  suffix={`/ ${MAX_RATING}`}
+                />
+              </div>
 
-      </form>
+              {/* Description */}
+              <div className="game_description_container">
+                <label className="field_label">Description</label>
+                <textarea
+                  name="description"
+                  value={game.description}
+                  onChange={handleChange}
+                  readOnly={!edit}
+                  className={`game_description ${edit ? 'editable' : ''}`}
+                  placeholder="Enter game description..."
+                />
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
     </MenuContainer>
   );
 }
 
-/**
- * Displays the game poster and the footer (rating/favorite).
- */
-function GamePosterSection({ game, edit, fileInputRef, handleImageChange, handleFavoriteToggle }) {
+function PosterSection({ game, edit, fileInputRef, handleImageChange, handleFavoriteToggle }) {
   const handlePosterClick = () => {
     if (edit && fileInputRef.current) {
       fileInputRef.current.click();
@@ -143,23 +192,25 @@ function GamePosterSection({ game, edit, fileInputRef, handleImageChange, handle
   };
 
   return (
-    <div className="add_game_poster_container">
-      <div className="poster_image_wrapper" onClick={handlePosterClick}>
+    <div className="poster_section">
+      <div 
+        className={`poster_wrapper ${edit ? 'editable' : ''}`}
+        onClick={handlePosterClick}
+      >
         <img
           src={game.getPosterURL()}
           alt={`${game.title} Poster`}
-          className={`poster_preview ${edit ? 'editable_poster' : ''}`}
+          className="poster_image"
         />
         {edit && (
-          <div className="poster_overlay">
+          <div className="poster_upload_overlay">
             <CloudUploadIcon fontSize="large" />
-            <span>Change Poster</span>
+            <span>Change Image</span>
           </div>
         )}
       </div>
 
       <input
-        className="file_upload_input"
         type="file"
         accept="image/*"
         ref={fileInputRef}
@@ -167,151 +218,100 @@ function GamePosterSection({ game, edit, fileInputRef, handleImageChange, handle
         onChange={handleImageChange}
       />
 
-      <GameFooter game={game} onFavorite={handleFavoriteToggle} />
-    </div>
-  );
-}
-
-/**
- * Displays the game's details (title, release, rating, description) and action buttons.
- * 
- * KEY CHANGE: Buttons are now included at the bottom of this component
- */
-function GameDetailsSection({ game, edit, handleChange, isSaving, onEdit, onDelete, onCancel }) {
-    return (
-        <div className={`add_game_inputs_container ${edit ? 'edit' : 'preview'}`}>
-            {/* Title */}
-            {edit ? (
-                <input
-                    type="text"
-                    name="title"
-                    value={game.title}
-                    onChange={handleChange}
-                    className="title_input"
-                    placeholder="Game Title"
-                    required
-                />
-            ) : (
-                <h2>{game.title}</h2>
-            )}
-
-            {/* Release Date */}
-            <div className="input_row release_row">
-                <span className="label">Released on</span>
-                <input
-                    name="release"
-                    type={edit ? "date" : "text"}
-                    placeholder="Release Date (YYYY-MM-DD)"
-                    value={game.release}
-                    readOnly={!edit}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Rating */}
-            <div className="input_row rating_row">
-                <span className="label">Rating</span>
-                <input
-                    name="rating"
-                    type="number"
-                    min="0"
-                    max={MAX_RATING}
-                    placeholder={`Rating (0-${MAX_RATING})`}
-                    value={game.rating}
-                    readOnly={!edit}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Description */}
-            <div className="input_row textarea desc_row">
-                <span className="label">Description</span>
-                <textarea
-                    placeholder="Description"
-                    className="input_textarea"
-                    name="description"
-                    value={game.description}
-                    readOnly={!edit}
-                    onChange={handleChange}
-                />
-            </div>
-
-            {/* Action Buttons - NOW AT BOTTOM OF INPUTS CONTAINER */}
-            <div className="add_game_submit_container">
-                <Buttons
-                    isEdit={edit}
-                    isSaving={isSaving}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    onCancel={onCancel}
-                />
-            </div>
+      <div className="poster_stats">
+        <div className="stat_item rating">
+          <StarIcon className="stat_icon" />
+          <span className="stat_value">{game?.rating || 0}</span>
+          <span className="stat_label">/ {MAX_RATING}</span>
         </div>
-    );
-}
-
-/**
- * Displays the current rating and favorite icon.
- */
-function GameFooter({ game, onFavorite }) {
-  return (
-    <div className="game_add_footer">
-      <div className="game_add_footer_rating">
-        <StarIcon fontSize="medium" className="rating_star_icon" />
-        <span className="rating_label">{`${game?.rating || 0}/${MAX_RATING}`}</span>
-      </div>
-      <div
-        className="game_footer_favorite"
-        onClick={(e) => {
-          e.stopPropagation();
-          onFavorite();
-        }}
-        title={game?.favorite === 1 ? "Remove from Favorites" : "Add to Favorites"}
-      >
-        {game?.favorite === 0 ? (
-          <FavoriteBorderIcon fontSize="medium" className="favorite_border_icon" />
-        ) : (
-          <FavoriteIcon fontSize="medium" className="favorite_icon" />
-        )}
+        
+        <button
+          type="button"
+          className="stat_item favorite"
+          onClick={(e) => {
+            e.preventDefault();
+            handleFavoriteToggle();
+          }}
+          title={game?.favorite === 1 ? "Remove from Favorites" : "Add to Favorites"}
+        >
+          {game?.favorite === 0 ? (
+            <FavoriteBorderIcon className="stat_icon" />
+          ) : (
+            <FavoriteIcon className="stat_icon favorited" />
+          )}
+          <span className="stat_label">
+            {game?.favorite === 1 ? "Favorited" : "Favorite"}
+          </span>
+        </button>
       </div>
     </div>
   );
 }
 
-/**
- * Displays the action buttons based on the current mode (Preview or Edit).
- */
-function Buttons({ isEdit, isSaving, onEdit, onDelete, onCancel }) {
+function MetadataField({ label, name, type, value, edit, onChange, min, max, suffix }) {
+  return (
+    <div className="metadata_field">
+      <label className="field_label">{label}</label>
+      <div className="field_input_wrapper">
+        <input
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          readOnly={!edit}
+          min={min}
+          max={max}
+          className={`field_input ${edit ? 'editable' : ''}`}
+        />
+        {suffix && <span className="field_suffix">{suffix}</span>}
+      </div>
+    </div>
+  );
+}
+
+function ActionButtons({ isEdit, isSaving, onEdit, onDelete, onCancel }) {
   if (isEdit) {
     return (
-      <div className="game_edit_buttons">
+      <div className="action_buttons edit_actions">
         <button
           type="submit"
-          className="save_btn"
+          className="action_btn save_btn"
           disabled={isSaving}
         >
-          {isSaving ? 'Saving...' : <><SaveIcon fontSize="small" /> Save</>}
+          <SaveIcon fontSize="small" />
+          {isSaving ? 'Saving...' : 'Save'}
         </button>
         <button
           type="button"
-          className="cancel_btn"
+          className="action_btn cancel_btn"
           onClick={onCancel}
           disabled={isSaving}
         >
-          <CancelIcon fontSize="small" /> Cancel
+          <CancelIcon fontSize="small" />
+          Cancel
         </button>
       </div>
     );
-  } else {
-    return (
-      <div className="game_preview_buttons">
-        <div className="edit_btn" onClick={onEdit} role="button" tabIndex="0">
-          <EditIcon fontSize="small" /> Edit
-        </div>
-        <div className="delete_btn" onClick={onDelete} role="button" tabIndex="0">
-          <DeleteIcon fontSize="small" /> Delete
-        </div>
-      </div>
-    );
   }
+
+  return (
+    <div className="action_buttons view_actions">
+      <button
+        type="button"
+        className="action_btn edit_btn"
+        onClick={onEdit}
+      >
+        <EditIcon fontSize="small" />
+        Edit
+      </button>
+      <button
+        type="button"
+        className="action_btn delete_btn"
+        onClick={onDelete}
+      >
+        <DeleteIcon fontSize="small" />
+        Delete
+      </button>
+    </div>
+  );
 }

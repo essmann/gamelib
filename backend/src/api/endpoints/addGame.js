@@ -13,7 +13,9 @@ async function addGame(db, game) {
     : null;
 
   // Generate unique game ID
-  game.id = Math.floor(Math.random() * 10e9);
+  if(!game.id){
+    game.id = Math.floor(Math.random() * 10e9);
+  }
 
   // Log game being added (with truncated poster)
   const gameForLogging = {

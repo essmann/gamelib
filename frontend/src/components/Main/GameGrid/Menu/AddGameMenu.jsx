@@ -127,7 +127,7 @@ function AddGameMenu({ data }) {
               onChange={handleChange}
             />
           </div>
-          <div className="input_row textarea">
+          <div className="input_row textarea add">
             <textarea
               placeholder="Description"
               className="input_textarea"
