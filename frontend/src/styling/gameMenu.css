@@ -484,3 +484,19 @@
 .action_btn.save_btn{
   background: green;
 }
+.poster_stats * {
+  color: var(--text-primary);
+  filter: none !important;
+
+}
+.stat_label{
+  font-size: large;
+}
+.stat_value{
+  font-size: large;
+  font-weight: 800;
+}
+.action_buttons.view_actions *{
+  background: var(--bg-secondary);
+  filter: none !important;
+  box-shadow: none !important;}

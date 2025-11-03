@@ -171,12 +171,21 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                   label="Rating"
                   name="rating"
                   type="number"
+                  className="rating_input"
                   value={game.rating}
                   edit={edit}
                   onChange={handleChange}
                   min="0"
                   max={MAX_RATING}
                   suffix={`/ ${MAX_RATING}`}
+                />
+                <MetadataField
+                  label="Genres"
+                  name="genres"
+                  type={edit ? "text" : "text"}
+                  value={game?.genres}
+                  edit={edit}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -265,10 +274,10 @@ function PosterSection({ game, edit, fileInputRef, handleImageChange, handleFavo
   );
 }
 
-function MetadataField({ label, name, type, value, edit, onChange, min, max, suffix }) {
+function MetadataField({ label, name, type, value, edit, onChange, min, max, suffix, className }) {
   return (
     <div className="metadata_field">
-      <label className="field_label">{label}</label>
+      <label className="field_label" >{label}</label>
       <div className="field_input_wrapper">
         <input
           name={name}
@@ -278,7 +287,7 @@ function MetadataField({ label, name, type, value, edit, onChange, min, max, suf
           readOnly={!edit}
           min={min}
           max={max}
-          className={`field_input ${edit ? 'editable' : ''}`}
+          className={`field_input ${edit ? 'editable' : ''} ${className || '' }`}
         />
         {suffix && <span className="field_suffix">{suffix}</span>}
       </div>

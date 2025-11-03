@@ -99,3 +99,8 @@
   align-items: center;
   padding: 0.25rem;
 }
+
+.game_add_footer_rating{
+  display: flex;
+  align-items: center;
+}

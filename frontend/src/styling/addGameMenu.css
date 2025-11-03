@@ -510,3 +510,23 @@
   flex-direction: row !important;
   padding: 0.2rem !important;
 }
+
+.field_suffix{
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.field_input.rating_input{
+  max-width: 100px;
+}
+
+.poster_wrapper{
+  max-height: 100% !important;
+}
+.menu_container{
+  overflow-y: auto !important;
+  max-height: calc(100vh - 100px) !important;
+}
+
+.menu_container{
+  top: 50% !important;
+}
