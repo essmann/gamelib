@@ -520,13 +520,5 @@
 }
 
 .poster_wrapper{
-  max-height: 100% !important;
-}
-.menu_container{
-  overflow-y: auto !important;
-  max-height: calc(100vh - 100px) !important;
-}
-
-.menu_container{
-  top: 50% !important;
+  max-height: 100%;
 }
