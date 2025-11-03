@@ -480,3 +480,7 @@
   outline-offset: 2px;
   border-radius: 8px;
 }
+
+.action_btn.save_btn{
+  background: green;
+}

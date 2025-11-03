@@ -49,35 +49,49 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     const file = e.target.files[0];
     if (file) {
       console.log("New file selected:", file.name);
+      // Store the file for upload when saving
+      setGame(prevGame => {
+        return new Game({ ...prevGame, newImageFile: file });
+      });
       e.target.value = null;
     }
   }, []);
 
-  const handleFavoriteToggle = useCallback(() => {
-    setGame(prevGame => {
-      const isFavorite = prevGame.favorite === 1;
-      return new Game({ ...prevGame, favorite: isFavorite ? 0 : 1 });
+  const handleFavoriteToggle = useCallback(async () => {
+    const updatedGame = new Game({ 
+      ...game, 
+      favorite: game.favorite === 1 ? 0 : 1 
     });
-  }, []);
+    setGame(updatedGame);
+    
+    // Save favorite change immediately without entering edit mode
+    try {
+      await onSave(updatedGame);
+    } catch (err) {
+      console.error("Error saving favorite:", err);
+      // Revert on error
+      setGame(game);
+    }
+  }, [game, onSave]);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    if (!edit || isSaving) return;
-
-    setIsSaving(true);
-    console.log("Attempting to save game:", game);
-
+    
+    // Only save when explicitly clicking the Save button in edit mode
+    if (!edit || !isSaving) return;
+    
+    console.log("GameMenu handleSubmit called");
+    console.log("Game data to save:", game);
+    
     try {
-      if (onSave) {
-        onSave(game);
-      }
-      setEdit(false);
-    } catch (error) {
-      console.error("Error saving game:", error);
+      await onSave(game);
+      setEdit(false); // Exit edit mode on successful save
+    } catch (err) {
+      console.error("Error saving game:", err);
     } finally {
       setIsSaving(false);
     }
-  }, [game, edit, isSaving, onSave]);
+  }, [edit, isSaving, game, onSave]);
 
   const handleDelete = useCallback(() => {
     if (window.confirm(`Are you sure you want to delete "${game.title}"?`)) {
@@ -92,6 +106,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const handleCancel = useCallback(() => {
     setGame(new Game(gameData));
     setEdit(false);
+    setIsSaving(false);
   }, [gameData]);
 
   return (
@@ -119,6 +134,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
               isEdit={edit}
               isSaving={isSaving}
               onEdit={() => setEdit(true)}
+              onSave={() => setIsSaving(true)}
               onDelete={handleDelete}
               onCancel={handleCancel}
             />
@@ -269,14 +285,15 @@ function MetadataField({ label, name, type, value, edit, onChange, min, max, suf
   );
 }
 
-function ActionButtons({ isEdit, isSaving, onEdit, onDelete, onCancel }) {
+function ActionButtons({ isEdit, isSaving, onEdit, onSave, onDelete, onCancel }) {
   if (isEdit) {
     return (
       <div className="action_buttons edit_actions">
         <button
-          type="submit"
+          type="button"
           className="action_btn save_btn"
           disabled={isSaving}
+          onClick={onSave}
         >
           <SaveIcon fontSize="small" />
           {isSaving ? 'Saving...' : 'Save'}
@@ -302,7 +319,7 @@ function ActionButtons({ isEdit, isSaving, onEdit, onDelete, onCancel }) {
         onClick={onEdit}
       >
         <EditIcon fontSize="small" />
-        Edit
+        Edit 
       </button>
       <button
         type="button"

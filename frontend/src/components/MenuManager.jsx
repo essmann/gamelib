@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import SearchMenu from "./Main/GameGrid/Menu/SearchMenu";
 import GameMenu from "./Main/GameGrid/Menu/GameMenu";
 import deleteGame from "../api/endpoints/deleteGame";
-
+import updateGame from "../api/endpoints/updateGame";
 function MenuManager() {
   const {
     previewGameData,
@@ -29,6 +29,7 @@ function MenuManager() {
           gameData={previewGameData}
           onDelete={deleteGame}
           onClose={handleCloseGameMenu}
+          onSave={updateGame}
         />
       )}
       {searchMenu && (
