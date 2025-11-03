@@ -74,25 +74,26 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     }
   }, [game, onSave]);
 
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    
-    // Only save when explicitly clicking the Save button in edit mode
-    if (!edit || !isSaving) return;
-    
-    console.log("GameMenu handleSubmit called");
-    console.log("Game data to save:", game);
-    
-    try {
-      await onSave(game);
-      setEdit(false); // Exit edit mode on successful save
-    } catch (err) {
-      console.error("Error saving game:", err);
-    } finally {
-      setIsSaving(false);
+  useEffect(()=>{
+    const saveGame = async () => {
+         await onSave(game);
+        setEdit(false);
+        setIsSaving(false);
     }
-  }, [edit, isSaving, game, onSave]);
+    if(isSaving){
+      try{
+        saveGame();
+      }
+      catch(err){
+        console.error("Error saving game:", err);
+      }
+    }
+    return;
+  },[isSaving])
 
+  const handleSubmit = () => {
+    return "";
+  }
   const handleDelete = useCallback(() => {
     if (window.confirm(`Are you sure you want to delete "${game.title}"?`)) {
       if (onDelete) {
