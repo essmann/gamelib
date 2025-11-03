@@ -4,17 +4,30 @@ import { GameContext } from "../../../../Context/ContextProvider.jsx";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AddIcon from "@mui/icons-material/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Game from "../../../../api/game.js";
 import addGame from "../../../../api/endpoints/addGame.js";
-function AddGameMenu({ data }) {
-  useEffect(() => {
-    console.log("AddGameMenu opened with data:", data);
-    console.log("State of game inside AddGameMenu:", game); 
-  });
+
+const MAX_RATING = 10;
+
+function AddGameMenu({ data, onClose }) {
   const { setAddGameMenu, setGames } = useContext(GameContext);
-  const [posterFile, setPosterFile] = useState(null); // store actual File
-  const [game, setGame] = useState(
-    new Game({
+  const fileInputRef = useRef(null);
+  const [posterFile, setPosterFile] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const [game, setGame] = useState(() => {
+    if (typeof data === "object" && data !== null) {
+      try {
+        const existingGame = new Game(data);
+        return existingGame;
+      } catch (err) {
+        console.error("Invalid game data passed to AddGameMenu:", err);
+      }
+    }
+    return new Game({
       id: null,
       title: "",
       description: "",
@@ -23,47 +36,72 @@ function AddGameMenu({ data }) {
       rating: "",
       favorite: 0,
       date_added: null,
-    })
-  );
+    });
+  });
+
   useEffect(() => {
-    //check if a game has been passed as an argument
-    if (typeof data === "object" && data !== null) {
-      try {
-        const existingGame = new Game(data);
-        setGame(existingGame);
-        setPosterFile(existingGame.poster ? existingGame.getPosterURL() : null);
-      } catch (err) {
-        console.error("Invalid game data passed to AddGameMenu:", err);
-      }
+    if (typeof data === "object" && data !== null && data.poster) {
+      setPosterFile(game.getPosterURL());
     }
   }, []);
 
-  const fileInputRef = useRef(null);
-  const handlePosterClick = () => fileInputRef.current.click();
+  const handlePosterClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const handlePosterChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const arrayBuffer = await file.arrayBuffer();
       let bytes = new Uint8Array(arrayBuffer);
-      setPosterFile(file);
-      setGame((prev) => new Game({ ...prev, poster: bytes })); // update Game instance
+      setPosterFile(URL.createObjectURL(file));
+      setGame((prev) => new Game({ ...prev, poster: bytes }));
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setGame((prev) => new Game({ ...prev, [name]: value }));
+    
+    if (name === 'rating') {
+      let numValue = parseInt(value, 10);
+      if (isNaN(numValue) || numValue < 0) numValue = 0;
+      if (numValue > MAX_RATING) numValue = MAX_RATING;
+      setGame((prev) => new Game({ ...prev, rating: numValue }));
+    } else {
+      setGame((prev) => new Game({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleFavoriteToggle = () => {
+    setGame((prev) => {
+      const newFav = prev.favorite === 1 ? 0 : 1;
+      return new Game({ ...prev, favorite: newFav });
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSaving) return;
+
+    setIsSaving(true);
     console.log("Game instance:", game);
-    alert(JSON.stringify(game, null, 2));
-    await addGame(game).then(() => {
+
+    try {
+      await addGame(game);
       setGames((prev) => [...prev, game]);
-    });
-    // TODO: convert poster to Uint8Array if sending to backend
+      setAddGameMenu(false);
+    } catch (error) {
+      console.error("Error adding game:", error);
+      alert("Failed to add game. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setAddGameMenu(false);
   };
 
   return (
@@ -72,103 +110,173 @@ function AddGameMenu({ data }) {
         setAddGameMenu(false);
       }}
     >
-      <form className="add_game_form" onSubmit={handleSubmit}>
-        {/* Poster on Left */}
-        <div className="add_game_poster_container" onClick={handlePosterClick}>
-          {posterFile ? (
-            <img
-              src={game.getPosterURL()}
-              alt="Poster"
-              className="poster_preview"
-            />
-          ) : (
-            <div className="add_game_empty_poster">
-              <div className="upload_hint">Click to upload image</div>
-            </div>
-          )}
-          <input
-            className="file_upload_input"
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handlePosterChange}
-            style={{ display: "none" }}
-          />
-          <GameFooter
-            game={game}
-            onFavorite={() => {
-              const newFav = game.favorite === 1 ? 0 : 1;
-              setGame((prev) => new Game({ ...prev, favorite: newFav }));
-            }}
-          />
-        </div>
-
-        <div className="add_game_inputs_container">
-          <h2>Add New Game</h2>
-          <div className="input_row">
+      <div className="game_menu_wrapper edit_mode">
+        <form className="game_menu_form" onSubmit={handleSubmit}>
+          
+          {/* Header */}
+          <div className="game_menu_header">
             <input
+              type="text"
               name="title"
-              placeholder="Title"
               value={game.title}
               onChange={handleChange}
+              className="game_title_input"
+              placeholder="Enter game title..."
+              required
             />
-            <input
-              name="release"
-              placeholder="Release Date"
-              value={game.release}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_row">
-            <input
-              name="rating"
-              placeholder="Rating (1-10)"
-              value={game.rating}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_row textarea add">
-            <textarea
-              placeholder="Description"
-              className="input_textarea"
-              name="description"
-              value={game.description}
-              onChange={handleChange}
-            />
+            
+            <div className="action_buttons edit_actions">
+              <button
+                type="submit"
+                className="action_btn save_btn"
+                disabled={isSaving}
+              >
+                <AddIcon fontSize="small" />
+                {isSaving ? 'Adding...' : 'Add Game'}
+              </button>
+              <button
+                type="button"
+                className="action_btn cancel_btn"
+                onClick={handleCancel}
+                disabled={isSaving}
+              >
+                <CancelIcon fontSize="small" />
+                Cancel
+              </button>
+            </div>
           </div>
 
-          <div className="add_game_submit_container">
-            <button type="submit" className="add_game_submit">
-              Submit
-            </button>
+          {/* Main Content */}
+          <div className="game_menu_content">
+            
+            {/* Poster Section */}
+            <PosterSection
+              posterFile={posterFile}
+              game={game}
+              fileInputRef={fileInputRef}
+              handlePosterClick={handlePosterClick}
+              handlePosterChange={handlePosterChange}
+              handleFavoriteToggle={handleFavoriteToggle}
+            />
+
+            {/* Details Section */}
+            <div className="game_details_section">
+              
+              {/* Metadata Grid */}
+              <div className="game_metadata">
+                <div className="metadata_field">
+                  <label className="field_label">Release Date</label>
+                  <div className="field_input_wrapper">
+                    <input
+                      name="release"
+                      type="date"
+                      value={game.release}
+                      onChange={handleChange}
+                      className="field_input editable"
+                    />
+                  </div>
+                </div>
+                
+                <div className="metadata_field">
+                  <label className="field_label">Rating</label>
+                  <div className="field_input_wrapper">
+                    <input
+                      name="rating"
+                      type="number"
+                      min="0"
+                      max={MAX_RATING}
+                      value={game.rating}
+                      onChange={handleChange}
+                      className="field_input editable"
+                      placeholder="0-10"
+                    />
+                    <span className="field_suffix">/ {MAX_RATING}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="game_description_container">
+                <label className="field_label">Description</label>
+                <textarea
+                  name="description"
+                  value={game.description}
+                  onChange={handleChange}
+                  className="game_description editable"
+                  placeholder="Enter game description..."
+                />
+              </div>
+
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </MenuContainer>
   );
 }
 
 export default AddGameMenu;
 
-export function GameFooter({ game, onFavorite }) {
+function PosterSection({ posterFile, game, fileInputRef, handlePosterClick, handlePosterChange, handleFavoriteToggle }) {
   return (
-    <div className="game_add_footer">
-      <div className="game_add_footer_rating">
-        <StarIcon fontSize="medium" />
-        <span className="rating_label">{`${game?.rating || 0}/10`}</span>
-      </div>
-      <div
-        className="game_footer_favorite"
-        onClick={(e) => {
-          e.stopPropagation();
-          onFavorite();
-        }}
+    <div className="poster_section">
+      <div 
+        className="poster_wrapper editable"
+        onClick={handlePosterClick}
       >
-        {game?.favorite === 0 ? (
-          <FavoriteBorderIcon fontSize="medium" />
+        {posterFile ? (
+          <>
+            <img
+              src={posterFile}
+              alt="Game Poster"
+              className="poster_image"
+            />
+            <div className="poster_upload_overlay">
+              <CloudUploadIcon fontSize="large" />
+              <span>Change Image</span>
+            </div>
+          </>
         ) : (
-          <FavoriteIcon fontSize="medium" />
+          <div className="poster_empty">
+            <CloudUploadIcon fontSize="large" />
+            <span>Click to upload poster</span>
+          </div>
         )}
+      </div>
+
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handlePosterChange}
+      />
+
+      <div className="poster_stats">
+        <div className="stat_item rating">
+          <StarIcon className="stat_icon" />
+          <span className="stat_value">{game?.rating || 0}</span>
+          <span className="stat_label">/ {MAX_RATING}</span>
+        </div>
+        
+        <button
+          type="button"
+          className="stat_item favorite"
+          onClick={(e) => {
+            e.preventDefault();
+            handleFavoriteToggle();
+          }}
+          title={game?.favorite === 1 ? "Remove from Favorites" : "Add to Favorites"}
+        >
+          {game?.favorite === 0 ? (
+            <FavoriteBorderIcon className="stat_icon" />
+          ) : (
+            <FavoriteIcon className="stat_icon favorited" />
+          )}
+          <span className="stat_label">
+            {game?.favorite === 1 ? "Favorited" : "Favorite"}
+          </span>
+        </button>
       </div>
     </div>
   );
