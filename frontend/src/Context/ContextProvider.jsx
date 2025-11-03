@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-
+import { useContext } from "react";
 export const GameContext = createContext();
 
 function ContextProvider({ children }) {
@@ -22,3 +22,5 @@ function ContextProvider({ children }) {
 }
 
 export default ContextProvider;
+
+

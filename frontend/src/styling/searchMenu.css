@@ -58,3 +58,7 @@
 .search_results{
     max-height: 300px;
 }
+
+.result_item.selected{
+    background: var(--bg-elevated);
+}

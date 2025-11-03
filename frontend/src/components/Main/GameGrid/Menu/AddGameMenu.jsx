@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import MenuContainer from "../../../MenuContainer";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
 import StarIcon from "@mui/icons-material/Star";
@@ -6,7 +6,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Game from "../../../../api/game.js";
 import addGame from "../../../../api/endpoints/addGame.js";
-function AddGameMenu() {
+function AddGameMenu({ data }) {
+  useEffect(() => {
+    console.log("AddGameMenu opened with data:", data);
+    console.log("State of game inside AddGameMenu:", game); 
+  });
   const { setAddGameMenu, setGames } = useContext(GameContext);
   const [posterFile, setPosterFile] = useState(null); // store actual File
   const [game, setGame] = useState(
@@ -21,6 +25,18 @@ function AddGameMenu() {
       date_added: null,
     })
   );
+  useEffect(() => {
+    //check if a game has been passed as an argument
+    if (typeof data === "object" && data !== null) {
+      try {
+        const existingGame = new Game(data);
+        setGame(existingGame);
+        setPosterFile(existingGame.poster ? existingGame.getPosterURL() : null);
+      } catch (err) {
+        console.error("Invalid game data passed to AddGameMenu:", err);
+      }
+    }
+  }, []);
 
   const fileInputRef = useRef(null);
   const handlePosterClick = () => fileInputRef.current.click();
@@ -28,8 +44,8 @@ function AddGameMenu() {
   const handlePosterChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-        const arrayBuffer = await file.arrayBuffer();
-        let bytes = new Uint8Array(arrayBuffer);
+      const arrayBuffer = await file.arrayBuffer();
+      let bytes = new Uint8Array(arrayBuffer);
       setPosterFile(file);
       setGame((prev) => new Game({ ...prev, poster: bytes })); // update Game instance
     }
@@ -44,8 +60,8 @@ function AddGameMenu() {
     e.preventDefault();
     console.log("Game instance:", game);
     alert(JSON.stringify(game, null, 2));
-    await addGame(game).then(()=>{
-      setGames((prev)=>[...prev, game])
+    await addGame(game).then(() => {
+      setGames((prev) => [...prev, game]);
     });
     // TODO: convert poster to Uint8Array if sending to backend
   };
@@ -60,7 +76,11 @@ function AddGameMenu() {
         {/* Poster on Left */}
         <div className="add_game_poster_container" onClick={handlePosterClick}>
           {posterFile ? (
-            <img src={game.getPosterURL()} alt="Poster" className="poster_preview" />
+            <img
+              src={game.getPosterURL()}
+              alt="Poster"
+              className="poster_preview"
+            />
           ) : (
             <div className="add_game_empty_poster">
               <div className="upload_hint">Click to upload image</div>
@@ -153,4 +173,3 @@ export function GameFooter({ game, onFavorite }) {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 import AddGameMenu from "./Main/GameGrid/Menu/AddGameMenu";
 import { GameContext } from "../Context/ContextProvider";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import SearchMenu from "./Main/GameGrid/Menu/SearchMenu";
 import GameMenu from "./Main/GameGrid/Menu/GameMenu";
 import deleteGame from "../api/endpoints/deleteGame";
@@ -17,9 +17,13 @@ function MenuManager() {
     setPreviewGameData(null);
   };
  
+  useEffect(()=>{
+    console.log("MenuManager re-rendered");
+  })
   return (
     <>
-      {addGameMenu && <AddGameMenu />}
+    
+      {addGameMenu && <AddGameMenu data={addGameMenu} />}
       {previewGameData && (
         <GameMenu
           gameData={previewGameData}
@@ -27,7 +31,7 @@ function MenuManager() {
           onClose={handleCloseGameMenu}
         />
       )}
-      {!searchMenu && (
+      {searchMenu && (
         <SearchMenu
           onClose={() => {
             setSearchMenu(false);
