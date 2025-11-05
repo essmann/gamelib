@@ -3,12 +3,12 @@
   "compilerOptions": {
     // File Layout
      "rootDir": "./src",
-     "outDir": "./dist/js",
+     "outDir": "./dist/ts",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "commonjs", // this is what node uses so why not
-    "target": "esnext", //compiles to newest js version
+    "module": "nodenext",
+    "target": "esnext",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -32,13 +32,18 @@
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
 
+    "allowJs": true,
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+  "files":["./src/main.ts", "./src/preload.js"],
+  "exclude": [
+    "./src/api/sqlite/games.db"
+  ]
 }

@@ -1,12 +1,13 @@
 // api/endpoints/addGame.js
-
+import { Game } from "../game";
 /**
  * Adds a new game to the database with its poster image
  * @param {Object} db - SQLite database connection
  * @param {Object} game - Game object containing all game details
- * @returns {Promise<number>} The ID of the newly created game
+ * @returns {Promise<Game>} The ID of the newly created game
  */
 async function addGame(db, game) {
+  console.log("Test");
   // Convert poster to Buffer if it's a Uint8Array
   const poster = game.poster instanceof Uint8Array 
     ? Buffer.from(game.poster) 
@@ -80,7 +81,7 @@ async function addGame(db, game) {
     // Log successful addition
     console.log(`✓ Successfully added game: "${game.title}" (ID: ${game.id})`);
 
-    return game.id;
+    return new Game(game);
 
   } catch (err) {
     console.error('Failed to add game:', err.message);
@@ -88,4 +89,4 @@ async function addGame(db, game) {
   }
 }
 
-module.exports = { addGame };
+export default addGame;

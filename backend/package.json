@@ -4,7 +4,7 @@
   "description": "backend for gamelib",
   "main": "main.js",
   "scripts": {
-    "start": "electron ./src/main.js",
+    "start": "electron ./dist/ts/main.js",
     "test": "jest",
     "build": "electron-builder",
     "package": "electron-forge package",
@@ -54,6 +54,7 @@
     "electron": "^38.5.0",
     "electron-builder": "^26.0.12",
     "jest": "^30.2.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {

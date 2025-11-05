@@ -10,7 +10,12 @@ function getDatabasePath() {
 
   if (isDev) {
     // Development: use local file
-    return path.join(__dirname, dbFileName);
+        console.log("Dev Mode");
+        console.log("Dirname: " + __dirname);
+
+        const projectRoot = path.resolve(__dirname, '../../../../'); // adjust if your dist is deeper
+        console.log("Project Root: " + projectRoot);
+        return path.join(projectRoot, 'src/api/sqlite', dbFileName);
   } else {
    
     const dbPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'games.db');
