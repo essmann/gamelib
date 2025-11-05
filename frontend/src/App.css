@@ -37,16 +37,17 @@ body {
   padding: 0.25rem;
   height: 100vh;
   width: 220px;
-  background: #0c0c0c !important;
+  background: var(--bg-primary) !important;
 }
 
 .game_grid {
+  
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px; /* constant row + column spacing */
   grid-auto-rows: 230px; /* locks row height */
   justify-content: center;
-  background: linear-gradient(#141414, rgb(15, 15, 15)) !important;
+  background: rgb(22, 22, 22);
 }
 
 .menu_container {
@@ -59,4 +60,13 @@ body {
  
   /* min-width: 600px; */
   z-index: 10001;
+}
+
+
+.main_content_header{
+     background: rgb(22, 22, 22);
+    
+}
+.main_content_header * {
+  margin-left: 1rem;
 }

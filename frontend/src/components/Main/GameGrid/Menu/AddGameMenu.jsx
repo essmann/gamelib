@@ -219,6 +219,7 @@ function AddGameMenu({ data, onClose }) {
 export default AddGameMenu;
 
 function PosterSection({ posterFile, game, fileInputRef, handlePosterClick, handlePosterChange, handleFavoriteToggle }) {
+  console.log(game.favorite);
   return (
     <div className="poster_section">
       <div 
@@ -269,10 +270,11 @@ function PosterSection({ posterFile, game, fileInputRef, handlePosterClick, hand
           }}
           title={game?.favorite === 1 ? "Remove from Favorites" : "Add to Favorites"}
         >
-          {game?.favorite === 0 ? (
-            <FavoriteBorderIcon className="stat_icon" />
+          {game?.favorite == 1 ? (
+            <FavoriteIcon className="stat_icon" />
+
           ) : (
-            <FavoriteIcon className="stat_icon favorited" />
+            <FavoriteBorderIcon className="stat_icon" />
           )}
           <span className="stat_label">
             {game?.favorite === 1 ? "Favorited" : "Favorite"}
