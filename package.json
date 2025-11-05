@@ -1,0 +1,47 @@
+{
+  "name": "gamelib",
+  "version": "1.0.0",
+  "description": "![Alt text](https://cdn.discordapp.com/attachments/1408187040302104586/1432638163024609300/image.png?ex=6901c7c3&is=69007643&hm=eb9f21bdc2be1a0bc6bbc40cbc0a65c0b2280d212fd265ba70578be8505e1855&)",
+  "homepage": "https://github.com/essmann/gamelib#readme",
+  "bugs": {
+    "url": "https://github.com/essmann/gamelib/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/essmann/gamelib.git"
+  },
+  "license": "ISC",
+  "author": "essmann",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ansi-regex": "^5.0.1",
+    "ansi-styles": "^4.3.0",
+    "chalk": "^4.1.2",
+    "cliui": "^8.0.1",
+    "color-convert": "^2.0.1",
+    "color-name": "^1.1.4",
+    "concurrently": "^9.2.1",
+    "emoji-regex": "^8.0.0",
+    "escalade": "^3.2.0",
+    "get-caller-file": "^2.0.5",
+    "has-flag": "^4.0.0",
+    "is-fullwidth-code-point": "^3.0.0",
+    "require-directory": "^2.1.1",
+    "rxjs": "^7.8.2",
+    "shell-quote": "^1.8.3",
+    "string-width": "^4.2.3",
+    "strip-ansi": "^6.0.1",
+    "supports-color": "^8.1.1",
+    "tree-kill": "^1.2.2",
+    "tslib": "^2.8.1",
+    "wrap-ansi": "^7.0.0",
+    "y18n": "^5.0.8",
+    "yargs": "^17.7.2",
+    "yargs-parser": "^21.1.1"
+  },
+  "devDependencies": {}
+}

@@ -5,8 +5,8 @@ import path from "path";
 const isDev = !app.isPackaged;
 
 // --- Database setup ---
-import db from "./api/sqlite/game_database";
-import external_db from "./api/sqlite/external_db";
+import db from "./api/sqlite/connection/game_database";
+import external_db from "./api/sqlite/connection/external_db";
 
 // --- API endpoints ---
 import addGame from "./api/endpoints/addGame";
