@@ -2,7 +2,8 @@
 
 - fix ghastly styling on menus at some point, make it smaller and more verbose.
 
-- migrate all js to typescript
+- migrate all js to typescript (ongoing)
 
 - consider using an sqlite ORM like sequelize
+
 
