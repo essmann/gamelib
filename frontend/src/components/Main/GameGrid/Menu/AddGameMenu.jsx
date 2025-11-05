@@ -36,6 +36,7 @@ function AddGameMenu({ data, onClose }) {
       rating: "",
       favorite: 0,
       date_added: null,
+      genres: null,
     });
   });
 
@@ -191,6 +192,19 @@ function AddGameMenu({ data, onClose }) {
                       placeholder="0-10"
                     />
                     <span className="field_suffix">/ {MAX_RATING}</span>
+                  </div>
+                </div>
+                <div className="metadata_field">
+                  <label className="field_label">Genres</label>
+                  <div className="field_input_wrapper">
+                    <input
+                      name="genres"
+                      type="text"
+                      value={game.genres}
+                      onChange={handleChange}
+                      className="field_input"
+                      readOnly={true}
+                    />
                   </div>
                 </div>
               </div>
