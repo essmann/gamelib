@@ -10,38 +10,36 @@
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
-    "build": {
-  "appId": "com.my-electron-app",
-  "productName": "MyElectronApp",
-  "files": [
-    "src/api/**/*",
-    "src/main.js",
-    "src/preload.js",
-    "src/scripts/**/*",
-    "dist/**/*",
-    "node_modules**/*",
-    "src/api/sqlite/games.db",
-    "src/api/sqlite/external_games.db"
-
-  ],
-  "asarUnpack": [
-    "src/api/sqlite/games.db",
-    "src/api/sqlite/external_games.db"
-
-  ],
-  "directories": {
-    "buildResources": "assets"
+  "build": {
+    "appId": "com.my-electron-app",
+    "productName": "MyElectronApp",
+    "files": [
+      "src/api/**/*",
+      "src/main.js",
+      "src/preload.js",
+      "src/scripts/**/*",
+      "dist/**/*",
+      "node_modules**/*",
+      "src/api/sqlite/games.db",
+      "src/api/sqlite/external_games.db"
+    ],
+    "asarUnpack": [
+      "src/api/sqlite/games.db",
+      "src/api/sqlite/external_games.db"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   },
-  "mac": {
-    "target": "dmg"
-  },
-  "win": {
-    "target": "nsis"
-  },
-  "linux": {
-    "target": "AppImage"
-  }
-},
   "author": "essmann",
   "license": "ISC",
   "devDependencies": {
@@ -55,7 +53,8 @@
     "@electron/fuses": "^1.8.0",
     "electron": "^38.5.0",
     "electron-builder": "^26.0.12",
-    "jest": "^30.2.0"
+    "jest": "^30.2.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
