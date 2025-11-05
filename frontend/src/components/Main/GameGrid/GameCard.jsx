@@ -6,20 +6,24 @@ import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 function GameCard({ game }) {
-const {previewGameData, setPreviewGameData} = useContext(GameContext);
-  useEffect(()=>{
-
-      game.getPosterURL();
-  },[])
+  const { previewGameData, setPreviewGameData } = useContext(GameContext);
+  useEffect(() => {
+    game.getPosterURL();
+    console.log("GameCard mounted or game changed." + game.title + game.favorite);
+  }, []);
 
   const onClick = () => {
     setPreviewGameData(game);
     console.log("Clicked game card. Updating..");
-  }
+  };
   return (
     <>
       <div className="game_card " onClick={onClick}>
-        <img className="game_card_image" src={game.getPosterURL() || ""} alt={game.title} />
+        <img
+          className="game_card_image"
+          src={game.getPosterURL() || ""}
+          alt={game.title}
+        />
         <div className="title_overlay">{game.title}</div>
         <GameFooter game={game} />
       </div>
@@ -42,7 +46,7 @@ export function GameFooter({ game, onFavorite }) {
           onFavorite();
         }}
       >
-        {game?.favorite === 0 ? (
+        {game?.favorite == 0 ? (
           <FavoriteBorderIcon fontSize="medium" />
         ) : (
           <FavoriteIcon fontSize="medium" />

@@ -63,6 +63,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
       favorite: game.favorite === 1 ? 0 : 1 
     });
     setGame(updatedGame);
+   
     
     // Save favorite change immediately without entering edit mode
     try {
