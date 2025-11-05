@@ -44,6 +44,18 @@
   },
   "files":["./src/main.ts", "./src/preload.js"],
   "exclude": [
-    "./src/api/sqlite/games.db"
+    "./src/api/sqlite/games.db",
+    "./src/api/sqlite/external_games.db",
   ]
+,
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+
+    "fallbackPolling": "dynamicPriority",
+    "excludeDirectories": [
+      "./dist",
+      "./node_modules"
+    ]
+  }
 }

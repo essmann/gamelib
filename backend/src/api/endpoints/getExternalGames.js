@@ -29,6 +29,7 @@ async function getExternalGames(db, prefix = '') {
       db.all(query, params, (err, rows) => {
         if (err) reject(err);
         else resolve(rows);
+        console.log("External poster type: " + typeof rows[0].poster);
       });
     });
 
