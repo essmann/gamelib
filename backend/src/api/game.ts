@@ -2,18 +2,18 @@
 class Game {
     id : string | number;
     title : string;
-    release : string;
-    description : string;
-    poster : Uint8Array
-    rating : number;
-    favorite : number;
-    date_added : string;
+    release : string | null;
+    description : string | null;
+    poster : Uint8Array | null;
+    rating : number | null;
+    favorite : number | null;
+    date_added : string | null;
 
     //external games
-    genres: string;
-    developers: string;
-    publishers: string;
-    platforms: string;
+    genres: string | null;
+    developers: string | null;
+    publishers: string | null;
+    categories: string | null;
 
 
     constructor(game_object : any){ {
@@ -30,7 +30,7 @@ class Game {
         this.genres = game_object.genres;
         this.developers = game_object.developers;
         this.publishers = game_object.publishers;
-        this.platforms = game_object.platforms;
+        this.categories = game_object.categories;
         
         console.log("Game instantiated");
         console.log("Poster: " + Object.prototype.toString.call(this.poster));

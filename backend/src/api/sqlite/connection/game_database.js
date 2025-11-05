@@ -42,7 +42,13 @@ db.serialize(() => {
       description TEXT,
       rating REAL,
       favorite INTEGER,
-      date_added TEXT
+      date_added TEXT,
+      genres TEXT,
+      developers TEXT,
+      publishers TEXT,
+      categories TEXT
+
+
     )
   `);
 

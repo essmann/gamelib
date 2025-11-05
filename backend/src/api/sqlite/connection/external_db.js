@@ -44,6 +44,7 @@ db.serialize(() => {
       detailed_description TEXT,
       developers TEXT,
       publishers TEXT,
+      categories TEXT,
       genres TEXT
 
     )
