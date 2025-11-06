@@ -184,7 +184,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                   label="Genres"
                   name="genres"
                   type={edit ? "text" : "text"}
-                  value={game?.genres}
+                  value={game?.getGenres() || ""}
                   edit={edit}
                   onChange={handleChange}
                 />

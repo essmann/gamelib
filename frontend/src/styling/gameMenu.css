@@ -500,3 +500,8 @@
   background: var(--bg-secondary);
   filter: none !important;
   box-shadow: none !important;}
+
+
+  .field_input{
+    height: 1rem !important;
+  }

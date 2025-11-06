@@ -17,6 +17,12 @@ class Game{
 
     }
 
+    getGenres(){
+        let genres = this.genres;
+        genres = genres.replace(/[\[\]']+/g,'');
+        return genres;
+    }
+
    getPosterURL() {
     if(this.poster == null){return;}
     if (this.poster instanceof Uint8Array) {
