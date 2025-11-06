@@ -7,16 +7,20 @@
  */
 async function getGames(db) {
   try {
+    // Get all column names from the 'games' table dynamically
+    const columns = await new Promise((resolve, reject) => {
+      db.all(`PRAGMA table_info(games);`, [], (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows.map(r => r.name));
+      });
+    });
+
+    const columnList = columns.map(c => `games.${c}`).join(', ');
+
     const rows = await new Promise((resolve, reject) => {
       db.all(
         `SELECT 
-          games.id AS game_id,
-          games.title,
-          games.release,
-          games.description,
-          games.rating,
-          games.favorite,
-          games.date_added,
+          ${columnList},
           posters.id AS poster_id,
           posters.poster
         FROM games
@@ -31,28 +35,16 @@ async function getGames(db) {
 
     console.log(`Fetched ${rows.length} game(s) from the database.`);
 
-    // Log clean game info
     const gamesForLogging = rows.map(game => ({
-      id: game.game_id,
-      title: game.title,
-      release: game.release,
-      description: game.description,
-      rating: game.rating,
-      favorite: game.favorite,
-      date_added: game.date_added,
+      ...game,
       poster: game.poster ? `<Buffer ${game.poster.length} bytes>` : null
     }));
 
     console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
 
+    // Return results
     return rows.map(row => ({
-      id: row.game_id,
-      title: row.title,
-      release: row.release,
-      description: row.description,
-      rating: row.rating,
-      favorite: row.favorite,
-      date_added: row.date_added,
+      ...row,
       poster: row.poster,
     }));
 

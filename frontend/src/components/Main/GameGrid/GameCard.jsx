@@ -6,7 +6,7 @@ import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 function GameCard({ game }) {
-  const { previewGameData, setPreviewGameData } = useContext(GameContext);
+  const { previewGameData, setPreviewGameData, setGames } = useContext(GameContext);
   useEffect(() => {
     game.getPosterURL();
     console.log("GameCard mounted or game changed." + game.title + game.favorite);
@@ -16,6 +16,14 @@ function GameCard({ game }) {
     setPreviewGameData(game);
     console.log("Clicked game card. Updating..");
   };
+  // const toggleFavorite = () => {
+  //   game.favorite = game.favorite == 1 ? 0 : 1;
+  //   game.updateGameData({ favorite: game.favorite });
+  //   setGames((prevGames) =>
+  //     prevGames.map((g) => (g.id === game.id ? { ...g, favorite: game.favorite } : g))
+  //   );
+  //   console.log("Toggled favorite for " + game.title + " to " + game.favorite);
+  // }
   return (
     <>
       <div className="game_card " onClick={onClick}>
