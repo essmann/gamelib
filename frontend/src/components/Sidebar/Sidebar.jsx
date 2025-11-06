@@ -4,7 +4,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Icon } from "@mui/material";
 import { GameContext } from "../../Context/ContextProvider";
-
+import SettingsIcon from '@mui/icons-material/Settings';
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -46,7 +46,7 @@ function ListItem({
 
   return (
     <div 
-      className={`sidebar_item ${isSelected ? 'selected' : ''} ${isChild ? 'child_item' : ''}`}
+      className={`sidebar_item ${isSelected ? 'selected' : ''}  ${title} ${isChild ? 'child_item' : ''}`}
       onClick={handleClick}
       role="button"
       tabIndex={0}
@@ -99,6 +99,14 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={true}
+        />
+        <ListItem
+          title="Settings"
+          icon={SettingsIcon}
+          index={indexEnum.settings || 99}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={false}
         />
 
         {/* Example of parent item usage - uncomment if needed
