@@ -91,6 +91,7 @@
   border-radius: 0 0 6px 6px;
   text-align: center;
   color: #bbb;
+  background: var(--bg-primary);
 }
 .game_add_footer{
   display: flex;
@@ -103,4 +104,7 @@
 .game_add_footer_rating{
   display: flex;
   align-items: center;
+}
+
+.game_footer_favorite{
 }

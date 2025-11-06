@@ -34,6 +34,7 @@
 
 /* Sidebar Items */
 .sidebar_item {
+  border-color: rgb(172, 27, 44);
   display: flex;
   align-items: center;
   padding: 0.625rem 0.75rem;
@@ -43,7 +44,7 @@
   font-size: 0.875rem;
   color: #9ca3af;
   border-radius: 6px;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.09s ease-in;
   user-select: none;
   position: relative;
 }
@@ -57,8 +58,11 @@
 /* Selected/Active state */
 .sidebar_item.selected {
   background: #1f1f1f;
+  border-color: rgb(172, 27, 44);
   color: #ffffff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-left: 2px solid rgb(172, 27, 44);
+  border-radius: 0px 4px 4px 0px;
 }
 
 /* Alternative active class for compatibility */
