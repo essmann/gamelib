@@ -21,7 +21,7 @@ ipcMain.handle(
   "add-game",
   async (event: IpcMainInvokeEvent, gameData: Game): Promise<Game> => {
     console.log("Hey");
-    const gameObject = new Game(gameData);
+    const gameObject = new Game(gameData );
     let game = await addGame(db, gameObject);
     return game;
   }
@@ -76,6 +76,7 @@ const createWindow = (): void => {
       preload: path.join(__dirname, "./preload.js"), // Adjust for dist folder
     },
   });
+  // win.setMenuBarVisibility(false)
 
   if (isDev) {
     win.loadURL("http://localhost:5173/");

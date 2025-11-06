@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import './styling/variables.css';
 :root {
   --color-dark: #202020;
   --color-dark-hex: #202020; /* if you want a separate variable for hex */
@@ -47,7 +48,7 @@ body {
   gap: 20px; /* constant row + column spacing */
   grid-auto-rows: 230px; /* locks row height */
   justify-content: center;
-  background: rgb(22, 22, 22);
+  background: var(--bg-secondary);
 }
 
 .menu_container {
@@ -67,6 +68,22 @@ body {
      background: rgb(22, 22, 22);
     
 }
-.main_content_header * {
-  margin-left: 1rem;
+.main_content_header {
+  margin: 0;
+  padding: 0.5rem;
+  background: var(--bg-secondary) !important;;
 }
+
+.main_content_header > span{
+  margin-right: 2rem;
+  color: var(--text-2);
+  cursor: pointer;
+  
+}
+
+.main_content_header > span.selected *{
+  background: rgb(66, 62, 62);
+  border-radius: 4px;
+}
+/* testing */
+
