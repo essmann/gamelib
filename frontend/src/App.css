@@ -68,7 +68,7 @@ body {
 }
 .main_content_header {
   margin: 0;
-  padding: 0.5rem;
+  padding: 0.4rem;
   background: var(--bg-primary) !important;
   display: flex;
   align-items: center;
@@ -122,4 +122,11 @@ justify-content: ;
 
   gap: 1rem;
 
+}
+
+.header_slider{
+  width: 150px;
+  color: rgb(221, 30, 81);
+  margin-left: auto;
+  
 }
