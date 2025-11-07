@@ -79,9 +79,10 @@ const createWindow = (): void => {
   // win.setMenuBarVisibility(false)
 
   if (isDev) {
+    console.log("__dirname in dev:", __dirname);
     win.loadURL("http://localhost:5173/");
   } else {
-    win.loadFile(path.join(__dirname, "./index.html")); // Adjust for build output
+    win.loadFile(path.join(__dirname, "../index.html")); // Adjust for build output
   }
 };
 
