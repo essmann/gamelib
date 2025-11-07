@@ -5,6 +5,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Icon } from "@mui/material";
 import { GameContext } from "../../Context/ContextProvider";
 import SettingsIcon from '@mui/icons-material/Settings';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -101,6 +103,14 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           count={true}
         />
         <ListItem
+        title="Lists"
+        icon={TurnedInIcon}
+        index={indexEnum.lists || 100}
+        currentIndex={currentIndex}
+        setIndex={setIndex}
+        count={true}
+      />
+        <ListItem
           title="Settings"
           icon={SettingsIcon}
           index={indexEnum.settings || 99}
@@ -108,6 +118,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           setIndex={setIndex}
           count={false}
         />
+       
 
         {/* Example of parent item usage - uncomment if needed
         <ListParentItem 
