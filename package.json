@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"cd frontend && npm run dev\" \"cd backend && tsc --watch\" \"cd backend && npm run start\""
+    "start": "concurrently \"cd frontend && npm run dev\" \"cd electron && tsc --watch\" \"cd electron && npm run start\""
   },
   "dependencies": {
     "ansi-regex": "^5.0.1",
@@ -31,6 +31,7 @@
     "get-caller-file": "^2.0.5",
     "has-flag": "^4.0.0",
     "is-fullwidth-code-point": "^3.0.0",
+    "mysql": "^2.18.1",
     "require-directory": "^2.1.1",
     "rxjs": "^7.8.2",
     "shell-quote": "^1.8.3",
