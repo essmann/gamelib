@@ -7,8 +7,12 @@ import db from "./database/connection.js"; // adjust extension or omit if using 
 import Poster from "./database/models/poster.js";
 import Game from "./database/models/game.js";
 
+//types
+import GameResponse from "./database/models/DTO/gameResponse.js";
+
 //endpoint handlers
 import getExternalGames from "./database/endpoints/getExternalGames.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -35,8 +39,10 @@ app.get("/", (req, res) => {
 
 });
 
-app.get("/externalGames", (req, res) =>{
-  getExternalGames(req, res);
+app.get("/externalGames", async (req, res) =>{
+ let games = await getExternalGames(req, res);
+ res.setHeader("Content-Type", "application/json");
+ res.end(JSON.stringify(games, null, 2));
   
 })
 app.listen(PORT, () => {
