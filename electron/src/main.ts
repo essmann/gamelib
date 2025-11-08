@@ -1,6 +1,16 @@
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "path";
+import dotenv from "dotenv";
+import http from "http";
+import https from "https";
+import url from "node:url";
+dotenv.config();
+//load env variables from .env and prioritize those over the ones on machine. note, docker takes precedence.
 
+// -- Environment variables ---
+const BACKEND_PORT = process.env.BACKEND_PORT || 8080;
+const BACKEND_HOST = process.env.BACKEND_HOST || "localhost";
+const BACKEND_URL = `http://${BACKEND_HOST}:${BACKEND_HOST}`;
 // --- Detect production mode ---
 const isDev = !app.isPackaged;
 
@@ -15,13 +25,14 @@ import { deleteGame } from "./api/endpoints/deleteGame";
 import { getGames } from "./api/endpoints/getGames";
 import { getExternalGames } from "./api/endpoints/getExternalGames";
 import Game from "./api/game";
+import { URLSearchParams } from "url";
 
 // --- IPC handlers ---
 ipcMain.handle(
   "add-game",
   async (event: IpcMainInvokeEvent, gameData: Game): Promise<Game> => {
     console.log("Hey");
-    const gameObject = new Game(gameData );
+    const gameObject = new Game(gameData);
     let game = await addGame(db, gameObject);
     return game;
   }
@@ -55,10 +66,32 @@ ipcMain.handle("get-games", async (): Promise<Game[]> => {
 ipcMain.handle(
   "get-external-games",
   async (event: IpcMainInvokeEvent, prefix: string): Promise<any> => {
-    console.log("Fetching external games with prefix:", prefix);
-    let ext_games = await getExternalGames(external_db, prefix);
-    console.log("External poster type: " + Object.prototype.toString.call(ext_games[0].poster));
-    return ext_games;
+    // console.log("Fetching external games with prefix:", prefix);
+    // let ext_games = await getExternalGames(external_db, prefix);
+    // console.log("External poster type: " + Object.prototype.toString.call(ext_games[0].poster));
+
+    // return ext_games;
+    const _url = url.format({
+      protocol: "http",
+      hostname: BACKEND_HOST,
+      port: BACKEND_PORT,
+      pathname: "/externalGames",
+      query: {
+        search: prefix,
+      },
+    });
+    console.log("url: " + _url);
+    console.log("Request sent");
+  
+  const response = await fetch(_url);
+
+  if (!response.ok) {
+    throw new Error("HTTP error status: " + response.status);
+  }
+
+  const data = await response.();
+  return data; 
+    
   }
 );
 

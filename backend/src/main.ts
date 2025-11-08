@@ -40,6 +40,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/externalGames", async (req, res) =>{
+  console.log("Request sent to /externlGames.");
+  console.log(req.query);
  let games = await getExternalGames(req, res);
  res.setHeader("Content-Type", "application/json");
  res.end(JSON.stringify(games, null, 2));
