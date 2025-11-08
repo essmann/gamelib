@@ -7,6 +7,8 @@ import db from "./database/connection.js"; // adjust extension or omit if using 
 import Poster from "./database/models/poster.js";
 import Game from "./database/models/game.js";
 
+//endpoint handlers
+import getExternalGames from "./database/endpoints/getExternalGames.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +17,7 @@ const PORT = process.env.PORT || 3000;
   try {
     await Game.sync();
     await Poster.sync();
-    
+
     const [result, meta] = await db.query("SHOW DATABASES");
     const [tables] = await db.query("SHOW TABLES");
     console.log("Databases:", result);
@@ -30,8 +32,13 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
+
 });
 
+app.get("/externalGames", (req, res) =>{
+  getExternalGames(req, res);
+  
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
