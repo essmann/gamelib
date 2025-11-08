@@ -5,22 +5,18 @@ import Game from './game.js';
 class Poster extends Model {}
 
 Poster.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+  poster_id: {
+    type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
+    
   },
-  game_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    references: {
-      model: Game,
-      key: 'id',
-    },
-  },
-  data: {
+  poster: {
     type: DataTypes.BLOB('long'),
     allowNull: true,
+  },
+  game_id: {          // <-- add this
+    type: DataTypes.INTEGER.UNSIGNED,
+    allowNull: false,
   },
 }, {
   sequelize,
@@ -29,7 +25,8 @@ Poster.init({
   timestamps: false,
 });
 
-Game.hasOne(Poster, { foreignKey: 'game_id', as: 'posterData' });
+
+Game.hasOne(Poster, { foreignKey: 'game_id' });
 Poster.belongsTo(Game, { foreignKey: 'game_id' });
 
 export default Poster;

@@ -1,9 +1,11 @@
-import express from 'express';
-import path from 'path';
-import db from './database/connection.js'; // adjust extension or omit if using ts-node
+import express from "express";
+import path from "path";
+import db from "./database/connection.js"; // adjust extension or omit if using ts-node
 // import dotenv from 'dotenv';
 
 // dotenv.config();
+import Poster from "./database/models/poster.js";
+import Game from "./database/models/game.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,16 +13,23 @@ const PORT = process.env.PORT || 3000;
 // Example test query
 (async () => {
   try {
-    const [result, meta] = await db.query('SHOW DATABASES');
-    console.log('Databases:', result);
-    console.log('Database connected successfully.');
+    await Game.sync();
+    await Poster.sync();
+    
+    const [result, meta] = await db.query("SHOW DATABASES");
+    const [tables] = await db.query("SHOW TABLES");
+    console.log("Databases:", result);
+    console.log("Tables:", tables);
+    console.log("Database connected successfully.");
+
+    
   } catch (error) {
-    console.error('Database connection failed:', error);
+    console.error("Database connection failed:", error);
   }
 })();
 
-app.get('/', (req , res ) => {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 app.listen(PORT, () => {

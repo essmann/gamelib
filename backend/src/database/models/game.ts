@@ -5,8 +5,9 @@ class Game extends Model {}
 
 Game.init({
   id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
+    allowNull: false,
   },
   title: {
     type: DataTypes.STRING,
@@ -21,7 +22,7 @@ Game.init({
     allowNull: true,
   },
   rating: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.REAL,
     allowNull: true,
   },
   favorite: {
@@ -33,19 +34,19 @@ Game.init({
     allowNull: true,
   },
   genres: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   developers: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   publishers: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   categories: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
   },
 }, {
