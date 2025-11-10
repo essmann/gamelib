@@ -8,25 +8,37 @@ async function getExternalGames(
   req: Request,
   res: Response
 ): Promise<GameResponse[] | void> {
-  let search = req.query.search || null;
-  if (search == null) {
-    return;
-  }
+  const search = req.query.search;
+  if (!search) return;
 
-  const [results] = await db.query(
-    `SELECT games.*, posters.poster 
-     FROM games
-     LEFT JOIN posters ON games.id = posters.game_id
-     WHERE games.title LIKE ?`,
-    {
-      replacements: [`${search}%`], // safe user input
+  const results = await Game.findAll({
+    where: {
+      title: {
+        [Op.like]: `${search}%`,
+      },
+    },
+    include: [
+      {
+        model: Poster,
+        attributes: ["poster"], // keep only poster column
+        required: false, // LEFT JOIN
+      },
+    ],
+    raw: true, // flattens the result so poster comes as Buffer
+    nest: true, // keeps included models nested correctly
+  });
+
+  // Map to DTO
+  const gamesArray = results.map((row: any) => {
+    // row.Poster.poster is a Buffer
+    if (row.Poster) {
+      row.poster = row.Poster.poster;
+    } else {
+      row.poster = null;
     }
-  );
-
-  console.log(results);
-  console.log("externalGames called with search: " + search);
-  // Map results to DTO
-  const gamesArray = results.map((row: any) => new GameResponse(row));
+    delete row.Poster; // optional cleanup
+    return new GameResponse(row);
+  });
 
   return gamesArray;
 }
