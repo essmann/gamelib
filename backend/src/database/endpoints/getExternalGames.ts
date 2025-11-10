@@ -11,7 +11,7 @@ async function getExternalGames(req: Request, res: Response) : Promise<GameRespo
   let games = await Game.findAll({
     where: {
       title: {
-        [Op.like]: `%${search}%`,
+        [Op.like]: `${search}%`,
       },
     },
   });

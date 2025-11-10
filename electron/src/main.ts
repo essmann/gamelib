@@ -89,7 +89,7 @@ ipcMain.handle(
     throw new Error("HTTP error status: " + response.status);
   }
 
-  const data = await response.();
+  const data = await response.json();
   return data; 
     
   }

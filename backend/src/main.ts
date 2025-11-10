@@ -39,14 +39,20 @@ app.get("/", (req, res) => {
 
 });
 
-app.get("/externalGames", async (req, res) =>{
-  console.log("Request sent to /externlGames.");
-  console.log(req.query);
- let games = await getExternalGames(req, res);
- res.setHeader("Content-Type", "application/json");
- res.end(JSON.stringify(games, null, 2));
-  
-})
+app.get("/externalGames", async (req, res) => {
+  console.log("Request sent to /externalGames.");
+  console.log(`query: ${req.query.search}`);
+
+  try {
+    const games = await getExternalGames(req, res);
+    res.json(games); // Automatically sets Content-Type and stringifies
+    console.log(`fetched ${games?.length || "0"} games`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch external games." });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
