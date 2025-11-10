@@ -4,9 +4,10 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Icon } from "@mui/material";
 import { GameContext } from "../../Context/ContextProvider";
-import SettingsIcon from '@mui/icons-material/Settings';
-import TurnedInIcon from '@mui/icons-material/TurnedIn';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import SettingsIcon from "@mui/icons-material/Settings";
+import TurnedInIcon from "@mui/icons-material/TurnedIn";
+import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
+import PersonIcon from "@mui/icons-material/Person";
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -17,26 +18,28 @@ function ListHeader({ title }) {
 }
 
 // Individual list item component
-function ListItem({ 
-  title, 
-  icon, 
-  index, 
+function ListItem({
+  title,
+  icon,
+  index,
   currentIndex,
-  setIndex, 
+  setIndex,
   count,
-  isChild = false 
+  isChild = false,
 }) {
   const { games } = useContext(GameContext);
   const isSelected = currentIndex === index;
-  
+
   // Calculate count based on item type
   const itemCount = useMemo(() => {
     if (!count) return null;
-    
-    if (index === 0) { // All Games
+
+    if (index === 0) {
+      // All Games
       return games?.length || 0;
-    } else if (index === 1) { // Favorites
-      return games?.filter(game => game.favorite)?.length || 0;
+    } else if (index === 1) {
+      // Favorites
+      return games?.filter((game) => game.favorite)?.length || 0;
     }
     return 0;
   }, [games, count, index]);
@@ -47,13 +50,15 @@ function ListItem({
   };
 
   return (
-    <div 
-      className={`sidebar_item ${isSelected ? 'selected' : ''}  ${title} ${isChild ? 'child_item' : ''}`}
+    <div
+      className={`sidebar_item ${isSelected ? "selected" : ""}  ${title} ${
+        isChild ? "child_item" : ""
+      }`}
       onClick={handleClick}
       role="button"
       tabIndex={0}
       onKeyPress={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           handleClick();
         }
       }}
@@ -62,14 +67,10 @@ function ListItem({
         <Icon component={icon} />
       </div>
       <div className="list_item_title">{title}</div>
-      {itemCount !== null && (
-        <div className="list_item_count">{itemCount}</div>
-      )}
+      {itemCount !== null && <div className="list_item_count">{itemCount}</div>}
     </div>
   );
 }
-
-
 
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
@@ -77,23 +78,34 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
 
   // Validate context
   if (!games) {
-    console.warn('Games context is not available');
+    console.warn("Games context is not available");
   }
 
   return (
     <div className="sidebar">
       <div className="sidebar_items_container">
+
+<ListHeader title={"PROFILE"} />
+
+        <ListItem
+          title="User"
+          icon={PersonIcon}
+          index={1000}
+          setIndex={setIndex}
+          currentIndex={currentIndex}
+        />
+
         <ListHeader title="GAMES" />
-        
-        <ListItem 
-          title="All Games" 
-          icon={AppsIcon} 
-          index={indexEnum.allGames} 
+
+        <ListItem
+          title="All Games"
+          icon={AppsIcon}
+          index={indexEnum.allGames}
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={true}
         />
-        
+
         <ListItem
           title="Favorites"
           icon={FavoriteBorderIcon}
@@ -103,13 +115,14 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           count={true}
         />
         <ListItem
-        title="Lists"
-        icon={TurnedInIcon}
-        index={indexEnum.lists || 100}
-        currentIndex={currentIndex}
-        setIndex={setIndex}
-        count={true}
-      />
+          title="Lists"
+          icon={TurnedInIcon}
+          index={indexEnum.lists || 100}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={true}
+        />
+        
         <ListItem
           title="Settings"
           icon={SettingsIcon}
@@ -118,7 +131,6 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           setIndex={setIndex}
           count={false}
         />
-       
 
         {/* Example of parent item usage - uncomment if needed
         <ListParentItem 
