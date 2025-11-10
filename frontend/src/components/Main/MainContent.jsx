@@ -35,6 +35,10 @@ function HeaderItem({}) {
             <FilterAltIcon fontSize="small"/>
             <button> Filter</button>
         </span>
+        <span className="header_sync">
+            <FilterAltIcon fontSize="small"/>
+            <button> Filter</button>
+        </span>
         
       <div className="display_btns">
         <div className="header_slider">

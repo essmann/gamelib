@@ -39,7 +39,7 @@ function App() {
     const fetchGames = async () => {
       try {
         const startTime = performance.now();
-        const gamesList = await getGames();
+        const gamesList = await getGames(true);
         
         // Convert to Game instances
         const gamesArray = gamesList.map(gameData => new Game(gameData));

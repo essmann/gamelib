@@ -18,6 +18,10 @@ User.init({
     password: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    games_last_synced: {
+        type: DataTypes.TIME, 
+        allowNull: true,
     }
 },
  {

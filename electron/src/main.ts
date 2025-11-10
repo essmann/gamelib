@@ -55,7 +55,7 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("get-games", async (): Promise<Game[]> => {
+ipcMain.handle("get-games", async (event : IpcMainInvokeEvent, localGames : boolean): Promise<Game[]> => {
   const now = Date.now();
   const rows = await getGames(db);
   const games = rows.map((row) => new Game(row));
