@@ -6,7 +6,8 @@ import db from "./database/connection.js"; // adjust extension or omit if using 
 // dotenv.config();
 import Poster from "./database/models/poster.js";
 import Game from "./database/models/game.js";
-
+import User from "./database/models/user/user.js";
+import UserGame from "./database/models/user/userGame.js";
 //types
 import GameResponse from "./database/models/DTO/gameResponse.js";
 
@@ -21,6 +22,8 @@ const PORT = process.env.PORT || 3000;
   try {
     await Game.sync();
     await Poster.sync();
+    await User.sync();
+    await UserGame.sync();
 
     const [result, meta] = await db.query("SHOW DATABASES");
     const [tables] = await db.query("SHOW TABLES");

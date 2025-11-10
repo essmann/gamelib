@@ -1,11 +1,12 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../connection.js';
 import Game from '../game.js';
+import UserGame from './userGame.js';
 
 class User extends Model{};
 
 User.init({
-    id:{
+    user_id:{
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
@@ -25,3 +26,6 @@ User.init({
   tableName: 'users',
   timestamps: false,
 });
+
+
+export default User;

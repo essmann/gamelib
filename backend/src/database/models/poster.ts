@@ -26,7 +26,7 @@ Poster.init({
 });
 
 
-Game.hasOne(Poster, { foreignKey: 'game_id' });
-Poster.belongsTo(Game, { foreignKey: 'game_id' });
+// Game.hasOne(Poster, { foreignKey: 'game_id' });
+// Poster.belongsTo(Game, { foreignKey: 'game_id' });
 
 export default Poster;

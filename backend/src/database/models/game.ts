@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../connection.js'; // your Sequelize instance
-
+import Poster from './poster.js';
 class Game extends Model {}
 
 Game.init({
@@ -55,5 +55,6 @@ Game.init({
   tableName: 'games',
   timestamps: false,
 });
-
+Game.hasOne(Poster, { foreignKey: 'game_id' });
+Poster.belongsTo(Game, { foreignKey: 'game_id' });
 export default Game;
