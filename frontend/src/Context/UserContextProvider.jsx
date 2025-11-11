@@ -1,23 +1,41 @@
-import { createContext, useState } from "react";
-import { useContext } from "react";
-export const UserGameContext = createContext();
+import { createContext, useState, useEffect } from "react";
+
+export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
-  const [user, setUser] = useState(null);        // current user info
- const [isLoggedIn, setIsLoggedIn] = useState(null);
- const [gamesSynced, setGamesSynced] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isOfflineMode, setIsOfflineMode] = useState(() => {
+    const saved = localStorage.getItem("offline");
+    return saved !== null ? JSON.parse(saved) : false;
+  });
+  const [gamesSynced, setGamesSynced] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("offline", JSON.stringify(isOfflineMode));
+    console.log("offline localStorage state has been updated: " + isOfflineMode);
+  }, [isOfflineMode]);
+
+  useEffect(() => {
+    if (isLoggedIn) setIsOfflineMode(false);
+  }, [isLoggedIn]);
+
   return (
-    <UserGameContext.Provider value={{ 
-      user, setUser,
-      isLoggedIn, setIsLoggedIn,
-      gamesSynced, setGamesSynced
-      
-    }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        isLoggedIn,
+        setIsLoggedIn,
+        isOfflineMode,
+        setIsOfflineMode,
+        gamesSynced,
+        setGamesSynced,
+      }}
+    >
       {children}
-    </UserGameContext.Provider>
+    </UserContext.Provider>
   );
 }
 
 export default UserContextProvider;
-
-

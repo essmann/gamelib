@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
 export const GameContext = createContext();
 
@@ -8,6 +8,8 @@ function ContextProvider({ children }) {
   const [previewGameData, setPreviewGameData] = useState(null);
   const [user, setUser] = useState(null);        // current user info
   const [searchMenu, setSearchMenu] = useState(false);
+
+
   return (
     <GameContext.Provider value={{ 
       games, setGames,

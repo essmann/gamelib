@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import AppsIcon from "@mui/icons-material/Apps";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -8,6 +8,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import PersonIcon from "@mui/icons-material/Person";
+import { UserContext } from "../../Context/UserContextProvider";
+import { useContext } from "react";
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -26,8 +28,10 @@ function ListItem({
   setIndex,
   count,
   isChild = false,
+  isLogin = false,
 }) {
   const { games } = useContext(GameContext);
+  const {isLoggedIn} = useContext(UserContext);
   const isSelected = currentIndex === index;
 
   // Calculate count based on item type
@@ -49,6 +53,9 @@ function ListItem({
     console.log("Clicked index: " + index);
   };
 
+  if(isLogin && !isLoggedIn){
+    title = "Sign in";
+  }
   return (
     <div
       className={`sidebar_item ${isSelected ? "selected" : ""}  ${title} ${
@@ -93,6 +100,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           index={1000}
           setIndex={setIndex}
           currentIndex={currentIndex}
+          isLogin={true}
         />
 
         <ListHeader title="GAMES" />

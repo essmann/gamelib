@@ -6,6 +6,7 @@ import "./styling/sidebar.css";
 import "./styling/addGameMenu.css";
 import "./styling/gameMenu.css";
 import "./styling/searchMenu.css";
+import './styling/loginMenu.css'
 import App from "./App.jsx";
 import ContextProvider from "./Context/ContextProvider.jsx"; // ✅ correct import
 import UserContextProvider from "./Context/UserContextProvider.jsx";

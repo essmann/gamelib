@@ -5,6 +5,7 @@ import SearchMenu from "./Main/GameGrid/Menu/SearchMenu";
 import GameMenu from "./Main/GameGrid/Menu/GameMenu";
 import deleteGame from "../api/endpoints/deleteGame";
 import updateGame from "../api/endpoints/updateGame";
+import LoginMenu from "./LoginMenu";
 function MenuManager() {
   const {
     previewGameData,
@@ -39,6 +40,7 @@ function MenuManager() {
           }}
         />
       )}
+      <LoginMenu/>
     </>
   );
 }
