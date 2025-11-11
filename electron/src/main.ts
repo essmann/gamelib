@@ -55,13 +55,16 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("get-games", async (event : IpcMainInvokeEvent, localGames : boolean): Promise<Game[]> => {
-  const now = Date.now();
-  const rows = await getGames(db);
-  const games = rows.map((row) => new Game(row));
-  console.log("Time taken:", (Date.now() - now) / 1000, "seconds");
-  return games;
-});
+ipcMain.handle(
+  "get-games",
+  async (event: IpcMainInvokeEvent, localGames: boolean): Promise<Game[]> => {
+    const now = Date.now();
+    const rows = await getGames(db);
+    const games = rows.map((row) => new Game(row));
+    console.log("Time taken:", (Date.now() - now) / 1000, "seconds");
+    return games;
+  }
+);
 
 ipcMain.handle(
   "get-external-games",
@@ -82,26 +85,45 @@ ipcMain.handle(
     });
     console.log("url: " + _url);
     console.log("Request sent");
-  
-  const response = await fetch(_url);
 
-  if (!response.ok) {
-    throw new Error("HTTP error status: " + response.status);
-  }
+    const response = await fetch(_url);
 
-  const data = await response.json();
-  return data; 
-    
+    if (!response.ok) {
+      throw new Error("HTTP error status: " + response.status);
+    }
+
+    const data = await response.json();
+    return data;
   }
 );
 
-ipcMain.handle("login", async (formData : any ) => {
+ipcMain.handle("login", async (formData: any) => {
   console.log("Login reached");
-})
-ipcMain.handle("register", async (formData : any) => {
-  console.log("Register reached");
-  return;
-})
+});
+ipcMain.handle("register", async (_event, formData: any) => {
+  console.log("Register reached in electron");
+
+  const _url = url.format({
+    protocol: "http",
+    hostname: BACKEND_HOST,
+    port: BACKEND_PORT,
+    pathname: "/register",
+  });
+  console.log("url: " + _url);
+
+  const response = await fetch(_url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
+});
 
 // --- Create window ---
 const createWindow = (): void => {

@@ -15,6 +15,7 @@ import Game from "./api/game";
 
 // Context
 import { GameContext } from "./Context/ContextProvider";
+import { UserContext } from "./Context/UserContextProvider";
 
 // Constants
 const SIDEBAR_INDEX = {
@@ -32,6 +33,11 @@ function App() {
     searchMenu, setSearchMenu
   } = useContext(GameContext);
 
+  const {
+    setIsLoggedIn
+  } = useContext(UserContext);
+
+  
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
 
   // Fetch games on mount
