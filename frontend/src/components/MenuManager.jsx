@@ -6,6 +6,7 @@ import GameMenu from "./Main/GameGrid/Menu/GameMenu";
 import deleteGame from "../api/endpoints/deleteGame";
 import updateGame from "../api/endpoints/updateGame";
 import LoginMenu from "./LoginMenu";
+import RegisterMenu from "./RegisterMenu";
 function MenuManager() {
   const {
     previewGameData,
