@@ -95,6 +95,14 @@ ipcMain.handle(
   }
 );
 
+ipcMain.handle("login", async (formData : any ) => {
+  console.log("Login reached");
+})
+ipcMain.handle("register", async (formData : any) => {
+  console.log("Register reached");
+  return;
+})
+
 // --- Create window ---
 const createWindow = (): void => {
   console.log("Creating window...");
