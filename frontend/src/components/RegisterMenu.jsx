@@ -3,7 +3,7 @@ import "../styling/registerMenu.css";
 
 function RegisterMenu({onClose}){
     return (
-        <MenuContainer className="register_container"> 
+        <MenuContainer className="register_container" onClose={onClose}> 
             <form className="register">
                 <div className="register_header">
                     <h2>Create Account</h2>

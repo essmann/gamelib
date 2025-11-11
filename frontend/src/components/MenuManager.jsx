@@ -14,6 +14,8 @@ function MenuManager() {
     addGameMenu,
     searchMenu,
     setSearchMenu,
+    loginMenu, setLoginMenu,
+    registerMenu, setRegisterMenu
   } = useContext(GameContext);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
@@ -41,7 +43,12 @@ function MenuManager() {
           }}
         />
       )}
-      <LoginMenu/>
+      {loginMenu && <LoginMenu openRegisterMenu={setRegisterMenu} onClose={()=>{
+        setLoginMenu(false);
+      }}/>}
+      {registerMenu && <RegisterMenu onClose={()=>{
+        setRegisterMenu(false);
+      }}/>}
     </>
   );
 }

@@ -95,3 +95,18 @@
     background: #333333;
     color: #ffffff;
 }
+
+.register_footer_container{
+    display: flex;
+    
+}
+.register_btn{
+    margin-left: 1rem;
+       color: #b4b4b4;
+       cursor: pointer;
+
+
+}
+.register_btn:hover{
+    color: grey;
+}

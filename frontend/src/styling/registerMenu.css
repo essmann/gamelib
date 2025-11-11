@@ -1,0 +1,97 @@
+.register_container {
+    min-width: 500px;
+    margin: 0 auto;
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px;
+    background: #1f1f1f;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.register_header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+}
+
+.register_body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input_group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input_group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #b4b4b4;
+}
+
+.register_input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    background: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.register_input:focus {
+    border-color: #10b981;
+}
+
+.register_input::placeholder {
+    color: #6b6b6b;
+}
+
+.register_footer {
+    display: flex;
+    gap: 12px;
+}
+
+.register_button,
+.cancel_button {
+    flex: 1;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.register_button {
+    background: #10b981;
+    color: white;
+}
+
+.register_button:hover {
+    background: #059669;
+}
+
+.cancel_button {
+    background: #2a2a2a;
+    color: #b4b4b4;
+    border: 1px solid #3a3a3a;
+}
+
+.cancel_button:hover {
+    background: #333333;
+    color: #ffffff;
+}

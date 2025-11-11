@@ -29,6 +29,7 @@ function ListItem({
   count,
   isChild = false,
   isLogin = false,
+  onClick
 }) {
   const { games } = useContext(GameContext);
   const {isLoggedIn} = useContext(UserContext);
@@ -56,12 +57,13 @@ function ListItem({
   if(isLogin && !isLoggedIn){
     title = "Sign in";
   }
+  
   return (
     <div
       className={`sidebar_item ${isSelected ? "selected" : ""}  ${title} ${
         isChild ? "child_item" : ""
       }`}
-      onClick={handleClick}
+      onClick={onClick || handleClick}
       role="button"
       tabIndex={0}
       onKeyPress={(e) => {
@@ -81,8 +83,8 @@ function ListItem({
 
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
-  const { games } = useContext(GameContext);
-
+  const { games, setLoginMenu } = useContext(GameContext);
+  const {isLoggedIn} = useContext(UserContext);
   // Validate context
   if (!games) {
     console.warn("Games context is not available");
@@ -101,6 +103,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           setIndex={setIndex}
           currentIndex={currentIndex}
           isLogin={true}
+          onClick={()=>setLoginMenu(true)}
         />
 
         <ListHeader title="GAMES" />
