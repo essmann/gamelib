@@ -110,3 +110,73 @@
 .register_btn:hover{
     color: grey;
 }
+
+.profile_container {
+  min-width: 400px;
+  padding: 20px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.35);
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile_header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  text-align: center;
+  color: #fff;
+}
+
+.profile_body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.profile_field {
+  background: #2a2a2a;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile_field strong {
+  color: #b0b0b0;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.profile_footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.close_button {
+  padding: 10px 20px;
+  background: #3a3a3a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+  transition: background 0.2s ease;
+}
+
+.close_button:hover {
+  background: #4d4d4d;
+}
+
+.profile_empty {
+  text-align: center;
+  padding: 25px 0;
+  font-size: 1rem;
+  color: #ccc;
+}

@@ -47,7 +47,8 @@ function ListItem({
   };
 
   if (isLogin) {
-    title = user?.username === null ? "Sign in" : user?.username;
+    console.log(user);
+    title = user?.username == null ? "Sign in" : user?.username;
   }
 
   return (

@@ -2,7 +2,7 @@
 import React from "react";
 import MenuContainer from "./MenuContainer";
 
-function ProfileMenu({ user, onClose }) {
+function ProfileMenu({ user, onClose, onLogout }) {
   if (!user) {
     return (
       <MenuContainer className="profile_container" onClose={onClose}>
@@ -23,11 +23,13 @@ function ProfileMenu({ user, onClose }) {
         <div className="profile_field">
           <strong>Username:</strong> {user.username || user}
         </div>
+
         {user.email && (
           <div className="profile_field">
             <strong>Email:</strong> {user.email}
           </div>
         )}
+
         {user.id && (
           <div className="profile_field">
             <strong>User ID:</strong> {user.id}
@@ -36,6 +38,10 @@ function ProfileMenu({ user, onClose }) {
       </div>
 
       <div className="profile_footer">
+        <button className="logout_button" onClick={onLogout}>
+          Logout
+        </button>
+
         <button className="close_button" onClick={onClose}>
           Close
         </button>

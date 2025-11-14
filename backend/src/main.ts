@@ -131,10 +131,24 @@ async function startServer() {
     }
   });
 
-  app.get("/logout", (req, res) => {
-    req.session.destroy(() => {});
-    res.json({ message: "Logged out" });
+ app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).json({ error: "Logout failed" });
+    }
+
+    // Make sure to match your session cookie settings
+    res.clearCookie("connect.sid", {
+      path: "/",             // match your session cookie path
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    res.json({ message: "Logged out successfully" });
   });
+});
 
   app.get("/externalGames", async (req, res) => {
     try {

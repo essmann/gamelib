@@ -3,7 +3,6 @@ import MenuContainer from "./MenuContainer";
 import login from "../api/endpoints/auth/login";
 
 function LoginMenu({ onClose, openRegisterMenu, setUser, user }) {
-  if(user!=null){return;}
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

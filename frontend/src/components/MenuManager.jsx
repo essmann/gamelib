@@ -9,6 +9,7 @@ import LoginMenu from "./LoginMenu";
 import RegisterMenu from "./RegisterMenu";
 import { UserContext } from "../Context/UserContextProvider";
 import ProfileMenu from "./ProfileMenu";
+import logout from "../api/endpoints/auth/logout";
 function MenuManager() {
   const {
     previewGameData,
@@ -58,6 +59,7 @@ function MenuManager() {
       }}
       user={user}
       setUser={setUser}
+      onLogout={logout}
       />}
 
       
