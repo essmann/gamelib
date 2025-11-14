@@ -1,14 +1,28 @@
 import express from "express";
 import path from "path";
+import dotenv from "dotenv";
 import db from "./database/connection.js";
 import Poster from "./database/models/poster.js";
 import Game from "./database/models/game.js";
 import User from "./database/models/user/user.js";
 import UserGame from "./database/models/user/userGame.js";
 import getExternalGames from "./database/endpoints/getExternalGames.js";
-
+import session from "express-session";
+import Session from "./database/models/user/session.js";
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+app.use(session({
+  secret: process.env.SECRET_KEY || "",
+  resave: false,           // Avoid resaving unchanged sessions
+    saveUninitialized: false, // Only save sessions with initialized data
+    cookie: {
+      maxAge: 60000,         // 1-minute session expiry
+    },
+
+})); // puts a session object in your requests
 
 // ✅ Middleware to parse JSON bodies
 app.use(express.json());
@@ -22,6 +36,7 @@ app.use((req, res, next) => {
 // ✅ Test DB connection
 (async () => {
   try {
+    await Session.sync();
     await Game.sync();
     await Poster.sync();
     await User.sync();
@@ -42,14 +57,23 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/test", (req, res) => {
+  req.session.user = {id: 1, username: "testname"};
+  console.log(req.session);
+  
+});
 app.post("/register", (req, res) => {
   console.log("Received registration data:", req.body);
   res.json({ message: "User registered successfully!" });
 });
 
-app.get("/login", (req, res) => {
+app.post("/login", (req, res) => {
   res.send("Login endpoint");
 });
+app.get("/logout", (req, res) => {
+  res.send("Logout endpoint");
+});
+
 
 app.get("/externalGames", async (req, res) => {
   console.log("Request sent to /externalGames.");

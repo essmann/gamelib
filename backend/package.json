@@ -11,9 +11,11 @@
     "start": "npx tsx src/main.ts"
   },
   "dependencies": {
+    "@types/express-session": "^1.18.2",
     "@types/typescript": "^0.4.29",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.15.3",
     "sequelize": "^6.37.7",
