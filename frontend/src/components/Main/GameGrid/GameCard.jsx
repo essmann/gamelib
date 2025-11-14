@@ -9,12 +9,12 @@ function GameCard({ game }) {
   const { previewGameData, setPreviewGameData, setGames } = useContext(GameContext);
   useEffect(() => {
     game.getPosterURL();
-    console.log("GameCard mounted or game changed." + game.title + game.favorite);
+    // console.log("GameCard mounted or game changed." + game.title + game.favorite);
   }, []);
 
   const onClick = () => {
     setPreviewGameData(game);
-    console.log("Clicked game card. Updating..");
+    // console.log("Clicked game card. Updating..");
   };
   // const toggleFavorite = () => {
   //   game.favorite = game.favorite == 1 ? 0 : 1;

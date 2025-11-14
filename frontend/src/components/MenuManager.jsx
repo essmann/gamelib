@@ -8,6 +8,7 @@ import updateGame from "../api/endpoints/updateGame";
 import LoginMenu from "./LoginMenu";
 import RegisterMenu from "./RegisterMenu";
 import { UserContext } from "../Context/UserContextProvider";
+import ProfileMenu from "./ProfileMenu";
 function MenuManager() {
   const {
     previewGameData,
@@ -16,7 +17,8 @@ function MenuManager() {
     searchMenu,
     setSearchMenu,
     loginMenu, setLoginMenu,
-    registerMenu, setRegisterMenu
+    registerMenu, setRegisterMenu,
+    profileMenu, setProfileMenu
   } = useContext(GameContext);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
@@ -47,10 +49,18 @@ function MenuManager() {
       )}
       {loginMenu && <LoginMenu openRegisterMenu={setRegisterMenu} onClose={()=>{
         setLoginMenu(false);
-      }} setUser={setUser}/>}
+      }} setUser={setUser} user={user}/>}
       {registerMenu && <RegisterMenu onClose={()=>{
         setRegisterMenu(false);
       }}/>}
+      {profileMenu && <ProfileMenu onClose={()=>{
+        setProfileMenu(false);
+      }}
+      user={user}
+      setUser={setUser}
+      />}
+
+      
     </>
   );
 }

@@ -40,6 +40,7 @@ function App() {
   // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
   useEffect(() => {}, []);
   useEffect(() => {
+    console.log("Fetching user information...");
     fetchUser(setUser);
   }, []); // <-- empty array = only runs once
 
@@ -49,6 +50,7 @@ function App() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
+        console.log("Fetching games...");
         const startTime = performance.now();
         const gamesList = await getGames(true);
 
@@ -56,7 +58,7 @@ function App() {
         const gamesArray = gamesList.map((gameData) => new Game(gameData));
 
         setGames(gamesArray);
-        console.log(gamesArray);
+        // console.log(gamesArray);
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
         console.log(`Games fetched in ${duration} seconds`);

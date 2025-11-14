@@ -21,16 +21,15 @@ async function login(req: Request, res: Response) {
   req.session.user = {
     id: user.dataValues.user_id,
     username: user.dataValues.username,
+    email: user.dataValues.email,
+    games_last_synced: user.dataValues.games_last_synced,
   };
 
   console.log(
     "Login successful. Session has been created and updated in session store MySQL."
   );
 
-  return res.json({
-    user: user.dataValues.username,
-    success: true,
-  });
+  return res.json(req.session.user);
 }
 
 export default login;

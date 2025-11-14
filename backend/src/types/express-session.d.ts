@@ -6,6 +6,8 @@ declare module "express-session" {
     user?: {
       id: number;
       username: string,
+      email: string,
+      games_last_synced: Date,
       
     };
   }

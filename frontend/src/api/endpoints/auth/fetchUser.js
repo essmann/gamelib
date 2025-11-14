@@ -4,7 +4,7 @@ const fetchUser = async (setUser) => {
           credentials: "include", // crucial for session cookies
         });
         const data = await res.json();
-        setUser(data.user || null);
+        setUser(data);
       } catch (err) {
         console.error("Failed to fetch current user:", err);
         setUser(null);

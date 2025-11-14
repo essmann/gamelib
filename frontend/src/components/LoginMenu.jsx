@@ -2,7 +2,8 @@ import { useState } from "react";
 import MenuContainer from "./MenuContainer";
 import login from "../api/endpoints/auth/login";
 
-function LoginMenu({ onClose, openRegisterMenu, setUser }) {
+function LoginMenu({ onClose, openRegisterMenu, setUser, user }) {
+  if(user!=null){return;}
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,7 +26,9 @@ function LoginMenu({ onClose, openRegisterMenu, setUser }) {
 
     try {
       const data = await login({ email, password });
-      setUser(data?.user || null);
+      console.log(data);
+      console.log("username: data.username : " + data.username);
+      setUser(data);
 
       console.log("user data after request: " + data);
       onClose();

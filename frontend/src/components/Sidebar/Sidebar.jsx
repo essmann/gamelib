@@ -1,16 +1,14 @@
-import { useMemo } from "react";
+import { useState, useContext, useMemo } from "react";
+import { Icon } from "@mui/material";
 import AppsIcon from "@mui/icons-material/Apps";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { Icon } from "@mui/material";
-import { GameContext } from "../../Context/ContextProvider";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
-import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import PersonIcon from "@mui/icons-material/Person";
+
+import { GameContext } from "../../Context/ContextProvider";
 import { UserContext } from "../../Context/UserContextProvider";
-import { useContext } from "react";
-import { useState } from "react";
+
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -31,46 +29,37 @@ function ListItem({
   isChild = false,
   isLogin = false,
   user = null,
-  onClick
+  onClick,
 }) {
   const { games } = useContext(GameContext);
   const isSelected = currentIndex === index;
 
-  // Calculate count based on item type
   const itemCount = useMemo(() => {
     if (!count) return null;
-
-    if (index === 0) {
-      // All Games
-      return games?.length || 0;
-    } else if (index === 1) {
-      // Favorites
-      return games?.filter((game) => game.favorite)?.length || 0;
-    }
+    if (index === 0) return games?.length || 0;
+    if (index === 1) return games?.filter((game) => game.favorite)?.length || 0;
     return 0;
   }, [games, count, index]);
 
   const handleClick = () => {
     setIndex(index);
-    console.log("Clicked index: " + index);
+    console.log("Clicked index:", index);
   };
 
-  if(isLogin){
-    title = user === null ? "Sign in" : user;
+  if (isLogin) {
+    title = user?.username === null ? "Sign in" : user?.username;
   }
-  
+
   return (
     <div
-      className={`sidebar_item ${isSelected ? "selected" : ""}  ${title} ${
+      className={`sidebar_item ${isSelected ? "selected" : ""} ${title} ${
         isChild ? "child_item" : ""
       }`}
       onClick={onClick || handleClick}
       role="button"
       tabIndex={0}
       onKeyPress={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleClick();
-        }
+        if (e.key === "Enter" || e.key === " ") handleClick();
       }}
     >
       <div className="list_item_icon">
@@ -84,48 +73,49 @@ function ListItem({
 
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
-  const { games, setLoginMenu } = useContext(GameContext);
-
-  // Validate context
-  if (!games) {
-    console.warn("Games context is not available");
+  const { games, setProfileMenu, setLoginMenu } = useContext(GameContext);
+ 
+  const handleProfileButtonClick = () => {
+    if(user?.username == null){
+      setLoginMenu(true);
+    }
+    else {
+      setProfileMenu(true);
+    }
   }
+  if (!games) console.warn("Games context is not available");
 
   return (
     <div className="sidebar">
       <div className="sidebar_items_container">
-
-<ListHeader title={"PROFILE"} />
-
+        <ListHeader title="PROFILE" />
         <ListItem
           title="User"
           icon={PersonIcon}
           index={1000}
           setIndex={setIndex}
           currentIndex={currentIndex}
-          isLogin={true}
+          isLogin
           user={user}
-          onClick={()=>setLoginMenu(true)}
+          onClick={handleProfileButtonClick}
         />
 
         <ListHeader title="GAMES" />
-
         <ListItem
           title="All Games"
           icon={AppsIcon}
           index={indexEnum.allGames}
           currentIndex={currentIndex}
           setIndex={setIndex}
-          count={true}
+          count
         />
-
         <ListItem
           title="Favorites"
           icon={FavoriteBorderIcon}
           index={indexEnum.favorites || 1}
           currentIndex={currentIndex}
           setIndex={setIndex}
-          count={true}
+          count
         />
         <ListItem
           title="Lists"
@@ -133,9 +123,8 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           index={indexEnum.lists || 100}
           currentIndex={currentIndex}
           setIndex={setIndex}
-          count={true}
+          count
         />
-        
         <ListItem
           title="Settings"
           icon={SettingsIcon}
@@ -144,33 +133,6 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           setIndex={setIndex}
           count={false}
         />
-
-        {/* Example of parent item usage - uncomment if needed
-        <ListParentItem 
-          title="Categories" 
-          icon={CategoryIcon}
-          index={indexEnum.categories}
-          currentIndex={currentIndex}
-          setIndex={setIndex}
-        >
-          <ListItem 
-            isChild={true} 
-            title="Action" 
-            icon={SportsEsportsIcon}
-            index={indexEnum.action}
-            currentIndex={currentIndex}
-            setIndex={setIndex}
-          />
-          <ListItem 
-            isChild={true} 
-            title="Adventure" 
-            icon={ExploreIcon}
-            index={indexEnum.adventure}
-            currentIndex={currentIndex}
-            setIndex={setIndex}
-          />
-        </ListParentItem>
-        */}
       </div>
     </div>
   );

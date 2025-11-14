@@ -11,28 +11,39 @@ import getExternalGames from "./database/endpoints/getExternalGames.js";
 
 import session from "express-session";
 import bcrypt from "bcrypt";
-
 import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
+
 dotenv.config();
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const color = {
+  red: (msg : string) => `\x1b[31m${msg}\x1b[0m`,
+  green: (msg : string) => `\x1b[32m${msg}\x1b[0m`,
+  yellow: (msg : string) => `\x1b[33m${msg}\x1b[0m`,
+  blue: (msg : string) => `\x1b[34m${msg}\x1b[0m`,
+  magenta: (msg :string ) => `\x1b[35m${msg}\x1b[0m`,
+  cyan: (msg : string) => `\x1b[36m${msg}\x1b[0m`,
+  bold: (msg : string) => `\x1b[1m${msg}\x1b[0m`,
+};
+
 
 async function startServer() {
   // Import connect-session-sequelize dynamically
-  const SequelizeStoreFactory = (await import("connect-session-sequelize"))
-    .default;
+  const SequelizeStoreFactory = (await import("connect-session-sequelize")).default;
   const SequelizeStore = SequelizeStoreFactory(session.Store);
 
-  // Create and sync the session store
+  // Session store
   const store = new SequelizeStore({ db });
   await store.sync();
 
   // Session middleware
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || "a_fallback_secret_for_dev_only",
+      secret: process.env.SESSION_SECRET || "dev_secret",
       store,
       resave: false,
       saveUninitialized: false,
@@ -45,78 +56,61 @@ async function startServer() {
     })
   );
 
-  // Body parsing middleware
+  // JSON & CORS setup
   app.use(express.json());
-
-  console.log("FRONTEND_URL: " + process.env.FRONTEND_URL);
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL, // frontend origin
-      credentials: true, // <-- allows cookies to be sent
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
     })
   );
 
-  // Log session data
-  app.use((req, res, next) => {
-    console.log("Session:", req.session);
-    next();
-  });
-
-  // Helper function for password hashing
-  async function hashPassword(password: string) {
-    try {
-      const hashedPw = await bcrypt.hash(password, 10);
-      console.log("Hashed Password:", hashedPw);
-      return hashedPw;
-    } catch (err) {
-      console.error("Error hashing password:", err);
-      throw err;
-    }
-  }
-
-  // Database initialization
+  // Database setup
   await User.sync();
   await Game.sync();
   await Poster.sync();
   await UserGame.sync();
 
+  // Seed a test user (safe-fail)
   try {
-    const testPw = await hashPassword("123");
+    const hash = await bcrypt.hash("123", 10);
     await User.create({
       username: "essmann",
       email: "ken@gmail.com",
-      password: testPw,
+      password: hash,
     });
-  } catch {
-    console.log("User exists.");
-  }
-  const [dbs] = await db.query("SHOW DATABASES");
-  const [tables] = await db.query("SHOW TABLES");
-  console.log("Databases:", dbs);
-  console.log("Tables:", tables);
-  console.log("Database connected successfully.");
+  } catch {}
 
-  // Routes
+  console.log("✅ Database connected and synced");
+
+  // ROUTES -----------------------------
+
   app.get("/", (req, res) => res.send("Hello World!"));
+
   app.get("/user", (req, res) => {
     if (req.session.user) {
-      return res.json({ user: req.session.user.username });
-    } else {
-      return res.status(401).json({ user: null });
-    }
+       console.log(color.green("Fetched user session:"), req.session.user);
+
+      return res.json(req.session.user)
+    };
+    return res.status(401).json({ user: null });
   });
 
   app.get("/test", (req, res) => {
-    req.session.user = { id: 1, username: "testname" };
-    console.log(req.session);
+    req.session.user = {
+      id: 1,
+      username: "testname",
+      email: "testMail@test.com",
+      games_last_synced: new Date(),
+    };
     res.send("Test OK");
   });
 
   app.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
-    const emailExists = (await User.findOne({ where: { email } })) !== null;
 
-    if (emailExists) {
+    const existing = await User.findOne({ where: { email } });
+    if (existing) {
       return res.status(409).json({
         error: "UserAlreadyExists",
         message: "A user with this email already exists.",
@@ -124,8 +118,8 @@ async function startServer() {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ username, password: hash, email });
-    console.log("User successfully registered");
+    await User.create({ username, email, password: hash });
+
     res.json({ message: "User registered successfully!" });
   });
 
@@ -133,27 +127,29 @@ async function startServer() {
     try {
       await login(req, res);
     } catch (e) {
-      console.log(e);
+      res.status(500).json({ error: "Login failed." });
     }
   });
 
-  app.get("/logout", (req, res) => res.send("Logout endpoint"));
+  app.get("/logout", (req, res) => {
+    req.session.destroy(() => {});
+    res.json({ message: "Logged out" });
+  });
 
   app.get("/externalGames", async (req, res) => {
     try {
       const games = await getExternalGames(req, res);
       res.json(games);
-    } catch (err) {
-      console.error(err);
+    } catch {
       res.status(500).json({ error: "Failed to fetch external games." });
     }
   });
 
-  // Start server
-  app.listen(PORT, () => {
-    console.log(`✅ Server running at http://localhost:${PORT}`);
-  });
+  // START SERVER -----------------------
+
+  app.listen(PORT, () =>
+    console.log(`🚀 Server running at http://localhost:${PORT}`)
+  );
 }
 
-// Run the async server starter
-startServer().catch((err) => console.error(err));
+startServer().catch((err) => console.error("Startup error:", err));
