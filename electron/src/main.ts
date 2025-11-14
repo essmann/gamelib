@@ -97,8 +97,29 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("login", async (formData: any) => {
-  console.log("Login reached");
+ipcMain.handle("login", async (_event, formData: any) => {
+  console.log("Login reached in electron");
+
+  const _url = url.format({
+    protocol: "http",
+    hostname: BACKEND_HOST,
+    port: BACKEND_PORT,
+    pathname: "/login",
+  });
+  console.log("url: " + _url);
+
+  const response = await fetch(_url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
 });
 ipcMain.handle("register", async (_event, formData: any) => {
   console.log("Register reached in electron");
