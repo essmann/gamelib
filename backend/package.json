@@ -15,6 +15,7 @@
     "@types/typescript": "^0.4.29",
     "bcrypt": "^6.0.0",
     "connect-session-sequelize": "^8.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-mysql-session": "^3.0.3",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/express-session": "^1.18.2",
     "tsx": "^4.20.6",

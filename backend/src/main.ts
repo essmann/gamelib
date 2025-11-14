@@ -13,7 +13,7 @@ import session from "express-session";
 import bcrypt from "bcrypt";
 
 import login from "./database/endpoints/auth/login.js";
-
+import cors from "cors";
 dotenv.config();
 
 const app = express();
@@ -47,6 +47,12 @@ async function startServer() {
 
   // Body parsing middleware
   app.use(express.json());
+
+  console.log("FRONTEND_URL: " + process.env.FRONTEND_URL);
+  app.use(cors({
+  origin: process.env.FRONTEND_URL, // frontend origin
+  credentials: true               // <-- allows cookies to be sent
+}));
 
   // Log session data
   app.use((req, res, next) => {

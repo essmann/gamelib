@@ -15,3 +15,5 @@ export const login = async (formData) => {
 
   return await response.json();
 };
+
+export default login;
