@@ -12,6 +12,7 @@ import MenuManager from "./components/MenuManager";
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
 import Game from "./api/game";
+import fetchUser from "./api/endpoints/auth/fetchUser";
 
 // Context
 import { GameContext } from "./Context/ContextProvider";
@@ -30,14 +31,18 @@ function App() {
     addGameMenu,
     games,
     setGames,
-    searchMenu, setSearchMenu
+    searchMenu,
+    setSearchMenu,
   } = useContext(GameContext);
 
-  const {
-    setIsLoggedIn
-  } = useContext(UserContext);
+  const { setIsLoggedIn, user, setUser } = useContext(UserContext);
 
-  
+  // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
+  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchUser(setUser);
+  }, []); // <-- empty array = only runs once
+
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
 
   // Fetch games on mount
@@ -46,10 +51,10 @@ function App() {
       try {
         const startTime = performance.now();
         const gamesList = await getGames(true);
-        
+
         // Convert to Game instances
-        const gamesArray = gamesList.map(gameData => new Game(gameData));
-        
+        const gamesArray = gamesList.map((gameData) => new Game(gameData));
+
         setGames(gamesArray);
         console.log(gamesArray);
         const endTime = performance.now();
@@ -63,9 +68,7 @@ function App() {
     fetchGames();
   }, [setGames]);
 
-  useEffect(()=>{
-
-  }, [deleteGame])
+  useEffect(() => {}, [deleteGame]);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
   };
@@ -76,15 +79,16 @@ function App() {
         currentIndex={sidebarIndex}
         setIndex={setSidebarIndex}
         indexEnum={SIDEBAR_INDEX}
+        user={user}
       />
-      
+
       <MainContent
         games={games}
         setGames={setGames}
         sidebarIndex={sidebarIndex}
       />
-      
-     <MenuManager/>
+
+      <MenuManager />
     </div>
   );
 }

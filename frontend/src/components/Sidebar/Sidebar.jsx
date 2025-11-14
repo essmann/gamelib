@@ -10,6 +10,7 @@ import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import PersonIcon from "@mui/icons-material/Person";
 import { UserContext } from "../../Context/UserContextProvider";
 import { useContext } from "react";
+import { useState } from "react";
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -29,10 +30,10 @@ function ListItem({
   count,
   isChild = false,
   isLogin = false,
+  user = null,
   onClick
 }) {
   const { games } = useContext(GameContext);
-  const {isLoggedIn} = useContext(UserContext);
   const isSelected = currentIndex === index;
 
   // Calculate count based on item type
@@ -54,8 +55,8 @@ function ListItem({
     console.log("Clicked index: " + index);
   };
 
-  if(isLogin && !isLoggedIn){
-    title = "Sign in";
+  if(isLogin){
+    title = user === null ? "Sign in" : user;
   }
   
   return (
@@ -82,9 +83,9 @@ function ListItem({
 }
 
 // Main sidebar component
-function Sidebar({ setIndex, currentIndex, indexEnum }) {
+function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const { games, setLoginMenu } = useContext(GameContext);
-  const {isLoggedIn} = useContext(UserContext);
+
   // Validate context
   if (!games) {
     console.warn("Games context is not available");
@@ -103,6 +104,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           setIndex={setIndex}
           currentIndex={currentIndex}
           isLogin={true}
+          user={user}
           onClick={()=>setLoginMenu(true)}
         />
 

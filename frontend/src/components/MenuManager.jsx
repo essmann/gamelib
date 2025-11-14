@@ -7,6 +7,7 @@ import deleteGame from "../api/endpoints/deleteGame";
 import updateGame from "../api/endpoints/updateGame";
 import LoginMenu from "./LoginMenu";
 import RegisterMenu from "./RegisterMenu";
+import { UserContext } from "../Context/UserContextProvider";
 function MenuManager() {
   const {
     previewGameData,
@@ -20,6 +21,7 @@ function MenuManager() {
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
   };
+  const {user, setUser} = useContext(UserContext);
  
   useEffect(()=>{
     console.log("MenuManager re-rendered");
@@ -45,7 +47,7 @@ function MenuManager() {
       )}
       {loginMenu && <LoginMenu openRegisterMenu={setRegisterMenu} onClose={()=>{
         setLoginMenu(false);
-      }}/>}
+      }} setUser={setUser}/>}
       {registerMenu && <RegisterMenu onClose={()=>{
         setRegisterMenu(false);
       }}/>}

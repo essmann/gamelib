@@ -49,10 +49,12 @@ async function startServer() {
   app.use(express.json());
 
   console.log("FRONTEND_URL: " + process.env.FRONTEND_URL);
-  app.use(cors({
-  origin: process.env.FRONTEND_URL, // frontend origin
-  credentials: true               // <-- allows cookies to be sent
-}));
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL, // frontend origin
+      credentials: true, // <-- allows cookies to be sent
+    })
+  );
 
   // Log session data
   app.use((req, res, next) => {
@@ -78,13 +80,16 @@ async function startServer() {
   await Poster.sync();
   await UserGame.sync();
 
-  const testPw = await hashPassword("123");
-  await User.create({
-    username: "essmann",
-    email: "ken@gmail.com",
-    password: testPw,
-  });
-
+  try {
+    const testPw = await hashPassword("123");
+    await User.create({
+      username: "essmann",
+      email: "ken@gmail.com",
+      password: testPw,
+    });
+  } catch {
+    console.log("User exists.");
+  }
   const [dbs] = await db.query("SHOW DATABASES");
   const [tables] = await db.query("SHOW TABLES");
   console.log("Databases:", dbs);
@@ -93,7 +98,13 @@ async function startServer() {
 
   // Routes
   app.get("/", (req, res) => res.send("Hello World!"));
-  app.get("/profile", (req, res) => res.send("Hello World!"));
+  app.get("/user", (req, res) => {
+    if (req.session.user) {
+      return res.json({ user: req.session.user.username });
+    } else {
+      return res.status(401).json({ user: null });
+    }
+  });
 
   app.get("/test", (req, res) => {
     req.session.user = { id: 1, username: "testname" };
