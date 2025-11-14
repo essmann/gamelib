@@ -2,7 +2,7 @@
 import React from "react";
 import MenuContainer from "./MenuContainer";
 
-function ProfileMenu({ user, onClose, onLogout }) {
+function ProfileMenu({ user, onClose, onLogout, setUser }) {
   if (!user) {
     return (
       <MenuContainer className="profile_container" onClose={onClose}>
@@ -38,7 +38,11 @@ function ProfileMenu({ user, onClose, onLogout }) {
       </div>
 
       <div className="profile_footer">
-        <button className="logout_button" onClick={onLogout}>
+        <button className="logout_button" onClick={()=>{
+            onLogout();
+            setUser(null);
+
+        }}>
           Logout
         </button>
 
