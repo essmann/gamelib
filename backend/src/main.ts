@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import db from "./database/connection.js";
 
-import Poster from "./database/models/poster.js";
-import Game from "./database/models/game.js";
+import Official_Poster from "./database/models/official_poster.js";
+import Official_Game from "./database/models/official_game.js";
 import User from "./database/models/user/user.js";
 import UserGame from "./database/models/user/userGame.js";
 
@@ -13,27 +13,26 @@ import session from "express-session";
 import bcrypt from "bcrypt";
 import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
+import CustomGame from "./database/models/customGame.js";
 
 dotenv.config();
-
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const color = {
-  red: (msg : string) => `\x1b[31m${msg}\x1b[0m`,
-  green: (msg : string) => `\x1b[32m${msg}\x1b[0m`,
-  yellow: (msg : string) => `\x1b[33m${msg}\x1b[0m`,
-  blue: (msg : string) => `\x1b[34m${msg}\x1b[0m`,
-  magenta: (msg :string ) => `\x1b[35m${msg}\x1b[0m`,
-  cyan: (msg : string) => `\x1b[36m${msg}\x1b[0m`,
-  bold: (msg : string) => `\x1b[1m${msg}\x1b[0m`,
+  red: (msg: string) => `\x1b[31m${msg}\x1b[0m`,
+  green: (msg: string) => `\x1b[32m${msg}\x1b[0m`,
+  yellow: (msg: string) => `\x1b[33m${msg}\x1b[0m`,
+  blue: (msg: string) => `\x1b[34m${msg}\x1b[0m`,
+  magenta: (msg: string) => `\x1b[35m${msg}\x1b[0m`,
+  cyan: (msg: string) => `\x1b[36m${msg}\x1b[0m`,
+  bold: (msg: string) => `\x1b[1m${msg}\x1b[0m`,
 };
-
 
 async function startServer() {
   // Import connect-session-sequelize dynamically
-  const SequelizeStoreFactory = (await import("connect-session-sequelize")).default;
+  const SequelizeStoreFactory = (await import("connect-session-sequelize"))
+    .default;
   const SequelizeStore = SequelizeStoreFactory(session.Store);
 
   // Session store
@@ -67,9 +66,10 @@ async function startServer() {
 
   // Database setup
   await User.sync();
-  await Game.sync();
-  await Poster.sync();
+  await Official_Game.sync();
+  await Official_Poster.sync();
   await UserGame.sync();
+  await CustomGame.sync();
 
   // Seed a test user (safe-fail)
   try {
@@ -89,10 +89,10 @@ async function startServer() {
 
   app.get("/user", (req, res) => {
     if (req.session.user) {
-       console.log(color.green("Fetched user session:"), req.session.user);
+      console.log(color.green("Fetched user session:"), req.session.user);
 
-      return res.json(req.session.user)
-    };
+      return res.json(req.session.user);
+    }
     return res.status(401).json({ user: null });
   });
 
@@ -131,26 +131,27 @@ async function startServer() {
     }
   });
 
- app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-      return res.status(500).json({ error: "Logout failed" });
-    }
+  app.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).json({ error: "Logout failed" });
+      }
 
-    // Make sure to match your session cookie settings
-    res.clearCookie("connect.sid", {
-      path: "/",             // match your session cookie path
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      // Make sure to match your session cookie settings
+      res.clearCookie("connect.sid", {
+        path: "/", // match your session cookie path
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+
+      res.json({ message: "Logged out successfully" });
     });
-
-    res.json({ message: "Logged out successfully" });
   });
-});
 
   app.get("/externalGames", async (req, res) => {
+    
     try {
       const games = await getExternalGames(req, res);
       res.json(games);
@@ -158,7 +159,22 @@ async function startServer() {
       res.status(500).json({ error: "Failed to fetch external games." });
     }
   });
+  // app.post("/addGame", async (req, res) => {
+  //   const user = req.session.user;
 
+  //   if (!user) {
+  //     return res.status(401).json({ error: "Not authenticated" });
+  //   }
+
+  //   try {
+  //     const id = user.id;
+  //     const game = await UserGame.create({
+  //       user_id: id,
+  //     });
+  //   } catch {
+  //     res.status(500).json({ error: "Failed to fetch external games." });
+  //   }
+  // });
   // START SERVER -----------------------
 
   app.listen(PORT, () =>

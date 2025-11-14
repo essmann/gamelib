@@ -1,8 +1,8 @@
 import { Op, Sequelize } from "sequelize";
 import GameResponse from "../models/DTO/gameResponse";
 import { Request, Response } from "express";
-import Game from "../models/game";
-import Poster from "../models/poster";
+import Game from "../models/official_game";
+import Poster from "../models/official_poster";
 import db from "../connection.js";
 async function getExternalGames(
   req: Request,

@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../connection.js';
-import Game from '../game.js';
+import Game from '../official_game.js';
 import UserGame from './userGame.js';
 
 class User extends Model{};

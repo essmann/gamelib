@@ -1,13 +1,20 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../connection.js'; // your Sequelize instance
-import Poster from './poster.js';
-class Game extends Model {}
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../connection.js";
+import Poster from "./official_poster.js";
+import User from "./user/user.js";
 
-Game.init({
+class CustomGame extends Model {}
+
+CustomGame.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
+    autoIncrement: true, // Custom games get their own IDs
+  },
+  user_id: {
+    type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
+    references: { model: User, key: "user_id" },
   },
   title: {
     type: DataTypes.STRING,
@@ -51,10 +58,16 @@ Game.init({
   },
 }, {
   sequelize,
-  modelName: 'Game',
-  tableName: 'games',
+  modelName: "CustomGame",
+  tableName: "customGames",
   timestamps: false,
 });
-Game.hasOne(Poster, { foreignKey: 'game_id' });
-Poster.belongsTo(Game, { foreignKey: 'game_id' });
-export default Game;
+
+// Link Poster if you want images for custom games
+CustomGame.hasOne(Poster, { foreignKey: "game_id" });
+Poster.belongsTo(CustomGame, { foreignKey: "game_id" });
+
+User.hasMany(CustomGame, { foreignKey: "user_id" });
+CustomGame.belongsTo(User, { foreignKey: "user_id" });
+
+export default CustomGame;
