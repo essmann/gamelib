@@ -9,6 +9,7 @@ User.init({
     user_id:{
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
+        autoIncrement: true,
         allowNull: false,
     },
     email: {
