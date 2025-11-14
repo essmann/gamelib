@@ -12,6 +12,8 @@ import getExternalGames from "./database/endpoints/getExternalGames.js";
 import session from "express-session";
 import bcrypt from "bcrypt";
 
+import login from "./database/endpoints/auth/login.js";
+
 dotenv.config();
 
 const app = express();
@@ -19,7 +21,8 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   // Import connect-session-sequelize dynamically
-  const SequelizeStoreFactory = (await import("connect-session-sequelize")).default;
+  const SequelizeStoreFactory = (await import("connect-session-sequelize"))
+    .default;
   const SequelizeStore = SequelizeStoreFactory(session.Store);
 
   // Create and sync the session store
@@ -110,20 +113,11 @@ async function startServer() {
   });
 
   app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
-
-    if (user) {
-      const passwordMatch = await bcrypt.compare(password, user.dataValues.password);
-      if (passwordMatch) {
-        req.session.user = {
-          id: user.dataValues.user_id,
-          username: user.dataValues.username,
-        };
-      }
+    try {
+      await login(req, res);
+    } catch (e) {
+      console.log(e);
     }
-    console.log(req.session);
-    res.send("Login endpoint");
   });
 
   app.get("/logout", (req, res) => res.send("Logout endpoint"));

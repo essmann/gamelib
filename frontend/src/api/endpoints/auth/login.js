@@ -1,11 +1,17 @@
+// src/api.ts or renderer/preload.js
+export const login = async (formData) => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-async function login(userData) {
-    try {
-        const response = await window.api.login(userData);
+  const response = await fetch(`${BACKEND_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include", // crucial for session cookies
+    body: JSON.stringify(formData),
+  });
 
-    } catch (error) {
-            console.log(error);
-    }
-}
+  if (!response.ok) {
+    throw new Error(`Login failed: ${response.status}`);
+  }
 
-export default login;
+  return await response.json();
+};

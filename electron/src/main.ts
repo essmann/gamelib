@@ -134,6 +134,7 @@ ipcMain.handle("register", async (_event, formData: any) => {
 
   const response = await fetch(_url, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   });
