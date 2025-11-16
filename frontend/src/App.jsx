@@ -77,7 +77,7 @@ function App() {
 
         // Convert to Game instances
         const gamesArray = gamesList.map((gameData) => new Game(gameData));
-
+        console.log(gamesArray);
         setGames(gamesArray);
         // console.log(gamesArray);
         const endTime = performance.now();
