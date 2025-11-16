@@ -17,7 +17,6 @@ function AddGameMenu({ data, onClose }) {
   const fileInputRef = useRef(null);
   const [posterFile, setPosterFile] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-  
   const [game, setGame] = useState(() => {
     if (typeof data === "object" && data !== null) {
       try {
@@ -27,6 +26,7 @@ function AddGameMenu({ data, onClose }) {
         console.error("Invalid game data passed to AddGameMenu:", err);
       }
     }
+    
     return new Game({
       id: null,
       title: "",
@@ -37,6 +37,7 @@ function AddGameMenu({ data, onClose }) {
       favorite: 0,
       date_added: null,
       genres: null,
+      isCustom: true,
     });
   });
 
@@ -90,7 +91,9 @@ function AddGameMenu({ data, onClose }) {
     console.log("Game instance:", game);
 
     try {
-      await addGame(game);
+      // await addGame(game);
+      await addGame(game, true);
+
       setGames((prev) => [...prev, game]);
       setAddGameMenu(false);
     } catch (error) {

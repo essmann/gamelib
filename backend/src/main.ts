@@ -8,13 +8,15 @@ import User from "./database/models/user/user.js";
 import UserGame from "./database/models/user/userGame.js";
 
 import getExternalGames from "./database/endpoints/getExternalGames.js";
+import addGame from "./database/endpoints/addGame.js";
 
 import session from "express-session";
 import bcrypt from "bcrypt";
 import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
 import CustomGame from "./database/models/customGame.js";
-
+import multer from "multer";
+const upload = multer();
 dotenv.config();
 
 const app = express();
@@ -151,7 +153,6 @@ async function startServer() {
   });
 
   app.get("/externalGames", async (req, res) => {
-    
     try {
       const games = await getExternalGames(req, res);
       res.json(games);
@@ -159,22 +160,13 @@ async function startServer() {
       res.status(500).json({ error: "Failed to fetch external games." });
     }
   });
-  // app.post("/addGame", async (req, res) => {
-  //   const user = req.session.user;
-
-  //   if (!user) {
-  //     return res.status(401).json({ error: "Not authenticated" });
-  //   }
-
-  //   try {
-  //     const id = user.id;
-  //     const game = await UserGame.create({
-  //       user_id: id,
-  //     });
-  //   } catch {
-  //     res.status(500).json({ error: "Failed to fetch external games." });
-  //   }
-  // });
+  app.post("/addGame", async (req, res) => {
+    const user = req.session.user;
+    if (!user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    return await addGame(req, res);
+  });
   // START SERVER -----------------------
 
   app.listen(PORT, () =>

@@ -3,6 +3,7 @@ class GameResponse {
     title: string;
     release: string | null;
     description: string | null;
+    isCustom: boolean | null;
     poster: string | null; // now as base64 string
     
     // user data
@@ -15,6 +16,7 @@ class GameResponse {
     developers: string | null;
     publishers: string | null;
     categories: string | null;
+
 
     constructor(game_object: any) {
         this.id = game_object.id;
@@ -33,6 +35,7 @@ class GameResponse {
         this.developers = game_object.developers ?? null;
         this.publishers = game_object.publishers ?? null;
         this.categories = game_object.categories ?? null;
+        this.isCustom = game_object.custom ?? false;
 
         console.log("Game instantiated");
         console.log("Poster type:", Object.prototype.toString.call(this.poster));

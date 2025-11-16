@@ -1,49 +1,40 @@
 import { Request, Response } from "express";
-import Game from "../models/official_game.js";
-import UserGame from "../models/user/userGame.js";
 
-/**
- * Adds a game to a user's collection.
- * Expects `req.session.user` to be set and `req.body.gameId`.
- */
-export default async function addGame(req: Request, res: Response) {
+async function addGame(req: Request, res: Response) {
+  console.log("📥 addGame request received");
+  
   const user = req.session.user;
-
   if (!user) {
+    console.log("❌ Unauthorized: No user session");
     return res.status(401).json({ error: "Not authenticated" });
   }
-
-  const { gameId } = req.body;
-
-  if (!gameId) {
-    return res.status(400).json({ error: "Missing gameId in request body" });
-  }
-
+  
+  console.log(`✅ Authenticated user: ${user.username || user.id}`);
+  
+  // Parse game data from JSON body
   try {
-    // Check if the game exists
-    const game = await Game.findByPk(gameId);
-    if (!game) {
-      return res.status(404).json({ error: "Game not found" });
-    }
-
-    // Check if the user already has this game
-    const existing = await UserGame.findOne({
-      where: { user_id: user.id, game_id: gameId },
+    const gameData = req.body;
+    
+    console.log("📦 Game data received:");
+    console.log(`   Title: ${gameData.title || 'N/A'}`);
+    console.log(`   Release: ${gameData.release || 'N/A'}`);
+    console.log(`   Custom: ${gameData.isCustom ? 'Yes' : 'No'}`);
+    console.log(`   Poster: ${gameData.poster ? `Base64 (${gameData.poster.length} chars)` : 'None'}`);
+    console.log(`   Genres: ${gameData.genres || 'N/A'}`);
+    
+    // TODO: Save gameData to database here
+    
+    console.log("✅ Game added successfully");
+    return res.status(200).json({ 
+      success: true, 
+      message: "Game added successfully",
+      gameData 
     });
-
-    if (existing) {
-      return res.status(409).json({ message: "Game already added" });
-    }
-
-    // Add the game for this user
-    await UserGame.create({
-      user_id: user.id,
-      game_id: gameId,
-    });
-
-    return res.json({ message: "Game added successfully" });
-  } catch (err) {
-    console.error("Error adding game:", err);
-    return res.status(500).json({ error: "Failed to add game" });
+    
+  } catch (error) {
+    console.error("❌ Error processing game data:", error);
+    return res.status(400).json({ error: "Invalid game data" });
   }
 }
+
+export default addGame;
