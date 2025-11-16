@@ -25,6 +25,7 @@ function LoginMenu({ onClose, openRegisterMenu, setUser, user }) {
 
     try {
       const data = await login({ email, password });
+      
       console.log(data);
       console.log("username: data.username : " + data.username);
       setUser(data);

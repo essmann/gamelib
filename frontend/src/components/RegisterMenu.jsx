@@ -66,10 +66,10 @@ function RegisterMenu({onClose}){
         e.preventDefault();
         
         const newErrors = validate();
-        await register(formData);
         if (Object.keys(newErrors).length === 0) {
             // Form is valid - submit data
-
+            
+            await register(formData);
             console.log("Form submitted:", formData);
             // Add your registration logic here
         } else {

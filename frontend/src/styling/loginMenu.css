@@ -180,3 +180,13 @@
   font-size: 1rem;
   color: #ccc;
 }
+
+@keyframes myAnimation {
+  0%   {margin-left: 2rem;}
+  100% {color:red; left:0px; top:0px;}
+}
+.error_message{
+  color: rgb(214, 48, 48);
+    animation-name: myAnimation;
+  animation-duration: 1s;
+}

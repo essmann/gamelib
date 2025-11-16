@@ -139,6 +139,7 @@ const createWindow = (): void => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "./preload.js"), // Adjust for dist folder
+       partition: "persist:main",  // <-- persistent session
     },
   });
   // win.setMenuBarVisibility(false)
