@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import UserGame from "../models/user/userGame";
 import CustomGame from "../models/customGame";
 import CustomPoster from "../models/customPoster";
+import GameResponse from "../models/DTO/game";
 
-async function addGame(req: Request, res: Response) {
+async function addGame(game : GameResponse, req: Request, res: Response) {
   console.log("📥 addGame request received");
   const user = req.session.user;
   

@@ -37,7 +37,7 @@ class GameResponse {
         this.developers = game_object.developers ?? null;
         this.publishers = game_object.publishers ?? null;
         this.categories = game_object.categories ?? null;
-        this.isCustom = game_object.custom ?? false;
+        this.isCustom = game_object.isCustom ?? false;
 
         console.log("Game instantiated");
         console.log("Poster type:", Object.prototype.toString.call(this.poster));

@@ -16,6 +16,7 @@ import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
 import CustomGame from "./database/models/customGame.js";
 import CustomPoster from "./database/models/customPoster.js";
+import GameResponse from "./database/models/DTO/game.js";
 dotenv.config();
 
 const app = express();
@@ -181,11 +182,17 @@ console.log('✅ UserGame synced');
   app.post("/addGame", async (req, res) => {
     console.log("ADD GAME");
     const user = req.session.user;
+    
     if (!user) {
+      console.log("Unauthorized.");
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    return await addGame(req, res);
+    let standard_game = new GameResponse(req.body);
+    console.log(standard_game);
+
+
+    return await addGame(standard_game, req, res);
   });
   // START SERVER -----------------------
 
