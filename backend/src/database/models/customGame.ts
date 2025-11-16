@@ -1,9 +1,11 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../connection.js";
-import Poster from "./official_poster.js";
 import User from "./user/user.js";
+import CustomPoster from "./customPoster.js";
 
-class CustomGame extends Model {}
+class CustomGame extends Model {
+  id: any;
+}
 
 CustomGame.init({
   id: {
@@ -64,8 +66,8 @@ CustomGame.init({
 });
 
 // Link Poster if you want images for custom games
-CustomGame.hasOne(Poster, { foreignKey: "game_id" });
-Poster.belongsTo(CustomGame, { foreignKey: "game_id" });
+CustomGame.hasOne(CustomPoster, { foreignKey: "game_id" });
+CustomPoster.belongsTo(CustomGame, { foreignKey: "game_id" });
 
 User.hasMany(CustomGame, { foreignKey: "user_id" });
 CustomGame.belongsTo(User, { foreignKey: "user_id" });

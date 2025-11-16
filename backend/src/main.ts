@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
 import CustomGame from "./database/models/customGame.js";
+import CustomPoster from "./database/models/customPoster.js";
 dotenv.config();
 
 const app = express();
@@ -38,7 +39,7 @@ async function startServer() {
   // Increase the JSON body size limit (adjust as needed)
   app.use(express.json({ limit: "50mb" })); // or '10mb', '100mb', etc.
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  
+
   // Session store
   const store = new SequelizeStore({ db });
   await store.sync();
@@ -68,12 +69,27 @@ async function startServer() {
     })
   );
 
-  // Database setup
-  await User.sync();
-  await Official_Game.sync();
-  await Official_Poster.sync();
-  await UserGame.sync();
-  await CustomGame.sync();
+ // Database setup
+console.log('📊 Syncing database tables...');
+
+await User.sync();
+console.log('✅ User synced');
+
+await Official_Game.sync();
+console.log('✅ Official_Game synced');
+
+await Official_Poster.sync();
+console.log('✅ Official_Poster synced');
+
+await CustomGame.sync();
+console.log('✅ CustomGame synced');
+
+await CustomPoster.sync();
+console.log('✅ CustomPoster synced');
+
+await UserGame.sync();
+console.log('✅ UserGame synced');
+
 
   // Seed a test user (safe-fail)
   try {
@@ -163,10 +179,12 @@ async function startServer() {
     }
   });
   app.post("/addGame", async (req, res) => {
+    console.log("ADD GAME");
     const user = req.session.user;
     if (!user) {
       return res.status(401).json({ error: "Not authenticated" });
     }
+
     return await addGame(req, res);
   });
   // START SERVER -----------------------

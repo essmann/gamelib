@@ -1,5 +1,5 @@
 import { Op, Sequelize } from "sequelize";
-import GameResponse from "../models/DTO/gameResponse";
+import GameResponse from "../models/DTO/game";
 import { Request, Response } from "express";
 import Game from "../models/official_game";
 import Poster from "../models/official_poster";

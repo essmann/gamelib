@@ -1,17 +1,18 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../connection.js';
-import Official_Game from './official_game.js';
 
-class Official_Poster extends Model {}
+class CustomPoster extends Model {
+  poster_id: any;
+}
 
-Official_Poster.init({
+CustomPoster.init({
   poster_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
     autoIncrement: true,
   },
   poster: {
-    type: DataTypes.BLOB('long'),
+    type: DataTypes.TEXT('medium'),
     allowNull: true,
   },
   game_id: {          
@@ -20,13 +21,13 @@ Official_Poster.init({
   },
 }, {
   sequelize,
-  modelName: 'Official_Poster',
-  tableName: 'official_posters',
+  modelName: 'customPoster',
+  tableName: 'custom_posters',
   timestamps: false,
 });
 
 // Uncomment and update associations if needed
-// Official_Game.hasOne(Official_Poster, { foreignKey: 'game_id' });
-// Official_Poster.belongsTo(Official_Game, { foreignKey: 'game_id' });
+// Official_Game.hasOne(customPoster, { foreignKey: 'game_id' });
+// customPoster.belongsTo(Official_Game, { foreignKey: 'game_id' });
 
-export default Official_Poster;
+export default CustomPoster;

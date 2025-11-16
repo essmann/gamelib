@@ -3,8 +3,10 @@ class GameResponse {
     title: string;
     release: string | null;
     description: string | null;
-    isCustom: boolean | null;
     poster: string | null; // now as base64 string
+    
+    isCustom: boolean | null;
+
     
     // user data
     rating: number | null;
