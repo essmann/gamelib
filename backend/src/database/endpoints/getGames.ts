@@ -18,16 +18,19 @@ async function getGames(req: Request, res: Response) {
 
   const games = await sequelize.query(
     `
- SELECT
-    ug.id AS usergame_id,
+SELECT
+    ug.id AS id,
     ug.user_id,
     ug.isCustom,
     ug.favorite,
     ug.rating,
     ug.date_added,
     
-    COALESCE(og.title, cg.title) AS game_title,
-    COALESCE(op.poster, cp.poster) AS game_poster,
+    COALESCE(og.title, cg.title) AS title,
+    COALESCE(op.poster, cp.poster) AS poster,
+    
+    -- Corrected to use 'release' column name
+    COALESCE(og.release, cg.release) AS release_date,
     
     COALESCE(og.publishers, cg.publishers) AS publishers,
     COALESCE(og.developers, cg.developers) AS developers,
@@ -43,7 +46,6 @@ LEFT JOIN custom_posters cp
     ON cg.id = cp.game_id
 WHERE ug.user_id = :userId
   AND (ug.game_id IS NOT NULL OR ug.custom_game_id IS NOT NULL);
-
 
 `,
     {
@@ -61,7 +63,7 @@ WHERE ug.user_id = :userId
   console.log("Time taken: " + time + " seconds.");
   console.log(`Fetched ${_games.length} games.`);
 
-  return games;
+  return _games;
 }
 
 export default getGames;

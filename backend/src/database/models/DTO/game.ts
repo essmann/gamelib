@@ -24,7 +24,7 @@ class GameResponse {
         this.id = game_object.id;
         this.title = game_object.title;
         this.release = game_object.release ?? null;
-        this.description = game_object.description ?? null;
+        this.description = game_object.description ?? game_object.release_date ?? null;
 
         // Convert poster buffer to base64 if it exists
         this.poster = game_object.poster ? this.convertToBase64(game_object.poster) : null;
