@@ -46,8 +46,8 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       // Create UserGame link
       await UserGame.create({
         user_id: user.id,
-        custom_game_id: customGame.id,
-        custom: game.isCustom || true,
+        custom_game_id: customGame.dataValues.id,
+        isCustom: game.isCustom || true,
         favorite: game.favorite || false,
         rating: game.rating || null,
       });
@@ -56,7 +56,7 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       return res.status(200).json({
         success: true,
         message: "Game added successfully",
-        gameId: cust.id,
+        gameId: customGame.dataValues.id,
       });
       
     } else {
@@ -66,6 +66,7 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
         game_id: game.id,
         favorite: game.favorite || false,
         rating: game.rating || null,
+        isCustom: false,
       });
       
       console.log("✅ Game added successfully");
