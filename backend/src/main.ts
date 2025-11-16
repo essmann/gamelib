@@ -71,27 +71,26 @@ async function startServer() {
     })
   );
 
- // Database setup
-console.log('📊 Syncing database tables...');
+  // Database setup
+  console.log("📊 Syncing database tables...");
 
-await User.sync();
-console.log('✅ User synced');
+  await User.sync();
+  console.log("✅ User synced");
 
-await Official_Game.sync();
-console.log('✅ Official_Game synced');
+  await Official_Game.sync();
+  console.log("✅ Official_Game synced");
 
-await Official_Poster.sync();
-console.log('✅ Official_Poster synced');
+  await Official_Poster.sync();
+  console.log("✅ Official_Poster synced");
 
-await CustomGame.sync();
-console.log('✅ CustomGame synced');
+  await CustomGame.sync();
+  console.log("✅ CustomGame synced");
 
-await CustomPoster.sync();
-console.log('✅ CustomPoster synced');
+  await CustomPoster.sync();
+  console.log("✅ CustomPoster synced");
 
-await UserGame.sync();
-console.log('✅ UserGame synced');
-
+  await UserGame.sync();
+  console.log("✅ UserGame synced");
 
   // Seed a test user (safe-fail)
   try {
@@ -115,8 +114,8 @@ console.log('✅ UserGame synced');
     }
     return res.status(401).json({ user: null });
   });
-  
-app.get("/sync", async (req, res) => {
+
+  app.get("/checksum", async (req, res) => {
     // if (!req.session.user) return res.status(401);
 
     const id = 1;
@@ -126,8 +125,8 @@ app.get("/sync", async (req, res) => {
     // Use a Date object, not Date.now()
     const s = await user.update({ games_last_synced: new Date() });
 
-    return res.json({games_last_synced: s.dataValues.games_last_synced});
-});
+    return res.json({ games_last_synced: s.dataValues.games_last_synced });
+  });
 
   app.get("/test", (req, res) => {
     req.session.user = {
@@ -194,7 +193,7 @@ app.get("/sync", async (req, res) => {
   app.post("/addGame", async (req, res) => {
     console.log("ADD GAME");
     const user = req.session.user;
-    
+
     if (!user) {
       console.log("Unauthorized.");
       return res.status(401).json({ error: "Not authenticated" });
@@ -203,13 +202,23 @@ app.get("/sync", async (req, res) => {
     let standard_game = new GameResponse(req.body);
     console.log(standard_game);
 
-
     return await addGame(standard_game, req, res);
   });
-  app.get("/myGames", async (req, res )=>{
-    
-    await getGames(req, res);
-  })
+  app.get("/myGames", async (req, res) => {
+    console.log("/mygames reached");
+    console.log(req.session.user);
+    if (!req.session.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    try {
+      const games = await getGames(req, res); // must return the data, not call res.json() inside
+      return res.json(games);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Failed to get games" });
+    }
+  });
   // START SERVER -----------------------
 
   app.listen(PORT, () =>

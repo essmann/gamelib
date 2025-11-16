@@ -10,11 +10,13 @@ import { Slider } from "@mui/material";
 import CloudDoneIcon from '@mui/icons-material/CloudDone';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import SyncProblemIcon from '@mui/icons-material/SyncProblem';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import forceSyncGamesForward from "../../api/forceSyncGamesForward.js";
 function MainContent({ games, setGames, sidebarIndex }) {
   const [selectedHeaderItem, setSelectedHeaderItem] = useState(0);
   return (
     <div className="main_content">
-      <HeaderItem />
+      <HeaderItem games={games} />
       {sidebarIndex == 0 && <GameGrid games={games} setGames={setGames} />}
       {sidebarIndex == 1 && (
         <GameGrid
@@ -28,7 +30,7 @@ function MainContent({ games, setGames, sidebarIndex }) {
 
 export default MainContent;
 
-function HeaderItem({}) {
+function HeaderItem({games}) {
   return (
     <div className="main_content_header">
         <span className="header_search">
@@ -40,7 +42,10 @@ function HeaderItem({}) {
             <button> Filter</button>
         </span>
         <span className="header_sync">
-            <CloudStatusItem/>
+          <button onClick={async ()=>{
+            await forceSyncGamesForward(games);
+          }}>force sync </button>
+            <FileUploadIcon fontSize="medium"/>
         </span>
         
       <div className="display_btns">

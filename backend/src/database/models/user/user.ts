@@ -31,6 +31,7 @@ User.init({
         type: DataTypes.DATE, 
         allowNull: true,
     }
+   
 },
  {
   sequelize,

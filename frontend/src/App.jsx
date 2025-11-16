@@ -17,6 +17,7 @@ import fetchUser from "./api/endpoints/auth/fetchUser";
 // Context
 import { GameContext } from "./Context/ContextProvider";
 import { UserContext } from "./Context/UserContextProvider";
+import getBackendGames from "./api/endpoints/getBackendGames";
 
 // Constants
 const SIDEBAR_INDEX = {
@@ -36,11 +37,11 @@ function App() {
   } = useContext(GameContext);
 
   const [synced, setSynced] = useState(false);
-
+   
   const { setIsLoggedIn, user, setUser } = useContext(UserContext);
 
   // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
-  useEffect(() => {}, []);
+  
   useEffect(() => {
     console.log("Fetching user information...");
     let _fetchUser = async () => {
@@ -50,6 +51,15 @@ function App() {
     _fetchUser();
 
   }, []); // <-- empty array = only runs once
+
+  useEffect(() => {
+    let x = async () => {
+      const games = await getBackendGames();
+      console.log("GAMES NIGGA");
+      console.log(games);
+    }
+    x();
+  }, []);
 
   useEffect(()=>{
       
@@ -63,7 +73,7 @@ function App() {
       try {
         console.log("Fetching games...");
         const startTime = performance.now();
-        const gamesList = await getGames(true);
+        const gamesList = await getGames(false);
 
         // Convert to Game instances
         const gamesArray = gamesList.map((gameData) => new Game(gameData));

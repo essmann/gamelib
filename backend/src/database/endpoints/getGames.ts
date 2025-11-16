@@ -9,7 +9,7 @@ import GameResponse from "../models/DTO/game";
 async function getGames(req: Request, res: Response) {
   console.log("Get games called");
 
-  const user_id = 1;
+  let user_id = req?.session?.user?.id ||  1;
   const t1 = Date.now();
 
   //   const games = await UserGame.findAll({
@@ -61,7 +61,7 @@ WHERE ug.user_id = :userId
   console.log("Time taken: " + time + " seconds.");
   console.log(`Fetched ${_games.length} games.`);
 
-  res.json(games);
+  return games;
 }
 
 export default getGames;
