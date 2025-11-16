@@ -1,16 +1,20 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../connection.js';
 import Official_Game from '../official_game.js';
-import CustomGame from '../customGame.js'; // import your custom game model
+import CustomGame from '../customGame.js';
 import User from './user.js';
 
 class UserGame extends Model {}
 
 UserGame.init({
+    id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true
+    },
     user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        primaryKey: true,
         references: {
             model: 'users',
             key: 'id'
@@ -18,7 +22,6 @@ UserGame.init({
     },
     game_id: {
         type: DataTypes.INTEGER.UNSIGNED,
-        primaryKey: true,
         allowNull: true,
         references: {
             model: 'official_games',
@@ -36,7 +39,6 @@ UserGame.init({
     isCustom: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        primaryKey: true,
     },
     favorite: {
         type: DataTypes.BOOLEAN,
@@ -55,36 +57,25 @@ UserGame.init({
     modelName: 'UserGame',
     tableName: 'usergames',
     timestamps: false,
-    indexes: [
-        {
-            unique: true,
-            fields: ['user_id', 'game_id', 'custom_game_id']
-        },
-        { fields: ['game_id'] },
-        { fields: ['custom_game_id'] }
-    ]
 });
 
-// Associations
+// Associations remain the same
 User.belongsToMany(Official_Game, { 
     through: UserGame, 
     foreignKey: 'user_id', 
     otherKey: 'game_id' 
 });
-
 Official_Game.belongsToMany(User, { 
     through: UserGame, 
     foreignKey: 'game_id', 
     otherKey: 'user_id' 
 });
 
-// User ↔ CustomGame association
 User.belongsToMany(CustomGame, {
     through: UserGame,
     foreignKey: 'user_id',
     otherKey: 'custom_game_id'
 });
-
 CustomGame.belongsToMany(User, {
     through: UserGame,
     foreignKey: 'custom_game_id',

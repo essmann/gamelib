@@ -46,7 +46,8 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       // Create UserGame link
       await UserGame.create({
         user_id: user.id,
-        custom_game_id: cust.id,
+        custom_game_id: customGame.id,
+        custom: game.isCustom || true,
         favorite: game.favorite || false,
         rating: game.rating || null,
       });
