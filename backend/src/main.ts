@@ -15,8 +15,6 @@ import bcrypt from "bcrypt";
 import login from "./database/endpoints/auth/login.js";
 import cors from "cors";
 import CustomGame from "./database/models/customGame.js";
-import multer from "multer";
-const upload = multer();
 dotenv.config();
 
 const app = express();
@@ -37,6 +35,10 @@ async function startServer() {
     .default;
   const SequelizeStore = SequelizeStoreFactory(session.Store);
 
+  // Increase the JSON body size limit (adjust as needed)
+  app.use(express.json({ limit: "50mb" })); // or '10mb', '100mb', etc.
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  
   // Session store
   const store = new SequelizeStore({ db });
   await store.sync();
