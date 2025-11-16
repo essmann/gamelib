@@ -16,30 +16,29 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
   console.log(`✅ Authenticated user: ${user.username || user.id}`);
   
   try {
-    const gameData = req.body;
     
     console.log("📦 Game data received:");
-    console.log(`   Title: ${gameData.title || "N/A"}`);
-    console.log(`   Release: ${gameData.release || "N/A"}`);
-    console.log(`   Custom: ${gameData.isCustom ? "Yes" : "No"}`);
-    console.log(`   Poster: ${gameData.poster ? `Base64 (${gameData.poster.length} chars)` : "None"}`);
-    console.log(`   Genres: ${gameData.genres || "N/A"}`);
+    console.log(`   Title: ${game.title || "N/A"}`);
+    console.log(`   Release: ${game.release || "N/A"}`);
+    console.log(`   Custom: ${game.isCustom ? "Yes" : "No"}`);
+    console.log(`   Poster: ${game.poster ? `Base64 (${game.poster.length} chars)` : "None"}`);
+    console.log(`   Genres: ${game.genres || "N/A"}`);
     
-    if (gameData.isCustom) {
-      // Remove poster and isCustom from gameData before creating CustomGame
-      const { poster, isCustom, ...cleanGameData } = gameData;
+    if (game.isCustom) {
+      // Remove poster and isCustom from game before creating CustomGame
+      const { poster, isCustom, ...gameData } = game;
       
-      const cust = await CustomGame.create({
+      const customGame = await CustomGame.create({
         user_id: user.id,
-        ...cleanGameData,
+        ...gameData,
       });
       
-      console.log(`📝 Custom game created with ID: ${cust.id}`);
+      console.log(`📝 Custom game created with ID: ${customGame.dataValues.id}`);
       
       if (poster) {
         const posterEntry = await CustomPoster.create({
           poster: poster,
-          game_id: cust.dataValues.id,
+          game_id: customGame.dataValues.id,
         });
         console.log(`🖼️ Poster created with ID: ${posterEntry.dataValues.poster_id}`);
       }
@@ -48,8 +47,8 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       await UserGame.create({
         user_id: user.id,
         custom_game_id: cust.id,
-        favorite: gameData.favorite || false,
-        rating: gameData.rating || null,
+        favorite: game.favorite || false,
+        rating: game.rating || null,
       });
       
       console.log("✅ Game added successfully");
@@ -63,16 +62,16 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       // External game
       await UserGame.create({
         user_id: user.id,
-        game_id: gameData.id,
-        favorite: gameData.favorite || false,
-        rating: gameData.rating || null,
+        game_id: game.id,
+        favorite: game.favorite || false,
+        rating: game.rating || null,
       });
       
       console.log("✅ Game added successfully");
       return res.status(200).json({
         success: true,
         message: "Game added successfully",
-        gameId: gameData.id,
+        gameId: game.id,
       });
     }
     

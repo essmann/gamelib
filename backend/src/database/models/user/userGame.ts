@@ -18,6 +18,7 @@ UserGame.init({
     },
     game_id: {
         type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
         allowNull: true,
         references: {
             model: 'official_games',
@@ -27,11 +28,15 @@ UserGame.init({
     custom_game_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: true,
-        primaryKey: true,
         references: {
             model: 'customgames',
             key: 'id'
         }
+    },
+    isCustom: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        primaryKey: true,
     },
     favorite: {
         type: DataTypes.BOOLEAN,
