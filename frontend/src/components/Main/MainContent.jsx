@@ -6,6 +6,10 @@ import { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Slider } from "@mui/material";
+
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
+import SyncProblemIcon from '@mui/icons-material/SyncProblem';
 function MainContent({ games, setGames, sidebarIndex }) {
   const [selectedHeaderItem, setSelectedHeaderItem] = useState(0);
   return (
@@ -36,8 +40,7 @@ function HeaderItem({}) {
             <button> Filter</button>
         </span>
         <span className="header_sync">
-            <FilterAltIcon fontSize="small"/>
-            <button> Filter</button>
+            <CloudStatusItem/>
         </span>
         
       <div className="display_btns">
@@ -53,4 +56,14 @@ function HeaderItem({}) {
       </div>
     </div>
   );
+}
+
+function CloudStatusItem(){
+  return (
+    <div className="header_cloud">
+        <div>
+          <CloudDoneIcon fontSize="large"/>
+        </div>
+    </div>
+  )
 }

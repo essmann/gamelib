@@ -65,21 +65,19 @@ User.belongsToMany(Official_Game, {
     foreignKey: 'user_id', 
     otherKey: 'game_id' 
 });
-Official_Game.belongsToMany(User, { 
-    through: UserGame, 
-    foreignKey: 'game_id', 
-    otherKey: 'user_id' 
+UserGame.belongsTo(Official_Game, {
+    foreignKey: "game_id",
+    as: "officialGame",
 });
 
-User.belongsToMany(CustomGame, {
-    through: UserGame,
-    foreignKey: 'user_id',
-    otherKey: 'custom_game_id'
+UserGame.belongsTo(CustomGame, {
+    foreignKey: "custom_game_id",
+    as: "customGame",
 });
-CustomGame.belongsToMany(User, {
-    through: UserGame,
-    foreignKey: 'custom_game_id',
-    otherKey: 'user_id'
+
+UserGame.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "user",
 });
 
 export default UserGame;

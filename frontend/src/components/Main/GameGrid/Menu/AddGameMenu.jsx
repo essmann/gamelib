@@ -92,6 +92,9 @@ function AddGameMenu({ data, onClose }) {
 
     try {
       // await addGame(game);
+      //update the local database first.
+      await addGame(game, false);
+      // then update online DB.
       await addGame(game, true);
 
       setGames((prev) => [...prev, game]);

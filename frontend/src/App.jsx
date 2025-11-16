@@ -35,14 +35,25 @@ function App() {
     setSearchMenu,
   } = useContext(GameContext);
 
+  const [synced, setSynced] = useState(false);
+
   const { setIsLoggedIn, user, setUser } = useContext(UserContext);
 
   // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
   useEffect(() => {}, []);
   useEffect(() => {
     console.log("Fetching user information...");
-    fetchUser(setUser);
+    let _fetchUser = async () => {
+    let user = await fetchUser(setUser);
+      console.log(user);
+    }
+    _fetchUser();
+
   }, []); // <-- empty array = only runs once
+
+  useEffect(()=>{
+      
+  }, [user])
 
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
 

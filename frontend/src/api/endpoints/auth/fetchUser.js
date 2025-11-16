@@ -5,6 +5,7 @@ const fetchUser = async (setUser) => {
         });
         const data = await res.json();
         setUser(data);
+        return data;
       } catch (err) {
         console.error("Failed to fetch current user:", err);
         setUser(null);

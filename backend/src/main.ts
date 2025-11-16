@@ -17,6 +17,7 @@ import cors from "cors";
 import CustomGame from "./database/models/customGame.js";
 import CustomPoster from "./database/models/customPoster.js";
 import GameResponse from "./database/models/DTO/game.js";
+import getGames from "./database/endpoints/getGames.js";
 dotenv.config();
 
 const app = express();
@@ -194,6 +195,10 @@ console.log('✅ UserGame synced');
 
     return await addGame(standard_game, req, res);
   });
+  app.get("/myGames", async (req, res )=>{
+    
+    await getGames(req, res);
+  })
   // START SERVER -----------------------
 
   app.listen(PORT, () =>
