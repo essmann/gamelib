@@ -13,6 +13,7 @@ User.init({
         allowNull: false,
     },
     email: {
+
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -27,7 +28,7 @@ User.init({
         allowNull: true,
     },
     games_last_synced: {
-        type: DataTypes.TIME, 
+        type: DataTypes.DATE, 
         allowNull: true,
     }
 },

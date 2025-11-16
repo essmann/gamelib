@@ -107,8 +107,6 @@ console.log('✅ UserGame synced');
 
   // ROUTES -----------------------------
 
-  app.get("/", (req, res) => res.send("Hello World!"));
-
   app.get("/user", (req, res) => {
     if (req.session.user) {
       console.log(color.green("Fetched user session:"), req.session.user);
@@ -117,6 +115,19 @@ console.log('✅ UserGame synced');
     }
     return res.status(401).json({ user: null });
   });
+  
+app.get("/sync", async (req, res) => {
+    // if (!req.session.user) return res.status(401);
+
+    const id = 1;
+    const user = await User.findOne({ where: { user_id: id } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Use a Date object, not Date.now()
+    const s = await user.update({ games_last_synced: new Date() });
+
+    return res.json({games_last_synced: s.dataValues.games_last_synced});
+});
 
   app.get("/test", (req, res) => {
     req.session.user = {
