@@ -8,6 +8,7 @@ class Game {
     rating : number | null;
     favorite : number | null;
     date_added : string | null;
+    isCustom : number;
 
     //external games
     genres: string | null;
@@ -26,6 +27,7 @@ class Game {
         this.rating = parseFloat(game_object.rating);
         this.favorite = game_object.favorite;
         this.date_added = game_object.date_added;
+        this.isCustom = game_object.isCustom;
         //external games
         this.genres = game_object.genres;
         this.developers = game_object.developers;
