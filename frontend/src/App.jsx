@@ -37,33 +37,43 @@ function App() {
   } = useContext(GameContext);
 
   const [synced, setSynced] = useState(false);
-   
+
   const { setIsLoggedIn, user, setUser } = useContext(UserContext);
 
+  useEffect(() => {}, []);
+
   // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
-  
+
   useEffect(() => {
     console.log("Fetching user information...");
     let _fetchUser = async () => {
-    let user = await fetchUser(setUser);
+      let user = await fetchUser(setUser);
       console.log(user);
-    }
+    };
     _fetchUser();
-
   }, []); // <-- empty array = only runs once
 
+  // When a user successfully logs in.
+  useEffect(() => {
+    if (user?.username) {
+      console.log("User detected");
+      let item = localStorage.getItem("games_last_modified");
+      if(!item){
+        
+      }
+    }
+    return;
+  }, [user]);
   useEffect(() => {
     let x = async () => {
       const games = await getBackendGames();
       console.log("GAMES NIGGA");
       console.log(games);
-    }
+    };
     x();
   }, []);
 
-  useEffect(()=>{
-      
-  }, [user])
+  useEffect(() => {}, [user]);
 
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
 

@@ -92,10 +92,10 @@ async function startServer() {
   await CustomPoster.sync();
   console.log("✅ CustomPoster synced");
 
-  await UserGame.sync();
+  await UserGame.sync({alter: true});
   console.log("✅ UserGame synced");
   
-  await CustomUserGame.sync();
+  await CustomUserGame.sync({alter: true});
   console.log("✅ CustomUserGame synced");
 
   // Seed a test user (safe-fail)

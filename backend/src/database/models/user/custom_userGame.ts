@@ -39,6 +39,13 @@ CustomUserGame.init({
     date_added: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+    },
+    date_deleted : {
+        type: DataTypes.DATE,
+    },
+    date_updated : {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     }
 }, {
     sequelize,
