@@ -11,7 +11,6 @@ CustomGame.init({
   id: {
     type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
-    autoIncrement: true, // Custom games get their own IDs
   },
   user_id: {
     type: DataTypes.INTEGER.UNSIGNED,

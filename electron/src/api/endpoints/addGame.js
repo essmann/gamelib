@@ -10,6 +10,7 @@ import  Game  from "../game";
 async function addGame(db, game) {
   console.log("Test");
 
+
   // Convert poster to Buffer if it's a Uint8Array
   const poster = game.poster instanceof Uint8Array 
     ? Buffer.from(game.poster)

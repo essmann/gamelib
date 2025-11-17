@@ -3,7 +3,7 @@ import UserGame from "../models/user/userGame";
 import CustomGame from "../models/customGame";
 import CustomPoster from "../models/customPoster";
 import GameResponse from "../models/DTO/game";
-
+import CustomUserGame from "../models/user/custom_userGame";
 async function addGame(game : GameResponse, req: Request, res: Response) {
   console.log("📥 addGame request received");
   const user = req.session.user;
@@ -26,9 +26,10 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
     
     if (game.isCustom) {
       // Remove poster and isCustom from game before creating CustomGame
-      const { poster, isCustom, ...gameData } = game;
+      const { poster, isCustom, id, ...gameData } = game;
       
       const customGame = await CustomGame.create({
+        id: id,
         user_id: user.id,
         ...gameData,
       });
@@ -44,10 +45,9 @@ async function addGame(game : GameResponse, req: Request, res: Response) {
       }
       
       // Create UserGame link
-      await UserGame.create({
+      await CustomUserGame.create({
         user_id: user.id,
-        custom_game_id: customGame.dataValues.id,
-        isCustom: game.isCustom || true,
+        game_id: customGame.dataValues.id,
         favorite: game.favorite || false,
         rating: game.rating || null,
       });
