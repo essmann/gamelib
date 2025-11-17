@@ -4,9 +4,9 @@ import Official_Game from '../official_game.js';
 import CustomGame from '../customGame.js';
 import User from './user.js';
 
-class UserGame extends Model {}
+class CustomUserGame extends Model {}
 
-UserGame.init({
+CustomUserGame.init({
     id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
@@ -23,13 +23,11 @@ UserGame.init({
     game_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        primaryKey: true,
         references: {
-            model: 'official_games',
+            model: 'custom_games',
             key: 'id'
         }
     },
-   
     favorite: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -44,27 +42,34 @@ UserGame.init({
     }
 }, {
     sequelize,
-    modelName: 'UserGame',
-    tableName: 'official_usergames',
+    modelName: 'CustomUserGame',
+    tableName: 'custom_usergames',
     timestamps: false,
 });
 
-// Associations remain the same
-User.belongsToMany(Official_Game, { 
-    through: UserGame, 
-    foreignKey: 'user_id', 
-    otherKey: 'game_id' 
+
+// =========================
+// Correct Associations
+// =========================
+
+// Users → Custom Games (many to many)
+User.belongsToMany(CustomGame, { 
+    through: CustomUserGame,
+    foreignKey: 'user_id',
+    otherKey: 'game_id'
 });
-UserGame.belongsTo(Official_Game, {
+
+// Each custom_usergame row belongs to a CustomGame
+CustomUserGame.belongsTo(CustomGame, {
     foreignKey: "game_id",
-    as: "officialGame",
+    as: "game"
 });
 
-
-
-UserGame.belongsTo(User, {
+// Each custom_usergame row belongs to a User
+CustomUserGame.belongsTo(User, {
     foreignKey: "user_id",
-    as: "user",
+    as: "user"
 });
 
-export default UserGame;
+
+export default CustomUserGame;

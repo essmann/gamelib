@@ -61,7 +61,7 @@ CustomGame.init({
 }, {
   sequelize,
   modelName: "CustomGame",
-  tableName: "customGames",
+  tableName: "custom_games",
   timestamps: false,
 });
 

@@ -18,6 +18,7 @@ import CustomGame from "./database/models/customGame.js";
 import CustomPoster from "./database/models/customPoster.js";
 import GameResponse from "./database/models/DTO/game.js";
 import getGames from "./database/endpoints/getGames.js";
+import CustomUserGame from "./database/models/user/custom_userGame.js";
 dotenv.config();
 
 const app = express();
@@ -91,6 +92,9 @@ async function startServer() {
 
   await UserGame.sync();
   console.log("✅ UserGame synced");
+  
+  await CustomUserGame.sync();
+  console.log("✅ CustomUserGame synced");
 
   // Seed a test user (safe-fail)
   try {
