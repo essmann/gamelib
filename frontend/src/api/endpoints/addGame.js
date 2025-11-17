@@ -1,54 +1,56 @@
-export const addGame = async (game, backend = false) => {
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+export const addGame = async (game) => {
   console.log("Adding game:", game);
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+  // Generate ID for custom games if missing
   if (game.isCustom && game.id == null) {
-    console.log("Game u tryna add: " + game);
-
     game.id = Math.floor(Math.random() * 1_000_000);
-
-
+    console.log("Assigned new custom game ID:", game.id);
   }
+
+  // 1️⃣ Add locally
+  await localAdd(game);
+
+  // 2️⃣ Add to backend
+  await backendAdd(game);
+};
+
+export default addGame;
+
+// --- Local add ---
+async function localAdd(game) {
   try {
-    if (!backend) {
-      // Local-first
-      const added = await window.api.addGame(game);
-      console.log("Added locally.");
-      return added;
-    }
+    await window.api.addGame(game);
+    console.log("✅ Added locally.");
   } catch (err) {
-    console.warn("Local add failed, falling back to backend…", err);
+    console.warn("⚠️ Local add failed:", err);
   }
+}
 
-  // Online version
+// --- Backend add ---
+async function backendAdd(game) {
   try {
-    let body;
-    let gameToSend = { ...game };
-
-    // Convert poster to base64 if it's not already a string
-    if (game.poster && typeof game.poster !== 'string') {
+    // Convert poster to Base64 if needed
+    const gameToSend = { ...game };
+    if (game.poster && typeof game.poster !== "string") {
       gameToSend.poster = game.getPosterAsBase64
         ? game.getPosterAsBase64()
-        : (typeof game.poster.getPosterAsBase64 === 'function'
+        : (typeof game.poster.getPosterAsBase64 === "function"
           ? game.poster.getPosterAsBase64()
           : game.poster);
     }
 
-    body = JSON.stringify(gameToSend);
-
-    const res = await fetch(`${BACKEND_URL}/addGame`, {  // Fixed: was template literal
+    const res = await fetch(`${BACKEND_URL}/addGame`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body,
+      body: JSON.stringify(gameToSend),
     });
 
-    if (!res.ok) throw new Error("Backend error");
-    console.log("Added online.");
-    return await res.json();
+    if (!res.ok) throw new Error("Backend addGame failed");
+    console.log("✅ Added online.");
   } catch (err) {
-    console.error("Failed online too:", err);
-    throw err;
+    console.error("❌ Failed to add game on backend:", err);
   }
 };
-
-export default addGame;
