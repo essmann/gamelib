@@ -22,7 +22,7 @@ async function login(req: Request, res: Response) {
     id: user.dataValues.user_id,
     username: user.dataValues.username,
     email: user.dataValues.email,
-    games_last_synced: user.dataValues.games_last_synced,
+    games_last_modified: user.dataValues.games_last_modified,
   };
 
   console.log(
