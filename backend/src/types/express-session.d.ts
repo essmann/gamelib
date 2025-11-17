@@ -7,7 +7,7 @@ declare module "express-session" {
       id: number;
       username: string,
       email: string,
-      games_last_synced: Date,
+      games_last_modified: Date,
       
     };
   }

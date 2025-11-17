@@ -129,9 +129,9 @@ async function startServer() {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // Use a Date object, not Date.now()
-    const s = await user.update({ games_last_synced: new Date() });
+    const s = await user.update({ games_last_modified: new Date() });
 
-    return res.json({ games_last_synced: s.dataValues.games_last_synced });
+    return res.json({ games_last_modified: s.dataValues.games_last_modified });
   });
 
   app.get("/test", (req, res) => {
@@ -139,7 +139,7 @@ async function startServer() {
       id: 1,
       username: "testname",
       email: "testMail@test.com",
-      games_last_synced: new Date(),
+      games_last_modified: new Date(),
     };
     res.send("Test OK");
   });

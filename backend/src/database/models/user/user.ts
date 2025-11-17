@@ -27,7 +27,7 @@ User.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-    games_last_synced: {
+    games_last_modified: {
         type: DataTypes.DATE, 
         allowNull: true,
     }
