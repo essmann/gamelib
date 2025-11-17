@@ -1,30 +1,33 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const updateGame = async (game) => {
-  console.log("Game you are trying to update:", JSON.stringify(game, null, 2));
-
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  let localResult = null;
-  let backendResult = null;
-
-  // Convert poster to Base64 if it's not already a string
-  let gameToSend = { ...game };
-  if (game.poster && typeof game.poster !== "string") {
-    gameToSend.poster = game.getPosterAsBase64
-      ? game.getPosterAsBase64()
-      : (typeof game.poster.getPosterAsBase64 === "function"
-        ? game.poster.getPosterAsBase64()
-        : game.poster);
-  }
+  console.log("Updating game:", game);
 
   // 1️⃣ Update locally
+  await localUpdate(game);
+
+  // 2️⃣ Update on backend
+  await backendUpdate(game);
+};
+
+export default updateGame;
+
+// --- Local update ---
+async function localUpdate(game) {
   try {
-    localResult = await window.api.updateGame(gameToSend);
+    let gameToSend = prepareGameForBackend(game);
+    await window.api.updateGame(gameToSend);
     console.log("✅ Updated locally.");
   } catch (err) {
     console.warn("⚠️ Local update failed:", err);
   }
+}
 
-  // 2️⃣ Always update backend
+// --- Backend update ---
+async function backendUpdate(game) {
   try {
+    let gameToSend = prepareGameForBackend(game);
+
     const res = await fetch(`${BACKEND_URL}/updateGame`, {
       method: "POST",
       credentials: "include",
@@ -33,14 +36,21 @@ export const updateGame = async (game) => {
     });
 
     if (!res.ok) throw new Error("Backend update failed");
-
-    backendResult = await res.json();
     console.log("✅ Updated on backend.");
   } catch (err) {
     console.error("❌ Failed to update game on backend:", err);
   }
+}
 
-  return { localResult, backendResult };
-};
-
-export default updateGame;
+// --- Helper: prepare poster ---
+function prepareGameForBackend(game) {
+  const gameCopy = { ...game };
+  if (gameCopy.poster && typeof gameCopy.poster !== "string") {
+    gameCopy.poster = gameCopy.getPosterAsBase64
+      ? gameCopy.getPosterAsBase64()
+      : (typeof gameCopy.poster.getPosterAsBase64 === "function"
+        ? gameCopy.poster.getPosterAsBase64()
+        : gameCopy.poster);
+  }
+  return gameCopy;
+}
