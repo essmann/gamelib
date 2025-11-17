@@ -20,6 +20,7 @@ import GameResponse from "./database/models/DTO/game.js";
 import getGames from "./database/endpoints/getGames.js";
 import CustomUserGame from "./database/models/user/custom_userGame.js";
 import deleteGame from "./database/endpoints/deleteGame.js";
+import updateGame from "./database/endpoints/updateGame.js";
 dotenv.config();
 
 const app = express();
@@ -213,6 +214,12 @@ async function startServer() {
   app.post("/deleteGame", async (req,res)=>{
     let game = new GameResponse(req.body);
     let deletedGame = await deleteGame(game, req, res);
+
+  })
+    app.post("/updateGame", async (req,res)=>{
+    let game = new GameResponse(req.body);
+    let updatedGame = await updateGame(game, req, res);
+    res.json(updateGame);
     
   })
   app.get("/myGames", async (req, res) => {
