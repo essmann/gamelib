@@ -17,7 +17,7 @@ async function getExternalGames(db, prefix = '') {
         games.genres,
         games.developers,
         games.publishers,
-        posters.image as poster
+        posters.image AS poster
       FROM games
       LEFT JOIN posters ON games.id = posters.id
       ${prefix ? 'WHERE games.title LIKE ?' : ''}
@@ -27,29 +27,42 @@ async function getExternalGames(db, prefix = '') {
 
     const rows = await new Promise((resolve, reject) => {
       db.all(query, params, (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
-        console.log("External poster type: " + typeof rows[0].poster);
+        if (err) return reject(err);
+
+        // Safe poster-type logging
+        if (rows && rows.length > 0) {
+          const type = Object.prototype.toString.call(rows[0].poster);
+          console.log("External poster type:", type);
+        } else {
+          console.log("External poster type: no rows returned");
+        }
+
+        resolve(rows || []);
       });
     });
 
     console.log(`Fetched ${rows.length} game(s) from the database.`);
 
-    // Clean log output
-    const gamesForLogging = rows.map(game => ({
-      id: game.game_id,
-      title: game.title,
-      release: game.release,
-      description: game.description,
-      genres: game.genres,
-      developers: game.developers,
-      publishers: game.publishers,
-      poster: game.poster ? `<Buffer ${game.poster.length} bytes>` : null
-    }));
+    // Clean logging
+    if (rows.length > 0) {
+      const gamesForLogging = rows.map(game => ({
+        id: game.game_id,
+        title: game.title,
+        release: game.release,
+        description: game.description,
+        genres: game.genres,
+        developers: game.developers,
+        publishers: game.publishers,
+        poster: game.poster
+          ? `<Buffer ${game.poster.length} bytes>`
+          : null
+      }));
+      console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
+    } else {
+      console.log("No games to log.");
+    }
 
-    console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
-
-    // Return full rows
+    // Return cleaned rows (never crashes)
     return rows.map(row => ({
       id: row.game_id,
       title: row.title,
@@ -58,7 +71,7 @@ async function getExternalGames(db, prefix = '') {
       genres: row.genres,
       developers: row.developers,
       publishers: row.publishers,
-      poster: row.poster,
+      poster: row.poster ?? null
     }));
 
   } catch (err) {

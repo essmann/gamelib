@@ -19,6 +19,7 @@ import CustomPoster from "./database/models/customPoster.js";
 import GameResponse from "./database/models/DTO/game.js";
 import getGames from "./database/endpoints/getGames.js";
 import CustomUserGame from "./database/models/user/custom_userGame.js";
+import deleteGame from "./database/endpoints/deleteGame.js";
 dotenv.config();
 
 const app = express();
@@ -208,6 +209,12 @@ async function startServer() {
 
     return await addGame(standard_game, req, res);
   });
+
+  app.post("/deleteGame", async (req,res)=>{
+    let game = new GameResponse(req.body);
+    let deletedGame = await deleteGame(game, req, res);
+    
+  })
   app.get("/myGames", async (req, res) => {
     console.log("/mygames reached");
     console.log(req.session.user);

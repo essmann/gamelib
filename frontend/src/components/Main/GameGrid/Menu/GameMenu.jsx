@@ -98,7 +98,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const handleDelete = useCallback(() => {
     if (window.confirm(`Are you sure you want to delete "${game.title}"?`)) {
       if (onDelete) {
-        onDelete(game.id);
+        onDelete(game);
         setGames((prev) => prev.filter((_game) => _game.id !== game.id));
       }
       onClose();

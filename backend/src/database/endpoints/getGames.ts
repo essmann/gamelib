@@ -21,7 +21,7 @@ async function getGames(req: Request, res: Response) {
 SELECT
     ug.id AS id,
     ug.user_id,
-    ug.isCustom,
+   
     ug.favorite,
     ug.rating,
     ug.date_added,
@@ -35,17 +35,17 @@ SELECT
     COALESCE(og.publishers, cg.publishers) AS publishers,
     COALESCE(og.developers, cg.developers) AS developers,
     COALESCE(og.genres, cg.genres) AS genres
-FROM usergames ug
+FROM official_usergames ug
 LEFT JOIN official_games og
     ON ug.game_id = og.id
 LEFT JOIN official_posters op
     ON og.id = op.game_id
-LEFT JOIN customgames cg
-    ON ug.custom_game_id = cg.id
+LEFT JOIN custom_games cg
+    ON ug.user_id = cg.user_id
 LEFT JOIN custom_posters cp
     ON cg.id = cp.game_id
 WHERE ug.user_id = :userId
-  AND (ug.game_id IS NOT NULL OR ug.custom_game_id IS NOT NULL);
+  AND (ug.game_id IS NOT NULL);
 
 `,
     {
