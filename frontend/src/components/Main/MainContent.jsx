@@ -30,45 +30,56 @@ function MainContent({ games, setGames, sidebarIndex }) {
 
 export default MainContent;
 
-function HeaderItem({games}) {
+function HeaderItem({ games }) {
   return (
     <div className="main_content_header">
-        <span className="header_search">
-            <SearchIcon fontSize="small"/>
-            <input type="text" placeholder="Search games..." />
-        </span>
-        <span className="header_filter">
-            <FilterAltIcon fontSize="small"/>
-            <button> Filter</button>
-        </span>
-        <span className="header_sync">
-          <button onClick={async ()=>{
-            await forceSyncGamesForward(games);
-          }}>force sync </button>
-            <FileUploadIcon fontSize="medium"/>
-        </span>
-        
+      <span className="header_search">
+        <SearchIcon fontSize="small" />
+        <input type="text" placeholder="Search games..." />
+      </span>
+      <span className="header_filter">
+        <FilterAltIcon fontSize="small" />
+        <button> Filter</button>
+      </span>
+      <span className="header_sync">
+
+       <button style={{borderRadius: 50}}>
+         <CloudSyncIcon fontSize="medium" />
+       </button>
+      </span>
+      <OnlineStatusItem online={true} />
+
       <div className="display_btns">
         <div className="header_slider">
-            <Slider size="small" color=""/>
+          <Slider size="small" color="" />
         </div>
         <span className="list_view selected">
-        <ReorderIcon fontSize="large" />
-      </span>
-      <span className="">
-        <WindowIcon fontSize="large" />
-      </span>
+          <ReorderIcon fontSize="large" />
+        </span>
+        <span className="">
+          <WindowIcon fontSize="large" />
+        </span>
       </div>
     </div>
   );
 }
 
-function CloudStatusItem(){
+function CloudStatusItem() {
   return (
     <div className="header_cloud">
-        <div>
-          <CloudDoneIcon fontSize="large"/>
-        </div>
+      <div>
+        <CloudDoneIcon fontSize="large" />
+      </div>
+    </div>
+  )
+}
+function OnlineStatusItem({ online }) {
+  return (
+    <div className="header_online">
+      <div>
+        <div className="header_dot"></div>
+        {online == true ? <div> Online </div> : <div> Offline </div>}
+      </div>
     </div>
   )
 }

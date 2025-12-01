@@ -6,7 +6,7 @@
   --color-hover: #2d2d2d;
   --rating-pink: #fc6399;
   --backloggd-bg: #16181c;
-  --darker-pink: #ea377a;
+--darker-pink: #ea377a;
   --text-1: #badefc;
   --white: #fff;
 }
@@ -89,7 +89,6 @@ body {
 
 .main_content_header > .header_search{
   display: flex;
-justify-content: ;
   align-items: center;
   background: var(--bg-secondary);
   padding: 0.25rem 0.5rem;
@@ -128,5 +127,20 @@ justify-content: ;
   width: 150px;
   color: rgb(221, 30, 81);
   margin-left: auto;
+  
+}
+
+.header_dot {
+  background: rgb(53, 158, 53);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+.header_online *{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
 }
