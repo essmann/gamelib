@@ -5,7 +5,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
 import PersonIcon from "@mui/icons-material/Person";
-
+// 🆕 Import the new icons for Export and Import
+import UploadIcon from "@mui/icons-material/Upload";
+import DownloadIcon from "@mui/icons-material/Download";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { GameContext } from "../../Context/ContextProvider";
 import { UserContext } from "../../Context/UserContextProvider";
 
@@ -53,9 +57,8 @@ function ListItem({
 
   return (
     <div
-      className={`sidebar_item ${isSelected ? "selected" : ""} ${title} ${
-        isChild ? "child_item" : ""
-      }`}
+      className={`sidebar_item ${isSelected ? "selected" : ""} ${title} ${isChild ? "child_item" : ""
+        }`}
       onClick={onClick || handleClick}
       role="button"
       tabIndex={0}
@@ -75,20 +78,34 @@ function ListItem({
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const { games, setProfileMenu, setLoginMenu } = useContext(GameContext);
- 
+
+  const [collapsed, setCollapsed] = useState(true);
   const handleProfileButtonClick = () => {
-    if(user?.username == null){
+    if (user?.username == null) {
       setLoginMenu(true);
-    }
-    else {
+    } else {
       setProfileMenu(true);
     }
-  }
+  };
   if (!games) console.warn("Games context is not available");
 
+  // Define new index values for Import and Export
+  const importIndex = indexEnum.import || 101;
+  const exportIndex = indexEnum.export || 102;
+
+
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${collapsed ?  "collapsed":""}`}>
+
       <div className="sidebar_items_container">
+        <div className="collapse_btn">
+          <button style={{border: "none", outline: "none"}} onClick={()=>{
+            setCollapsed((prev)=>!prev);
+          }}>
+            {!collapsed ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon/>}
+          </button >
+        </div>
+
         <ListHeader title="PROFILE" />
         <ListItem
           title="User"
@@ -126,6 +143,25 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           setIndex={setIndex}
           count
         />
+        {/* 🆕 Separate Import and Export Options Added */}
+        <ListHeader title={"Etc"} />
+        <ListItem
+          title="Import"
+          icon={DownloadIcon}
+          index={importIndex}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={false}
+        />
+        <ListItem
+          title="Export"
+          icon={UploadIcon}
+          index={exportIndex}
+          currentIndex={currentIndex}
+          setIndex={setIndex}
+          count={false}
+        />
+        {/* End of new items */}
         <ListItem
           title="Settings"
           icon={SettingsIcon}
@@ -138,5 +174,6 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
     </div>
   );
 }
+
 
 export default Sidebar;

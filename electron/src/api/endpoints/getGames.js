@@ -6,7 +6,9 @@
  * @returns {Promise<Array>} Array of game objects with poster data
  */
 async function getGames(db) {
+  console.log(db);
   try {
+    
     // Get all column names from the 'games' table dynamically
     const columns = await new Promise((resolve, reject) => {
       db.all(`PRAGMA table_info(games);`, [], (err, rows) => {
