@@ -7,3 +7,4 @@
 - consider using an sqlite ORM like sequelize
 
 
+- PRUNE the entire DB. We don't actually need any game information other than user information, you only need the game cover and title + rating, date_added etc. Reduce bloat.
