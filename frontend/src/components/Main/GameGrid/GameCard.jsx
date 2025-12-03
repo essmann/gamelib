@@ -54,10 +54,10 @@ export function GameFooter({ game, onFavorite }) {
           onFavorite();
         }}
       >
-        {game?.favorite == 0 ? (
-          <FavoriteBorderIcon fontSize="medium" />
-        ) : (
+        {game?.favorite === 1 ? (
           <FavoriteIcon fontSize="medium" />
+        ) : (
+          <FavoriteBorderIcon fontSize="medium" />
         )}
       </div>
     </div>

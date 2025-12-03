@@ -261,10 +261,10 @@ function PosterSection({ game, edit, fileInputRef, handleImageChange, handleFavo
           }}
           title={game?.favorite === 1 ? "Remove from Favorites" : "Add to Favorites"}
         >
-          {game?.favorite === 0 ? (
-            <FavoriteBorderIcon className="stat_icon" />
-          ) : (
+          {game?.favorite === 1 ? (
             <FavoriteIcon className="stat_icon favorited" />
+          ) : (
+            <FavoriteBorderIcon className="stat_icon" />
           )}
           <span className="stat_label">
             {game?.favorite === 1 ? "Favorited" : "Favorite"}
