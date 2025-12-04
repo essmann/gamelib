@@ -17,6 +17,7 @@ import exportGames from "../../api/exportGames";
 import importGames from "../../api/importGames";
 import deleteGame from "../../api/endpoints/deleteGame";
 import addGame from "../../api/endpoints/addGame";
+import getGames from "../../api/endpoints/getGames";
 
 // List header component for section titles
 function ListHeader({ title }) {
@@ -100,7 +101,9 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
 
   async function onImport() {
     try {
-      return await importGames();
+      await importGames();
+      // let _games = await getGames();
+      // setGames(_games);
     } catch (err) {
       console.error('Error during import:', err);
     }

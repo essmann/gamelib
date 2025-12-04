@@ -1,34 +1,36 @@
 // utils/importGames.js
-
-
 export default async function importGames() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
+  const file = await new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
 
-  input.onchange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+    input.onchange = (event) => {
+      resolve(event.target.files[0]);
+    };
 
-    const text = await file.text();
-    let games = JSON.parse(text);
+    input.click();
+  });
 
-    // Convert base64 posters back to Uint8Array
-    games = games.map((game) => {
-      if (game.poster) {
-        const binaryString = atob(game.poster); // decode base64
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        game.poster = bytes;
+  if (!file) return;
+
+  const text = await file.text();
+  let games = JSON.parse(text);
+
+  // Convert base64 posters back to Uint8Array
+  games = games.map((game) => {
+    if (game.poster) {
+      const binaryString = atob(game.poster); // decode base64
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
       }
-      return game;
-    });
+      game.poster = bytes;
+    }
+    return game;
+  });
 
-    return await window.api.importGames(games);
-  };
-
-  input.click();
+  // Call your backend import function
+  return await window.api.importGames(games);
 }
