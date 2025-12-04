@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('api', {
   deleteGame: ( id) => ipcRenderer.invoke('delete-game', id),
   getExternalGames: (prefix) => ipcRenderer.invoke('get-external-games', prefix),
   register: (formData) => ipcRenderer.invoke('register', formData),
-  login: (formData) => ipcRenderer.invoke('login', formData)
+  login: (formData) => ipcRenderer.invoke('login', formData),
+  importGames: (games) => ipcRenderer.invoke('import-games', games),
   
 })

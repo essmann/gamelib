@@ -13,7 +13,7 @@ export const addGame = async (game) => {
   await localAdd(game);
 
   // 2️⃣ Add to backend
-  await backendAdd(game);
+  // await backendAdd(game);
 };
 
 export default addGame;

@@ -7,7 +7,7 @@ export const deleteGame = async (game) => {
   await localDelete(game);
 
   // 2️⃣ Delete on backend
-  await backendDelete(game);
+  // await backendDelete(game);
 };
 
 export default deleteGame;

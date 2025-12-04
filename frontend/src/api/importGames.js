@@ -1,5 +1,7 @@
 // utils/importGames.js
-export default function importGames(callback) {
+
+
+export default async function importGames() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'application/json';
@@ -25,7 +27,7 @@ export default function importGames(callback) {
       return game;
     });
 
-    callback(games); // send it back to your React state
+    return await window.api.importGames(games);
   };
 
   input.click();

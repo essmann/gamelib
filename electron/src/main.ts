@@ -20,10 +20,13 @@ import external_db from "./api/sqlite/connection/external_db";
 
 // --- API endpoints ---
 import addGame from "./api/endpoints/addGame";
+import importGames from "./api/endpoints/importGames";
 import { updateGame } from "./api/endpoints/updateGame";
 import { deleteGame } from "./api/endpoints/deleteGame";
 import { getGames } from "./api/endpoints/getGames";
 import { getExternalGames } from "./api/endpoints/getExternalGames";
+
+
 import Game from "./api/game";
 import { URLSearchParams } from "url";
 
@@ -127,6 +130,9 @@ ipcMain.handle("register", async (_event, formData: any) => {
   return data;
 });
 
+ipcMain.handle("import-games", async (event, games : any) => {
+  return await importGames(db, games);
+})
 // --- Create window ---
 const createWindow = (): void => {
   console.log("Creating window...");

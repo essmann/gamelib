@@ -7,7 +7,7 @@ export const updateGame = async (game) => {
   await localUpdate(game);
 
   // 2️⃣ Update on backend
-  await backendUpdate(game);
+  // await backendUpdate(game);
 };
 
 export default updateGame;

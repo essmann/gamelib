@@ -17,6 +17,7 @@ import exportGames from "../../api/exportGames";
 import importGames from "../../api/importGames";
 import deleteGame from "../../api/endpoints/deleteGame";
 import addGame from "../../api/endpoints/addGame";
+
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -81,7 +82,7 @@ function ListItem({
 
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
-  const { games, setProfileMenu, setLoginMenu } = useContext(GameContext);
+  const { games, setGames, setProfileMenu, setLoginMenu } = useContext(GameContext);
 
   const [collapsed, setCollapsed] = useState(false);
   // const handleProfileButtonClick = () => {
@@ -97,23 +98,23 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const importIndex = indexEnum.import || 101;
   const exportIndex = indexEnum.export || 102;
 
- async function onImport(newGames){
-    //add
-    newGames.map(async (g)=> {
-      return await addGame(g);
-    })
-    
+  async function onImport() {
+    try {
+      return await importGames();
+    } catch (err) {
+      console.error('Error during import:', err);
+    }
+  }
 
- }
   return (
-    <div className={`sidebar ${collapsed ?  "collapsed":""}`}>
+    <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
 
       <div className="sidebar_items_container">
         <div className="collapse_btn">
-          <button style={{border: "none", outline: "none"}} onClick={()=>{
-            setCollapsed((prev)=>!prev);
+          <button style={{ border: "none", outline: "none" }} onClick={() => {
+            setCollapsed((prev) => !prev);
           }}>
-            {!collapsed ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon/>}
+            {!collapsed ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />}
           </button >
         </div>
 
@@ -164,10 +165,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={false}
-          onClick={()=>importGames((_games)=>{
-            console.log(_games);
-            onImport(_games);
-          })}
+          onClick={onImport}
         />
         <ListItem
           title="Export"
@@ -176,7 +174,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={false}
-          onClick={()=>exportGames(games)}
+          onClick={() => exportGames(games)}
         />
         {/* End of new items */}
         <ListItem
