@@ -455,3 +455,19 @@
 .poster_wrapper *{
   background: inherit;
 }
+.vertical_sidebar > .sidebar_item  {
+  width: 100% !important;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: left !important;
+
+}
+.vertical_sidebar > .sidebar_item *{
+  margin-right: auto;
+
+}
+
+.vertical_sidebar{
+  gap: 0px;
+}

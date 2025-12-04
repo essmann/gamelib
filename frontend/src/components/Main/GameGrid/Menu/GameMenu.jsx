@@ -11,6 +11,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Game from "../../../../api/game.js";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
 import AddIcon from '@mui/icons-material/Add';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 const MAX_RATING = 10;
 
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
@@ -264,6 +265,27 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                   <AddIcon className="sidebar_icon" />
                   <span className="sidebar_label">Add to List</span>
                 </div>
+
+
+              </div>
+              
+              <div className="sidebar_item flex">
+
+                <div className="item_side">
+                  <StarIcon className="sidebar_icon" />
+                  <span className="sidebar_label">Rate</span>
+                </div>
+
+
+              </div>
+              
+              <div className="sidebar_item flex">
+
+                <div className="item_side">
+                  <AddPhotoAlternateIcon className="sidebar_icon" />
+                  <span className="sidebar_label">Change poster</span>
+                </div>
+
 
               </div>
               <div className="sidebar_information">
