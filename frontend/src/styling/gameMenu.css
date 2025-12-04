@@ -443,3 +443,15 @@
 .game_menu{
   height: auto;
 }
+
+.sidebar_information{
+  border-top: 1px solid white;
+  width: 100%;
+}
+.vertical_sidebar{
+  width: 100%;
+}
+
+.poster_wrapper *{
+  background: inherit;
+}

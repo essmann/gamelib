@@ -16,12 +16,12 @@ class Game {
         this.categories = game_object.categories || null;
         //other
     }
-    
+
     getGenres() {
         if (!this.genres) return '';
         return this.genres.replace(/[\[\]']+/g, '');
     }
-    
+
     getPosterURL() {
         if (!this.poster) return null;
         // Case 1: Poster is a Base64 string
@@ -35,32 +35,38 @@ class Game {
         }
         return null;
     }
-    
+
     getPosterAsBase64() {
         if (!this.poster) return null;
-        
+
         // Already Base64
         if (typeof this.poster === 'string') {
             return this.poster;
         }
-        
+
         // Convert Uint8Array or ArrayBuffer to Base64
         if (this.poster instanceof Uint8Array || this.poster instanceof ArrayBuffer) {
-            const uint8Array = this.poster instanceof ArrayBuffer 
-                ? new Uint8Array(this.poster) 
+            const uint8Array = this.poster instanceof ArrayBuffer
+                ? new Uint8Array(this.poster)
                 : this.poster;
-            
+
             // Convert to binary string
             let binary = '';
             for (let i = 0; i < uint8Array.length; i++) {
                 binary += String.fromCharCode(uint8Array[i]);
             }
-            
+
             // Convert to Base64
             return btoa(binary);
         }
-        
+
         return null;
+    }
+    getDate() {
+        if (!this.date_added) { return; }
+        let d = parseInt(this.date_added);
+        console.log(d);
+        return new Date(d).toLocaleDateString("en-US");
     }
 }
 

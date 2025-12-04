@@ -266,7 +266,14 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 </div>
 
               </div>
-              
+              <div className="sidebar_information">
+
+                <div className="item_side">
+                  <span className="sidebar_label">Added at {game.getDate()}</span>
+                </div>
+
+              </div>
+
             </div>
 
 
