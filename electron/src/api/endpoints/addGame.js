@@ -1,5 +1,5 @@
 // api/endpoints/addGame.js
-import  Game  from "../game";
+import Game from "../game";
 
 /**
  * Adds a new game to the database with its poster image
@@ -12,7 +12,7 @@ async function addGame(db, game) {
 
 
   // Convert poster to Buffer if it's a Uint8Array
-  const poster = game.poster instanceof Uint8Array 
+  const poster = game.poster instanceof Uint8Array
     ? Buffer.from(game.poster)
     : null;
 

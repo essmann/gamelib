@@ -507,3 +507,6 @@
   }
 
  
+  .poster_wrapper *{
+    background: inherit !important;
+  }
