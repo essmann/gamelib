@@ -10,7 +10,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Game from "../../../../api/game.js";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
-
+import AddIcon from '@mui/icons-material/Add';
 const MAX_RATING = 10;
 
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
@@ -35,7 +35,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     setGame(prevGame => {
       const updatedProps = { ...prevGame };
       updatedProps[name] = value;
-      
+
       if (name === 'rating') {
         // Allow floating point numbers (real numbers)
         let numValue = parseFloat(value);
@@ -43,7 +43,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
         if (numValue > MAX_RATING) numValue = MAX_RATING;
         updatedProps.rating = numValue;
       }
-      
+
       // CRITICAL: Always return a new Game instance to preserve class methods
       return new Game(updatedProps);
     });
@@ -59,15 +59,15 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 
   const handleFavoriteToggle = useCallback(async () => {
     // Create the updated state first
-    const updatedGame = new Game({ 
-      ...game, 
-      favorite: game.favorite === 1 ? 0 : 1 
+    const updatedGame = new Game({
+      ...game,
+      favorite: game.favorite === 1 ? 0 : 1
     });
-    
+
     // Update local state and context immediately
     setGame(updatedGame);
     setGames((prev) => prev.map(g => g.id === updatedGame.id ? updatedGame : g));
-    
+
     // Save change immediately
     try {
       await onSave(updatedGame);
@@ -85,7 +85,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     if (isSaving || !edit) return; // Only allow save if in edit mode and not already saving
 
     setIsSaving(true);
-    
+
     try {
       await onSave(game);
       setEdit(false);
@@ -147,7 +147,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
           onClick={() => setEdit(true)}
         >
           <EditIcon fontSize="small" />
-          Edit 
+          Edit
         </button>
         <button
           type="button"
@@ -160,29 +160,29 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
       </div>
     );
   };
-  
-  const MetadataField = ({ label, name, type, value, min, max, suffix, className, readOnly = false }) => {
-    return (
-      <div className="metadata_field">
-        <label className="field_label" htmlFor={name}>{label}</label>
-        <div className="field_input_wrapper">
-          <input
-            id={name}
-            name={name}
-            type={type}
-            value={String(value || '')}
-            onChange={handleChange}
-            readOnly={!edit || readOnly} // readOnly combines with !edit
-            min={min}
-            max={max}
-            className={`field_input ${edit ? 'editable' : ''} ${className || ''}`}
-            step={name === 'rating' ? "0.1" : undefined}
-          />
-          {suffix && <span className="field_suffix">{suffix}</span>}
-        </div>
-      </div>
-    );
-  };
+
+  // const MetadataField = ({ label, name, type, value, min, max, suffix, className, readOnly = false }) => {
+  //   return (
+  //     <div className="metadata_field">
+  //       <label className="field_label" htmlFor={name}>{label}</label>
+  //       <div className="field_input_wrapper">
+  //         <input
+  //           id={name}
+  //           name={name}
+  //           type={type}
+  //           value={String(value || '')}
+  //           onChange={handleChange}
+  //           readOnly={!edit || readOnly} // readOnly combines with !edit
+  //           min={min}
+  //           max={max}
+  //           className={`field_input ${edit ? 'editable' : ''} ${className || ''}`}
+  //           step={name === 'rating' ? "0.1" : undefined}
+  //         />
+  //         {suffix && <span className="field_suffix">{suffix}</span>}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   // --- Main Render ---
 
@@ -192,7 +192,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     <MenuContainer onClose={onClose} clickAwayExceptionClass={"game_card_image"}>
       <div className={`game_menu ${menuClassName}`}>
         <form className="game_menu_form" onSubmit={handleSubmit}>
-          
+
           {/* TOP BAR / ID Display */}
           <header className="game_menu_header">
             <span className="game_id_display">ID: {game.id}</span>
@@ -200,10 +200,10 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
           </header>
 
           <div className="game_content_grid">
-            
+
             {/* Left Column: Poster, Rating, Favorite */}
             <div className="poster_column">
-              <div 
+              <div
                 className={`poster_wrapper ${edit ? 'editable' : ''}`}
                 onClick={() => edit && fileInputRef.current?.click()}
               >
@@ -228,14 +228,13 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 onChange={handleImageChange}
               />
 
-              {/* Quick Stats/Actions below poster */}
               <div className="quick_actions_bar">
                 <div className="stat_item rating">
                   <StarIcon className="stat_icon star_icon" />
-                  <span className="stat_value">{game?.rating || 0}</span>
-                  <span className="stat_label">/ {MAX_RATING}</span>
+                  {/* <span className="stat_value">{game?.rating || 0}</span> */}
+                  <span className="stat_label"> {`${game?.rating || 0}`}/ {MAX_RATING}</span>
                 </div>
-                
+
                 <button
                   type="button"
                   className="stat_item favorite_btn"
@@ -255,73 +254,22 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
             </div>
 
             {/* Right Column: Title, Details, Description */}
-            <div className="details_column">
-              
-              {/* Title Input/Display */}
-              <div className="title_section">
-                {edit ? (
-                  <input
-                    type="text"
-                    name="title"
-                    value={game.title}
-                    onChange={handleChange}
-                    className="game_title_input"
-                    placeholder="Game Title"
-                    required
-                  />
-                ) : (
-                  <h1 className="game_title">{game.title}</h1>
-                )}
+            {/* Vertical Sidebar */}
+            <div className="vertical_sidebar">
+
+
+              <div className="sidebar_item flex">
+
+                <div className="item_side">
+                  <AddIcon className="sidebar_icon" />
+                  <span className="sidebar_label">Add to List</span>
+                </div>
+
               </div>
               
-              <hr className="details_separator" />
-
-              {/* Metadata Grid */}
-              <div className="metadata_grid">
-                
-                <MetadataField
-                  label="Rating"
-                  name="rating"
-                  type="number"
-                  // Use a specific class to limit width
-                  className="rating_input_small"
-                  value={game.rating}
-                  min="0"
-                  max={MAX_RATING}
-                  suffix={`/ ${MAX_RATING}`}
-                />
-                
-                <MetadataField
-                  label="Release Date"
-                  name="release"
-                  type={edit ? "date" : "text"}
-                  value={game.release}
-                  readOnly={!edit}
-                />
-                
-                <MetadataField
-                  label="Genres"
-                  name="genres"
-                  type="text"
-                  value={game?.getGenres() || ""}
-                  readOnly={!edit}
-                />
-              </div>
-
-              {/* Description */}
-              <div className="game_description_container">
-                <label className="field_label">Description</label>
-                <textarea
-                  name="description"
-                  value={game.description || ''}
-                  onChange={handleChange}
-                  readOnly={!edit}
-                  className={`game_description ${edit ? 'editable' : ''}`}
-                  placeholder="Enter game description..."
-                />
-              </div>
-
             </div>
+
+
           </div>
         </form>
       </div>

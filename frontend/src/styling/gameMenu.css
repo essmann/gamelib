@@ -59,14 +59,18 @@
 
 /* Action Buttons (Save/Edit/Delete) */
 .action_buttons button {
+  box-shadow: none;
     font-size: 0.9rem;
-    padding: 10px 14px; /* Slightly larger buttons */
-    border-radius: var(--radius, 6px);
+    /* padding: 10px 14px; Slightly larger buttons */
+    padding: 0.25rem;
     transition: background-color 0.2s, transform 0.1s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
     border: none;
 }
 .action_buttons button:hover:not(:disabled) {
@@ -78,11 +82,9 @@
 }
 
 .action_buttons .edit_btn {
-    background: var(--color-primary, #007AFF);
     color: white;
 }
 .action_buttons .delete_btn {
-    background: var(--color-danger, #FF3B30);
     color: white;
     margin-left: 10px;
 }
@@ -355,4 +357,89 @@
     background: var(--bg-surface, #1A1B1F); 
     border: 1px solid var(--border, #3A3B45);
     color: var(--text-primary, #E0E1E6);
+}
+
+
+.game_menu{
+  max-width: 500px;
+  
+}
+
+.game_menu{
+  border-radius: 1rem !important;
+}
+.menu_container{
+  border-radius: 1rem !important;
+
+}
+
+.game_details * {
+  margin-top: 1rem;
+}
+
+.list_div > .list_item_count{
+  background: red;
+}
+
+.game_menu{
+}
+/* Vertical sidebar container */
+.vertical_sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;           /* space between items */
+  padding: 12px;
+  width: 80px;         /* fixed width for icons/stat column */
+  align-items: center; /* center icons/buttons */
+}
+
+/* Each item inside the sidebar */
+.vertical_sidebar .sidebar_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.vertical_sidebar .sidebar_item:hover {
+  background-color: #2a2a2a;
+  transform: translateX(2px);
+}
+
+/* Icon inside each sidebar item */
+.vertical_sidebar .sidebar_icon {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+/* Label below icon */
+.vertical_sidebar .sidebar_label {
+  font-size: 11px;
+  color: #ccc;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Optional: active state */
+.vertical_sidebar .sidebar_item.active {
+  background-color: #3a3a3a;
+}
+
+.flex{
+  display: flex;
+}
+
+.item_side{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game_menu{
+  height: auto;
 }

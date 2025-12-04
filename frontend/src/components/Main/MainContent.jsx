@@ -43,11 +43,11 @@ function HeaderItem({ games }) {
       </span>
       <span className="header_sync">
 
-       <button style={{borderRadius: 50}}>
+       {/* <button style={{borderRadius: 50}}>
          <CloudSyncIcon fontSize="medium" />
-       </button>
+       </button> */}
       </span>
-      <OnlineStatusItem online={true} />
+      {/* <OnlineStatusItem online={true} /> */}
 
       <div className="display_btns">
         <div className="header_slider">
@@ -73,13 +73,13 @@ function CloudStatusItem() {
     </div>
   )
 }
-function OnlineStatusItem({ online }) {
-  return (
-    <div className="header_online">
-      <div>
-        <div className="header_dot"></div>
-        {online == true ? <div> Online </div> : <div> Offline </div>}
-      </div>
-    </div>
-  )
-}
+// function OnlineStatusItem({ online }) {
+//   return (
+//     <div className="header_online">
+//       <div>
+//         <div className="header_dot"></div>
+//         {online == true ? <div> Online </div> : <div> Offline </div>}
+//       </div>
+//     </div>
+//   )
+// }

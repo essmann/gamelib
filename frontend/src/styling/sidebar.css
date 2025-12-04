@@ -276,9 +276,7 @@
 
 }
 .sidebar.collapsed > .sidebar_items_container > .sidebar_item > .list_item_count{
-  background: red !important;
-  display: none;
-
+  margin: -8px !important;
 }
 .sidebar.collapsed > .sidebar_items_container > .sidebar_item > .list_item_icon *{
   font-size: x-large;

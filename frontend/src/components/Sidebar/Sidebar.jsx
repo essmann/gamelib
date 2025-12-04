@@ -50,10 +50,10 @@ function ListItem({
     console.log("Clicked index:", index);
   };
 
-  if (isLogin) {
-    console.log(user);
-    title = user?.username == null ? "Sign in" : user?.username;
-  }
+  // if (isLogin) {
+  //   console.log(user);
+  //   title = user?.username == null ? "Sign in" : user?.username;
+  // }
 
   return (
     <div
@@ -80,13 +80,13 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const { games, setProfileMenu, setLoginMenu } = useContext(GameContext);
 
   const [collapsed, setCollapsed] = useState(true);
-  const handleProfileButtonClick = () => {
-    if (user?.username == null) {
-      setLoginMenu(true);
-    } else {
-      setProfileMenu(true);
-    }
-  };
+  // const handleProfileButtonClick = () => {
+  //   if (user?.username == null) {
+  //     setLoginMenu(true);
+  //   } else {
+  //     setProfileMenu(true);
+  //   }
+  // };
   if (!games) console.warn("Games context is not available");
 
   // Define new index values for Import and Export
@@ -106,8 +106,8 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           </button >
         </div>
 
-        <ListHeader title="PROFILE" />
-        <ListItem
+        {/* <ListHeader title="PROFILE" /> */}
+        {/* <ListItem
           title="User"
           icon={PersonIcon}
           index={1000}
@@ -116,7 +116,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           isLogin
           user={user}
           onClick={handleProfileButtonClick}
-        />
+        /> */}
 
         <ListHeader title="GAMES" />
         <ListItem
