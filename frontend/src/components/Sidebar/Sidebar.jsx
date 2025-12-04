@@ -13,6 +13,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { GameContext } from "../../Context/ContextProvider";
 import { UserContext } from "../../Context/UserContextProvider";
 
+import exportGames from "../../api/exportGames";
+import importGames from "../../api/importGames";
+import deleteGame from "../../api/endpoints/deleteGame";
+import addGame from "../../api/endpoints/addGame";
 // List header component for section titles
 function ListHeader({ title }) {
   return (
@@ -79,7 +83,7 @@ function ListItem({
 function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const { games, setProfileMenu, setLoginMenu } = useContext(GameContext);
 
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   // const handleProfileButtonClick = () => {
   //   if (user?.username == null) {
   //     setLoginMenu(true);
@@ -93,7 +97,14 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
   const importIndex = indexEnum.import || 101;
   const exportIndex = indexEnum.export || 102;
 
+ async function onImport(newGames){
+    //add
+    newGames.map(async (g)=> {
+      return await addGame(g);
+    })
+    
 
+ }
   return (
     <div className={`sidebar ${collapsed ?  "collapsed":""}`}>
 
@@ -117,6 +128,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           user={user}
           onClick={handleProfileButtonClick}
         /> */}
+
 
         <ListHeader title="GAMES" />
         <ListItem
@@ -152,6 +164,10 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={false}
+          onClick={()=>importGames((_games)=>{
+            console.log(_games);
+            onImport(_games);
+          })}
         />
         <ListItem
           title="Export"
@@ -160,6 +176,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum, user }) {
           currentIndex={currentIndex}
           setIndex={setIndex}
           count={false}
+          onClick={()=>exportGames(games)}
         />
         {/* End of new items */}
         <ListItem

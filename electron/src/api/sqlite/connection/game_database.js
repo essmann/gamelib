@@ -1,7 +1,6 @@
 // database.js
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-const fs = require('fs');
 const { app } = require('electron');
 
 function getDatabasePath() {
@@ -9,21 +8,17 @@ function getDatabasePath() {
   const isDev = !app.isPackaged;
 
   if (isDev) {
-    // Development: use local file
-        console.log("Dev Mode");
-        console.log("Dirname: " + __dirname);
+    console.log("Dev Mode");
+    console.log("Dirname: " + __dirname);
 
-        const projectRoot = path.resolve(__dirname, '../../../../../'); // adjust if your dist is deeper
-        console.log("Project Root: " + projectRoot);
-        return path.join(projectRoot, 'src/api/sqlite/database', dbFileName);
+    const projectRoot = path.resolve(__dirname, '../../../../../'); // adjust if needed
+    console.log("Project Root: " + projectRoot);
+    return path.join(projectRoot, 'src/api/sqlite/database', dbFileName);
   } else {
-   
-    const dbPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'games.db');
-    return dbPath;
+    return path.join(process.resourcesPath, 'app.asar.unpacked', 'games.db');
   }
 }
 
-// Determine DB path based on environment
 const dbPath = getDatabasePath();
 console.log('Using SQLite DB at:', dbPath);
 
@@ -36,19 +31,18 @@ db.serialize(() => {
 
   db.run(`
     CREATE TABLE IF NOT EXISTS games (
-      id INTEGER PRIMARY KEY,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       release TEXT,
       description TEXT,
       rating REAL,
       favorite INTEGER,
+      isCustom INTEGER,
       date_added TEXT,
       genres TEXT,
       developers TEXT,
       publishers TEXT,
       categories TEXT
-
-
     )
   `);
 

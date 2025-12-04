@@ -1,4 +1,3 @@
-// api/endpoints/addGame.js
 import Game from "../game";
 
 /**
@@ -10,70 +9,66 @@ import Game from "../game";
 async function addGame(db, game) {
   console.log("Test");
 
-
   // Convert poster to Buffer if it's a Uint8Array
-  const poster = game.poster instanceof Uint8Array
-    ? Buffer.from(game.poster)
-    : null;
-
-  // Generate a unique ID if not provided
-  if (!game.id) {
-    game.id = Math.floor(Math.random() * 10e9);
-  }
+  const posterBuffer = game.poster instanceof Uint8Array ? Buffer.from(game.poster) : null;
 
   // Ensure date_added is always set
   game.date_added = game.date_added || new Date().toISOString();
 
-  // Exclude poster from the `games` table insert
-  const { poster: _, ...gameData } = game;
+  // Exclude poster and id from the `games` table insert
+  const { poster, id, ...gameData } = game;
 
-  // Dynamically build the query parts
   const columns = Object.keys(gameData);
   const placeholders = columns.map(() => '?').join(', ');
   const values = Object.values(gameData);
 
-  // Log the query (for debugging)
-  console.log('Adding game:', JSON.stringify({ ...gameData, poster: poster ? `<Buffer ${poster.length} bytes>` : null }, null, 2));
+  console.log(
+    'Adding game:',
+    JSON.stringify(
+      { ...gameData, poster: posterBuffer ? `<Buffer ${posterBuffer.length} bytes>` : null },
+      null,
+      2
+    )
+  );
 
   try {
     // Insert game into games table
-    await new Promise((resolve, reject) => {
+    const gameId = await new Promise((resolve, reject) => {
       const sql = `INSERT INTO games (${columns.join(', ')}) VALUES (${placeholders})`;
       db.run(sql, values, function (err) {
         if (err) {
           console.error('Error inserting game:', err);
           reject(err);
         } else {
-          console.log(`Game added with ID: ${game.id} (${this.changes} row(s) affected)`);
-          resolve();
+          console.log(`Game added with ID: ${this.lastID} (${this.changes} row(s) affected)`);
+          resolve(this.lastID);
         }
       });
     });
 
     // Insert poster into posters table (if provided)
-    if (poster) {
+    if (posterBuffer) {
       await new Promise((resolve, reject) => {
         db.run(
           'INSERT INTO posters (game_id, poster) VALUES (?, ?)',
-          [game.id, poster],
+          [gameId, posterBuffer],
           function (err) {
             if (err) {
               console.error('Error inserting poster:', err);
               reject(err);
             } else {
-              console.log(`Poster added for game ID: ${game.id} (${this.changes} row(s) affected)`);
+              console.log(`Poster added for game ID: ${gameId} (${this.changes} row(s) affected)`);
               resolve();
             }
           }
         );
       });
     } else {
-      console.log('No poster provided for game ID:', game.id);
+      console.log('No poster provided for game ID:', gameId);
     }
 
-    console.log(`✓ Successfully added game: "${game.title}" (ID: ${game.id})`);
-    return new Game(game);
-
+    console.log(`✓ Successfully added game: "${game.title}" (ID: ${gameId})`);
+    return new Game({ ...game, id: gameId });
   } catch (err) {
     console.error('Failed to add game:', err.message);
     throw new Error(`Failed to add game: ${err.message}`);
