@@ -34,8 +34,8 @@ class Game {
         this.publishers = game_object.publishers;
         this.categories = game_object.categories;
         
-        console.log("Game instantiated");
-        console.log("Poster: " + Object.prototype.toString.call(this.poster));
+        // console.log("Game instantiated");
+        // console.log("Poster: " + Object.prototype.toString.call(this.poster));
 
         //
     }

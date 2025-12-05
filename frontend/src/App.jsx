@@ -13,6 +13,7 @@ import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
 import Game from "./api/game";
 import fetchUser from "./api/endpoints/auth/fetchUser";
+import getLists from "./api/endpoints/getLists";
 
 // Context
 import { GameContext } from "./Context/ContextProvider";
@@ -32,6 +33,8 @@ function App() {
     addGameMenu,
     games,
     setGames,
+    lists, 
+    setLists,
     searchMenu,
     setSearchMenu,
   } = useContext(GameContext);
@@ -100,6 +103,20 @@ function App() {
 
     fetchGames();
   }, [setGames]);
+  useEffect(() => {
+  const fetchLists = async () => {
+    try {
+      console.log("Fetching lists...");
+      const fetchedLists = await getLists(); // calls the imported API
+      console.log(fetchedLists);
+      setLists(fetchedLists);
+    } catch (error) {
+      console.error("Failed to fetch lists:", error);
+    }
+  };
+
+  fetchLists();
+}, [setLists]);
 
   useEffect(() => {}, [deleteGame]);
   const handleCloseGameMenu = () => {

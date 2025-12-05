@@ -11,9 +11,11 @@ function ContextProvider({ children }) {
   const [loginMenu, setLoginMenu] = useState(false);
   const [registerMenu, setRegisterMenu] = useState(false);
   const [profileMenu, setProfileMenu] = useState(false);
+  const [lists, setLists] = useState([]);
   return (
     <GameContext.Provider value={{ 
       games, setGames,
+      lists, setLists,
       addGameMenu, setAddGameMenu,
       previewGameData, setPreviewGameData,
       user, setUser,

@@ -42,7 +42,7 @@ async function getGames(db) {
       poster: game.poster ? `<Buffer ${game.poster.length} bytes>` : null
     }));
 
-    console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
+    // console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
 
     // Return results
     return rows.map(row => ({
