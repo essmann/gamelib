@@ -25,7 +25,12 @@ import { updateGame } from "./api/endpoints/updateGame";
 import { deleteGame } from "./api/endpoints/deleteGame";
 import { getGames } from "./api/endpoints/getGames";
 import { getExternalGames } from "./api/endpoints/getExternalGames";
-
+//lists
+import addList from "./api/endpoints/lists/addList";
+import addToList from "./api/endpoints/lists/addToList";
+import getLists from "./api/endpoints/lists/getLists";
+import deleteFromList from "./api/endpoints/lists/deleteFromList";
+import deleteList from "./api/endpoints/lists/deleteList";
 
 import Game from "./api/game";
 import { URLSearchParams } from "url";
@@ -77,61 +82,32 @@ ipcMain.handle(
     console.log("External poster type: " + Object.prototype.toString.call(ext_games[0].poster));
 
     return ext_games;
-    
-});
 
-ipcMain.handle("login", async (_event, formData: any) => {
-  console.log("Login reached in electron");
-
-  const _url = url.format({
-    protocol: "http",
-    hostname: BACKEND_HOST,
-    port: BACKEND_PORT,
-    pathname: "/login",
-  });
-  console.log("url: " + _url);
-
-  const response = await fetch(_url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error status: ${response.status}`);
-  }
 
-  const data = await response.json();
-  return data;
-});
-ipcMain.handle("register", async (_event, formData: any) => {
-  console.log("Register reached in electron");
 
-  const _url = url.format({
-    protocol: "http",
-    hostname: BACKEND_HOST,
-    port: BACKEND_PORT,
-    pathname: "/register",
-  });
-  console.log("url: " + _url);
-
-  const response = await fetch(_url, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error status: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data;
-});
-
-ipcMain.handle("import-games", async (event, games : any) => {
+ipcMain.handle("import-games", async (event, games: any) => {
   return await importGames(db, games);
+})
+ipcMain.handle("add-list", async (event, name: string) => {
+  console.log("Adding list with name: " + name + " ...");
+  return await addList(db, name);
+
+
+})
+ipcMain.handle("add-to-list", async (event, listId, gameId) => {
+    return await addToList(db, listId, gameId);
+})
+
+ipcMain.handle("get-lists", async () => {
+  return await getLists(db);
+})
+ipcMain.handle("delete-list", async (event, listId : any) => {
+  return await deleteList(db, listId);
+})
+ipcMain.handle("delete-from-list", async (event, listId, gameId) => {
+  return await deleteFromList(db, listId, gameId);
 })
 // --- Create window ---
 const createWindow = (): void => {
@@ -145,7 +121,7 @@ const createWindow = (): void => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "./preload.js"), // Adjust for dist folder
-       partition: "persist:main",  // <-- persistent session
+      partition: "persist:main",  // <-- persistent session
     },
   });
   // win.setMenuBarVisibility(false)
