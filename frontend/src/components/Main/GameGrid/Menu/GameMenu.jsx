@@ -13,7 +13,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Game from "../../../../api/game.js";
 import { GameContext } from "../../../../Context/ContextProvider.jsx";
 import { ClickAwayListener } from "@mui/material";
-
+import addToList from "../../../../api/endpoints/addToList.js";
 const MAX_RATING = 10;
 
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
@@ -106,9 +106,10 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     setIsListMenuOpen(prev => !prev);
   };
 
-  const handleListItemClick = (list) => {
+  const handleListItemClick =  async (list, gameId) => {
     console.log(`Added "${game.title}" to ${list.name}`);
-    setIsListMenuOpen(false);
+    await addToList(list.id, game.id);
+    // setIsListMenuOpen(false);
   };
 
   // --- Sub-Components ---
@@ -147,7 +148,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
           <li
             key={list.id}
             className={`list_menu_item ${isInList ? 'in_list' : ''}`}
-            onClick={() => handleToggleListItem(list)}
+            onClick={() => handleListItemClick(list, game)}
             onMouseDown={(e) => e.preventDefault()}
           >
             <span className="icon">{isInList ? '✔' : '+'}</span>

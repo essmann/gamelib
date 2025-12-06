@@ -12,6 +12,7 @@ function ContextProvider({ children }) {
   const [registerMenu, setRegisterMenu] = useState(false);
   const [profileMenu, setProfileMenu] = useState(false);
   const [lists, setLists] = useState([]);
+  const [listMenu, setListMenu] = useState(false);
   return (
     <GameContext.Provider value={{ 
       games, setGames,
@@ -22,7 +23,8 @@ function ContextProvider({ children }) {
       searchMenu, setSearchMenu,
       loginMenu, setLoginMenu,
       registerMenu, setRegisterMenu,
-      profileMenu, setProfileMenu
+      profileMenu, setProfileMenu,
+      listMenu, setListMenu
     }}>
       {children}
     </GameContext.Provider>

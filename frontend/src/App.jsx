@@ -9,6 +9,7 @@ import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
 import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
 import MenuManager from "./components/MenuManager";
 
+
 // API
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
