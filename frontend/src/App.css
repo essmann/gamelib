@@ -469,3 +469,265 @@ cursor: pointer;
   background: var(--darker-pink);
   color: var(--white);
 }
+/* Game Lists Container */
+.game-lists-container {
+  max-width: 500px;
+  padding: 16px;
+  background: var(--color-dark);
+  min-width: 400px;
+}
+
+/* Header */
+.lists-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-hover);
+}
+
+.lists-header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.list-count {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* Tree Structure */
+.lists-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* Tree Item */
+.tree-item {
+  font-size: 14px;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s;
+  border-radius: 4px;
+}
+
+.tree-node:hover {
+  background: var(--color-hover);
+}
+
+.node-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: var(--text-1);
+}
+
+.node-content svg {
+  color: #9ca3af;
+}
+
+.node-content svg:first-child {
+  color: #6b7280;
+}
+
+.node-label {
+  flex: 1;
+  font-size: 14px;
+}
+
+.node-count {
+  font-size: 12px;
+  color: #6b7280;
+  margin-left: auto;
+}
+
+.node-delete {
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+  transition: all 0.15s;
+  margin-right: 4px;
+}
+
+.node-delete:hover {
+  background: var(--darker-pink);
+  color: var(--white);
+}
+
+/* Tree Children */
+.tree-children {
+  margin-left: 24px;
+  padding-left: 12px;
+  border-left: 1px solid var(--color-hover);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tree-leaf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+  color: var(--text-1);
+  font-size: 13px;
+  position: relative;
+}
+
+.tree-leaf:hover {
+  background: var(--color-hover);
+  padding-left: 8px;
+  color: var(--rating-pink);
+}
+
+.leaf-bullet {
+  color: var(--rating-pink);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.leaf-label {
+  flex: 1;
+}
+
+.leaf-rating {
+  font-size: 11px;
+  color: var(--rating-pink);
+  font-weight: 600;
+}
+
+.leaf-delete {
+  padding: 2px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+  transition: all 0.15s;
+  margin-left: 4px;
+}
+
+.leaf-delete:hover {
+  background: var(--darker-pink);
+  color: var(--white);
+}
+
+.empty-node {
+  padding: 8px 6px;
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Create List Button */
+.create-list-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px dashed var(--color-hover);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--rating-pink);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 8px;
+}
+
+.create-list-btn:hover {
+  border-color: var(--rating-pink);
+  background: var(--color-hover);
+}
+
+/* Inline Create Form */
+.create-list-inline {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--color-hover);
+  border: 1px solid var(--rating-pink);
+  border-radius: 4px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.create-list-inline input {
+  flex: 1;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  background: var(--color-dark);
+  color: var(--text-1);
+}
+
+.create-list-inline input:focus {
+  outline: 1px solid var(--rating-pink);
+}
+
+.inline-btn {
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+}
+
+.inline-btn.confirm {
+  color: #10b981;
+}
+
+.inline-btn.confirm:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.inline-btn.confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.inline-btn.cancel {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.inline-btn.cancel:hover {
+  background: var(--darker-pink);
+  color: var(--white);
+}

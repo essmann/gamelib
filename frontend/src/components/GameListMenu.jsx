@@ -97,10 +97,18 @@ function GameListMenu({ lists, onClose, onCreateList, onDeleteList }) {
 function GameList({ list, onDelete }) {
     const [open, setOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [hoveredGameId, setHoveredGameId] = useState(null);
 
     const handleDelete = () => {
         if (window.confirm(`Delete "${list.name}"?`)) {
             onDelete(list.id);
+        }
+    };
+
+    const handleRemoveGame = (gameId, gameTitle) => {
+        if (window.confirm(`Remove "${gameTitle}" from this list?`)) {
+            // Add your API call here to remove game from list
+            console.log(`Remove game ${gameId} from list ${list.id}`);
         }
     };
 
@@ -131,11 +139,24 @@ function GameList({ list, onDelete }) {
                         <div className="empty-node">Empty</div>
                     ) : (
                         list.games.map((game) => (
-                            <div key={game.id} className="tree-leaf">
+                            <div 
+                                key={game.id} 
+                                className="tree-leaf"
+                                onMouseEnter={() => setHoveredGameId(game.id)}
+                                onMouseLeave={() => setHoveredGameId(null)}
+                            >
                                 <span className="leaf-bullet">•</span>
                                 <span className="leaf-label">{game.title}</span>
                                 {game.rating && (
                                     <span className="leaf-rating">★ {game.rating}</span>
+                                )}
+                                {hoveredGameId === game.id && (
+                                    <button 
+                                        className="leaf-delete"
+                                        onClick={() => handleRemoveGame(game.id, game.title)}
+                                    >
+                                        <DeleteOutlineIcon fontSize="small" />
+                                    </button>
                                 )}
                             </div>
                         ))
