@@ -23,6 +23,7 @@ function MainContent({ games, setGames, sidebarIndex }) {
           games={games.filter((game) => game.favorite)}
           setGames={setGames}
         />
+        
       )}
     </div>
   );

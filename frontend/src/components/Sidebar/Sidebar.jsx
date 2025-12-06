@@ -69,7 +69,7 @@ function ListItem({
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
   const [collapsed, setCollapsed] = useState(false);
-  const { lists, setLists } = useContext(GameContext);
+  const { lists, setLists, games } = useContext(GameContext);
   
 
   async function onImport() {
@@ -96,7 +96,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
 
         <ListHeader title="Etc" />
         <ListItem title="Import" icon={DownloadIcon} index={101} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={onImport} />
-        <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportGames()} />
+        <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportGames(games)} />
 
         <ListItem title="Settings" icon={SettingsIcon} index={indexEnum.settings || 99} currentIndex={currentIndex} setIndex={setIndex} count={false} />
       </div>

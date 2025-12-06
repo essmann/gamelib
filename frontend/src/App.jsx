@@ -8,6 +8,7 @@ import AddGameMenu from "./components/Main/GameGrid/Menu/AddGameMenu";
 import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
 import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
 import MenuManager from "./components/MenuManager";
+
 // API
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
@@ -19,6 +20,7 @@ import getLists from "./api/endpoints/getLists";
 import { GameContext } from "./Context/ContextProvider";
 import { UserContext } from "./Context/UserContextProvider";
 import getBackendGames from "./api/endpoints/getBackendGames";
+import CheckboxListSecondary from "./components/MUI/CheckboxListSecondary";
 
 // Constants
 const SIDEBAR_INDEX = {
@@ -33,7 +35,7 @@ function App() {
     addGameMenu,
     games,
     setGames,
-    lists, 
+    lists,
     setLists,
     searchMenu,
     setSearchMenu,
@@ -43,7 +45,7 @@ function App() {
 
   const { setIsLoggedIn, user, setUser } = useContext(UserContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   // collect user data on refresh via session ID. wont return anything if no session ID is present in cookie.
 
@@ -61,8 +63,8 @@ function App() {
     if (user?.username) {
       console.log("User detected");
       let item = localStorage.getItem("games_last_modified");
-      if(!item){
-        
+      if (!item) {
+
       }
     }
     return;
@@ -76,7 +78,7 @@ function App() {
     x();
   }, []);
 
-  useEffect(() => {}, [user]);
+  useEffect(() => { }, [user]);
 
   const [sidebarIndex, setSidebarIndex] = useState(SIDEBAR_INDEX.allGames);
 
@@ -104,21 +106,21 @@ function App() {
     fetchGames();
   }, [setGames]);
   useEffect(() => {
-  const fetchLists = async () => {
-    try {
-      console.log("Fetching lists...");
-      const fetchedLists = await getLists(); // calls the imported API
-      console.log(fetchedLists);
-      setLists(fetchedLists);
-    } catch (error) {
-      console.error("Failed to fetch lists:", error);
-    }
-  };
+    const fetchLists = async () => {
+      try {
+        console.log("Fetching lists...");
+        const fetchedLists = await getLists(); // calls the imported API
+        console.log(fetchedLists);
+        setLists(fetchedLists);
+      } catch (error) {
+        console.error("Failed to fetch lists:", error);
+      }
+    };
 
-  fetchLists();
-}, [setLists]);
+    fetchLists();
+  }, [setLists]);
 
-  useEffect(() => {}, [deleteGame]);
+  useEffect(() => { }, [deleteGame]);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
   };
@@ -137,6 +139,8 @@ function App() {
         setGames={setGames}
         sidebarIndex={sidebarIndex}
       />
+      
+
 
       <MenuManager />
     </div>

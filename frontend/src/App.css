@@ -144,3 +144,8 @@ body {
   align-items: center;
   
 }
+
+.list_menu.floating{
+  background: rgb(39, 37, 37) !important;
+  
+}
