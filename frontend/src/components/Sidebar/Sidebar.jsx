@@ -69,7 +69,7 @@ function ListItem({
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
   const [collapsed, setCollapsed] = useState(false);
-  const { lists, setLists, games } = useContext(GameContext);
+  const { lists, setLists, games, setListMenu } = useContext(GameContext);
   
 
   async function onImport() {
@@ -92,7 +92,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
         <ListHeader title="GAMES" />
         <ListItem title="All Games" icon={AppsIcon} index={indexEnum.allGames} currentIndex={currentIndex} setIndex={setIndex} count />
         <ListItem title="Favorites" icon={FavoriteBorderIcon} index={indexEnum.favorites || 1} currentIndex={currentIndex} setIndex={setIndex} count />
-        <ListItem title="Lists" icon={TurnedInIcon} index={indexEnum.lists || 100} currentIndex={currentIndex} setIndex={setIndex} count countNumber={lists.length} />
+        <ListItem title="Lists" icon={TurnedInIcon} index={indexEnum.lists || 100} currentIndex={currentIndex} setIndex={setIndex} count countNumber={lists.length} onClick={()=>setListMenu(true)} />
 
         <ListHeader title="Etc" />
         <ListItem title="Import" icon={DownloadIcon} index={101} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={onImport} />

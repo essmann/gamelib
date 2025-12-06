@@ -5,7 +5,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar/Sidebar";
 import MainContent from "./components/Main/MainContent";
 import AddGameMenu from "./components/Main/GameGrid/Menu/AddGameMenu";
-import GameMenu from "./components/Main/GameGrid/Menu/GameMenu";
+import GameMenu from "./components/Main/GameGrid/Menu/GameMenu/GameMenu";
 import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
 import MenuManager from "./components/MenuManager";
 

@@ -151,9 +151,11 @@ body {
 }
 .game-lists {
   padding: 10px;
+  min-width: 400px;
 }
 
 .game-list {
+  min-width: 400px;
   margin-bottom: 12px;
   border: 1px solid var(--color-hover);
   border-radius: 8px;
@@ -214,4 +216,11 @@ body {
   color: #888;
   padding: 20px;
   text-align: center;
+}
+
+.game-list.add{
+  padding: 0.5rem;
+}
+.game-list.add{
+cursor: pointer;  
 }

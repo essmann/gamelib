@@ -68,9 +68,11 @@ db.serialize(() => {
     list_id INTEGER NOT NULL,
     game_id INTEGER NOT NULL,
     FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE,
-    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE
+    FOREIGN KEY (game_id) REFERENCES games(id) ON DELETE CASCADE,
+    UNIQUE(list_id, game_id)  -- Prevent duplicates
   )
 `);
+
 
 
 });

@@ -1,19 +1,28 @@
 import MenuContainer from "./MenuContainer";
 import { useState } from "react";
+import { ClickAwayListener } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+function GameListMenu({ lists, onClose }) {
 
-function GameListMenu({ lists }) {
-    if (!lists || lists.length === 0) {
-        return <div className="empty-message">No game lists available</div>;
+
+
+    function createNewList(){
+        let x = ("Name of list");
     }
-
     return (
-        <MenuContainer>
-            <div className="game-lists">
-                {lists.map((list) => (
-                    <GameList key={list.id} list={list} />
-                ))}
-            </div>
-        </MenuContainer>
+            <MenuContainer onClose={onClose}>
+                <div className="game-lists">
+                    {lists.map((list) => (
+                        <GameList key={list.id} list={list} />
+                    ))}
+                    <div>
+                        <div className="flex game-list add" onClick={createNewList}>
+                            <AddIcon/>
+                            <span>New list</span>
+                        </div>
+                    </div>
+                </div>
+            </MenuContainer>
     );
 }
 

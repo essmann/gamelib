@@ -2,7 +2,7 @@ import AddGameMenu from "./Main/GameGrid/Menu/AddGameMenu";
 import { GameContext } from "../Context/ContextProvider";
 import { useContext, useEffect } from "react";
 import SearchMenu from "./Main/GameGrid/Menu/SearchMenu";
-import GameMenu from "./Main/GameGrid/Menu/GameMenu";
+import GameMenu from "./Main/GameGrid/Menu/GameMenu/GameMenu";
 import deleteGame from "../api/endpoints/deleteGame";
 import updateGame from "../api/endpoints/updateGame";
 import LoginMenu from "./LoginMenu";
@@ -64,7 +64,7 @@ function MenuManager() {
       setUser={setUser}
       onLogout={logout}
       />}
-      {!listMenu && <GameListMenu lists={lists}/>}
+      {listMenu && <GameListMenu lists={lists} onClose={()=>setListMenu(false)}/>}
 
       
     </>

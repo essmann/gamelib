@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useContext } from "react";
-import MenuContainer from "../../../MenuContainer";
+import MenuContainer from "../../../../MenuContainer.jsx";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -10,16 +10,17 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AddIcon from '@mui/icons-material/Add';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import Game from "../../../../api/game.js";
-import { GameContext } from "../../../../Context/ContextProvider.jsx";
-import { ClickAwayListener } from "@mui/material";
-import addToList from "../../../../api/endpoints/addToList.js";
+import Game from "../../../../../api/game.js";
+import { GameContext } from "../../../../../Context/ContextProvider.jsx";
+import addToList from "../../../../../api/endpoints/addToList.js";
+import AddListMenu from "./AddListMenu.jsx";
+
 const MAX_RATING = 10;
 
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const fileInputRef = useRef(null);
   const [game, setGame] = useState(() => new Game(gameData));
-  const { setGames, lists } = useContext(GameContext); // lists = array of objects
+  const { setGames, lists } = useContext(GameContext);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -64,7 +65,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     setGame(updatedGame);
     setGames((prev) => prev.map(g => g.id === updatedGame.id ? updatedGame : g));
 
-    try { await onSave(updatedGame); } 
+    try { await onSave(updatedGame); }
     catch (err) {
       console.error("Error saving favorite:", err);
       setGame(game);
@@ -76,8 +77,8 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     e.preventDefault();
     if (isSaving || !edit) return;
     setIsSaving(true);
-    try { await onSave(game); setEdit(false); } 
-    catch (err) { console.error("Error saving game:", err); } 
+    try { await onSave(game); setEdit(false); }
+    catch (err) { console.error("Error saving game:", err); }
     finally { setIsSaving(false); }
   }, [isSaving, game, onSave, edit]);
 
@@ -106,10 +107,9 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     setIsListMenuOpen(prev => !prev);
   };
 
-  const handleListItemClick =  async (list, gameId) => {
-    console.log(`Added "${game.title}" to ${list.name}`);
-    await addToList(list.id, game.id);
-    // setIsListMenuOpen(false);
+  const handleListItemClick = async (list, gameId, gameName) => {
+    console.log(`Added "${gameName}" to ${list.name}`);
+    await addToList(list.id, gameId);
   };
 
   // --- Sub-Components ---
@@ -137,29 +137,6 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
       </div>
     );
   };
-
-  const ListMenu = () => (
-  <ClickAwayListener onClickAway={()=>setIsListMenuOpen(false)}>
-    <div className="list_menu floating" style={{ top: listMenuPosition.top, left: listMenuPosition.left }}>
-    <ul className="list_menu_ul">
-      {lists.map(list => {
-        const isInList = list.games?.some(g => g.id === game.id);
-        return (
-          <li
-            key={list.id}
-            className={`list_menu_item ${isInList ? 'in_list' : ''}`}
-            onClick={() => handleListItemClick(list, game)}
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <span className="icon">{isInList ? '✔' : '+'}</span>
-            {list.name}
-          </li>
-        );
-      })}
-    </ul>
-  </div>
-  </ClickAwayListener>
-);
 
   // --- Render ---
   return (
@@ -203,7 +180,15 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 </div>
               </div>
 
-              {isListMenuOpen && <ListMenu />}
+              <AddListMenu
+                isOpen={isListMenuOpen}
+                onClose={() => setIsListMenuOpen(false)}
+                position={listMenuPosition}
+                lists={lists}
+                gameId={game.id}
+                gameName={game.title}
+                onListItemClick={handleListItemClick}
+              />
 
               <div className="sidebar_item flex">
                 <div className="item_side">
