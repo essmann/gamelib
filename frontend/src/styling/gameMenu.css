@@ -30,7 +30,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: var(--backloggd-bg);
+  background: var(--bg-primary);
   border-bottom: 1px solid var(--color-hover);
 }
 
@@ -107,6 +107,7 @@
 .game_content_grid {
   display: grid;
   grid-template-columns: 200px 1fr;
+  
   gap: 0;
   height: 100%;
   overflow: hidden;
@@ -122,7 +123,9 @@
   flex-direction: column;
   gap: 12px;
   padding: 20px;
-  background: var(--backloggd-bg);
+  /* background: var(--backloggd-bg); */
+  background: var(--bg-primary);
+
   border-right: 1px solid var(--color-hover);
 }
 
@@ -223,7 +226,9 @@
 .vertical_sidebar {
   display: flex;
   flex-direction: column;
-  background: var(--backloggd-bg);
+  /* background: var(--backloggd-bg); */
+  background: var(--bg-primary);
+
   border-left: 1px solid var(--color-hover);
   padding: 0;
   position: relative;
