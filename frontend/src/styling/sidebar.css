@@ -1,84 +1,122 @@
+/* ======================================= */
+/* SIDEBAR - PROFESSIONAL REDESIGN */
+/* ======================================= */
+
 /* Sidebar Container */
 .sidebar {
-  width: 250px;
-  background: #0f0f0f;
+  width: 220px;
+  background: var(--backloggd-bg);
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+  border-right: 1px solid var(--color-hover);
+  transition: width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  flex-shrink: 0;
+  will-change: width;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+  min-width: 70px;
 }
 
 .sidebar_items_container {
   padding: 0.5rem 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* List Header */
+.sidebar_top_items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================================= */
+/* LIST HEADERS */
+/* ======================================= */
+
 .list_header_container {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  padding: 0 0.625rem;
+  padding: 0 1rem;
+  transition: opacity 0.2s;
 }
 
-.list_header {
-  color: #747475;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding-left: 0.5rem;
-}
-
-/* First header should have less top margin */
 .list_header_container:first-child {
   margin-top: 1rem;
 }
 
-/* Sidebar Items */
+.list_header {
+  color: #6b7280;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar.collapsed .list_header_container {
+  display: none;
+}
+
+/* ======================================= */
+/* SIDEBAR ITEMS */
+/* ======================================= */
+
 .sidebar_item {
-  border-color: rgb(172, 27, 44);
   display: flex;
   align-items: center;
-  padding: 0.625rem 0.75rem;
-  margin: 0.125rem 0.5rem;
+  padding: 0.7rem 0.875rem;
+  margin: 0.125rem 0.625rem;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: var(--text-1);
   border-radius: 6px;
-  transition: all 0.09s ease-in;
+  transition: all 0.15s ease;
   user-select: none;
   position: relative;
+  height: 43.5px;
+  box-sizing: border-box;
+  opacity: 0.85;
 }
 
-/* Hover state */
 .sidebar_item:hover {
-  background: #1a1a1a;
-  color: #d1d5db;
+  background: var(--color-hover);
+  opacity: 1;
+  color: var(--rating-pink);
 }
 
-/* Selected/Active state */
-.sidebar_item.selected {
-  background: #1f1f1f;
-  border-color: rgb(172, 27, 44);
-  color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  border-left: 2px solid rgb(172, 27, 44);
-  border-radius: 0px 4px 4px 0px;
-}
-
-/* Alternative active class for compatibility */
+/* Selected/Active State */
+.sidebar_item.selected,
 .sidebar_item.active {
-  background: #1f1f1f;
-  color: #ffffff;
+  background: var(--color-dark);
+  color: var(--rating-pink);
+  opacity: 1;
+  font-weight: 600;
+  border-left: 3px solid var(--rating-pink);
+  border-radius: 0 6px 6px 0;
+  padding-left: calc(0.875rem - 3px);
+  box-shadow: 0 2px 8px rgba(252, 99, 153, 0.15);
 }
 
-/* Child items (nested) */
+/* Child Items (Nested) */
 .sidebar_item.child_item {
-  padding-left: 2.5rem;
+  padding-left: 2.75rem;
   font-size: 0.8125rem;
-  margin: 0.0625rem 0.5rem;
+  margin: 0.0625rem 0.625rem;
+  opacity: 0.75;
 }
 
-/* List Item Icon */
+.sidebar_item.child_item:hover {
+  opacity: 1;
+}
+
+/* ======================================= */
+/* ICONS */
+/* ======================================= */
+
 .list_item_icon {
   display: flex;
   align-items: center;
@@ -92,17 +130,17 @@
 .list_item_icon .MuiIcon-root,
 .list_item_icon .MuiSvgIcon-root {
   font-size: 1.25rem;
-  opacity: 0.85;
 }
 
-.sidebar_item.selected .list_item_icon .MuiIcon-root,
-.sidebar_item.selected .list_item_icon .MuiSvgIcon-root,
-.sidebar_item.active .list_item_icon .MuiIcon-root,
-.sidebar_item.active .list_item_icon .MuiSvgIcon-root {
-  opacity: 1;
+.sidebar.collapsed .list_item_icon .MuiIcon-root,
+.sidebar.collapsed .list_item_icon .MuiSvgIcon-root {
+  font-size: 1.5rem;
 }
 
-/* List Item Title */
+/* ======================================= */
+/* TITLE & COUNT */
+/* ======================================= */
+
 .list_item_title {
   flex: 1;
   font-size: inherit;
@@ -110,33 +148,55 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: opacity 0.15s ease;
 }
 
-/* List Item Count Badge */
+.sidebar.collapsed .list_item_title {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Count Badge */
 .list_item_count {
-  color: #636363;
-  font-size: 0.8125rem;
+  color: #6b7280;
+  font-size: 0.75rem;
   font-weight: 600;
   padding: 0.125rem 0.5rem;
-  background: #1a1a1a;
-  border-radius: 4px;
+  background: var(--backloggd-bg);
+  border: 1px solid var(--color-hover);
+  border-radius: 10px;
   min-width: 1.5rem;
   text-align: center;
-  transition: all 0.15s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .sidebar_item:hover .list_item_count {
-  background: #252525;
-  color: #7a7a7a;
+  background: var(--color-dark);
+  color: #9ca3af;
+  border-color: var(--color-hover);
 }
 
 .sidebar_item.selected .list_item_count,
 .sidebar_item.active .list_item_count {
-  background: #2a2a2a;
-  color: #a8a8a8;
+  background: var(--backloggd-bg);
+  color: var(--rating-pink);
+  border-color: var(--rating-pink);
 }
 
-/* Parent Item Styles */
+.sidebar.collapsed .list_item_count {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.65rem;
+  padding: 0.0625rem 0.375rem;
+  min-width: auto;
+}
+
+/* ======================================= */
+/* PARENT ITEMS & COLLAPSE */
+/* ======================================= */
+
 .list_item_parent_container {
   margin: 0.25rem 0;
 }
@@ -148,22 +208,34 @@
 .collapse_btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
-  margin-left: 0.25rem;
-  border-radius: 4px;
-  transition: background 0.15s ease;
-  opacity: 0.7;
+  justify-content: flex-end;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.15s ease;
 }
 
-.collapse_btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+.collapse_btn button {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: var(--text-1);
+  opacity: 0.6;
+  transition: all 0.15s ease;
+}
+
+.collapse_btn button:hover {
+  background: var(--color-hover);
   opacity: 1;
+  color: var(--rating-pink);
 }
 
 .collapse_icon {
   transition: transform 0.25s ease;
   font-size: 1.25rem !important;
+  color: inherit;
 }
 
 .collapse_icon.expanded {
@@ -173,21 +245,59 @@
 /* Children Container */
 .list_item_children {
   animation: slideDown 0.2s ease;
-  padding: 0.25rem 0;
+  padding: 0.125rem 0;
 }
 
 @keyframes slideDown {
   from {
     opacity: 0;
     max-height: 0;
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
     max-height: 500px;
+    transform: translateY(0);
   }
 }
 
-/* Scrollbar Styling */
+/* ======================================= */
+/* SPECIAL ITEMS */
+/* ======================================= */
+
+.sidebar_item.Settings {
+  margin-top: auto;
+  border-top: 1px solid var(--color-hover);
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+}
+
+.sidebar_item.Settings:hover {
+  border-radius: 0;
+}
+
+.sidebar.collapsed .sidebar_item.Settings {
+  padding-left: 0;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* ======================================= */
+/* DIVIDER */
+/* ======================================= */
+
+.sidebar_divider {
+  height: 1px;
+  background: var(--color-hover);
+  margin: 0.75rem 0.625rem;
+}
+
+/* ======================================= */
+/* SCROLLBAR */
+/* ======================================= */
+
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }
@@ -197,7 +307,7 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
+  background: var(--color-hover);
   border-radius: 3px;
 }
 
@@ -205,15 +315,17 @@
   background: #3a3a3a;
 }
 
-/* Firefox scrollbar */
 .sidebar {
   scrollbar-width: thin;
-  scrollbar-color: #2a2a2a transparent;
+  scrollbar-color: var(--color-hover) transparent;
 }
 
-/* Focus styles for accessibility */
+/* ======================================= */
+/* ACCESSIBILITY */
+/* ======================================= */
+
 .sidebar_item:focus {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--rating-pink);
   outline-offset: -2px;
 }
 
@@ -221,16 +333,10 @@
   outline: none;
 }
 
-/* Divider (optional, add between sections) */
-.sidebar_divider {
-  height: 1px;
-  background: #1f1f1f;
-  margin: 0.75rem 0.5rem;
-}
+/* ======================================= */
+/* ANIMATIONS */
+/* ======================================= */
 
-
-
-/* Animation for entering items */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -246,54 +352,34 @@
   animation: fadeIn 0.3s ease forwards;
 }
 
+/* ======================================= */
+/* COLLAPSED STATE SPECIFICS */
+/* ======================================= */
 
-.sidebar_item.Settings{
-  margin-top: auto !important;
-}
-
-.sidebar_items_container{
-  height: 100%;
-  display: flex;
-  height: 100% !important;
-  flex-direction: column;
-
+.sidebar.collapsed .sidebar_item {
+  justify-content: center;
+  padding: 0.7rem 0;
+  margin: 0.125rem 0.5rem;
+  position: relative;
 }
 
-.sidebar{
-  
-}
-.collapse_btn{
-  margin-left: auto;
-}
-.collapse_btn > button {
-  all: unset;
-  cursor: pointer;
+.sidebar.collapsed .sidebar_item.selected,
+.sidebar.collapsed .sidebar_item.active {
+  border-left: none;
+  border-radius: 6px;
+  padding: 0.7rem 0;
+  background: var(--color-dark);
 }
 
-.sidebar.collapsed > .sidebar_items_container > .sidebar_item > .list_item_title{
-  background: red !important;
-  display: none;
-
-}
-.sidebar.collapsed > .sidebar_items_container > .sidebar_item > .list_item_count{
-  margin: -8px !important;
-}
-.sidebar.collapsed > .sidebar_items_container > .sidebar_item > .list_item_icon *{
-  font-size: x-large;
-}
-.sidebar.collapsed > .sidebar_items_container > .list_header_container{
-  display: none;
-}
-.sidebar.collapsed{
-  width: auto;
-  min-width: 80px !important;
-  
+.sidebar.collapsed .list_item_icon {
+  margin-right: 0;
 }
 
-.sidebar_item{
-  height: 43.5px;
+.sidebar.collapsed .collapse_btn {
+  justify-content: center;
+  padding: 0.75rem 0;
 }
 
-.game_footer_favorite{
-  
+.sidebar.collapsed .collapse_btn button {
+  padding: 0.5rem;
 }

@@ -29,12 +29,11 @@ function ListItem({
   currentIndex,
   setIndex,
   count,
-  countNumber, // <- new prop
+  countNumber,
   onClick,
 }) {
   const { games } = useContext(GameContext);
   const isSelected = currentIndex === index;
-
   const itemCount = countNumber !== undefined
     ? countNumber
     : count
@@ -69,9 +68,8 @@ function ListItem({
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
   const [collapsed, setCollapsed] = useState(false);
-  const { lists, setLists, games, setListMenu } = useContext(GameContext);
+  const { lists, games, setListMenu } = useContext(GameContext);
   
-
   async function onImport() {
     try {
       await importGames();
@@ -89,14 +87,16 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           </button>
         </div>
 
-        <ListHeader title="GAMES" />
-        <ListItem title="All Games" icon={AppsIcon} index={indexEnum.allGames} currentIndex={currentIndex} setIndex={setIndex} count />
-        <ListItem title="Favorites" icon={FavoriteBorderIcon} index={indexEnum.favorites || 1} currentIndex={currentIndex} setIndex={setIndex} count />
-        <ListItem title="Lists" icon={TurnedInIcon} index={indexEnum.lists || 100} currentIndex={currentIndex} setIndex={setIndex} count countNumber={lists.length} onClick={()=>setListMenu(true)} />
-
-        <ListHeader title="Etc" />
-        <ListItem title="Import" icon={DownloadIcon} index={101} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={onImport} />
-        <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportGames(games)} />
+        <div className="sidebar_top_items">
+          <ListHeader title="GAMES" />
+          <ListItem title="All Games" icon={AppsIcon} index={indexEnum.allGames} currentIndex={currentIndex} setIndex={setIndex} count />
+          <ListItem title="Favorites" icon={FavoriteBorderIcon} index={indexEnum.favorites || 1} currentIndex={currentIndex} setIndex={setIndex} count />
+          <ListItem title="Lists" icon={TurnedInIcon} index={indexEnum.lists || 100} currentIndex={currentIndex} setIndex={setIndex} count countNumber={lists.length} onClick={()=>setListMenu(true)} />
+          
+          <ListHeader title="Etc" />
+          <ListItem title="Import" icon={DownloadIcon} index={101} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={onImport} />
+          <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportGames(games)} />
+        </div>
 
         <ListItem title="Settings" icon={SettingsIcon} index={indexEnum.settings || 99} currentIndex={currentIndex} setIndex={setIndex} count={false} />
       </div>

@@ -100,13 +100,22 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   }, [gameData]);
 
   // --- List Menu Handlers ---
-  const handleToggleListMenu = () => {
-    if (addToListRef.current) {
-      const rect = addToListRef.current.getBoundingClientRect();
-      setListMenuPosition({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
+
+const handleToggleListMenu = () => {
+  if (addToListRef.current) {
+    const buttonRect = addToListRef.current.getBoundingClientRect();
+    const sidebarRect = document.querySelector('.vertical_sidebar')?.getBoundingClientRect();
+    
+    if (sidebarRect) {
+      // Position relative to the sidebar button
+      setListMenuPosition({ 
+        top: buttonRect.top - sidebarRect.top,
+        left: 0 // Will be positioned via CSS at left: 100%
+      });
     }
-    setIsListMenuOpen(prev => !prev);
-  };
+  }
+  setIsListMenuOpen(prev => !prev);
+};
 
   const handleListItemClick = async (list, gameId, gameName) => {
     console.log(`Added "${gameName}" to ${list.name}`);
