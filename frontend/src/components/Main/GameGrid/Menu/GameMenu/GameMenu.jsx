@@ -14,6 +14,7 @@ import Game from "../../../../../api/game.js";
 import { GameContext } from "../../../../../Context/ContextProvider.jsx";
 import addToList from "../../../../../api/endpoints/addToList.js";
 import AddListMenu from "./AddListMenu.jsx";
+import addList from "../../../../../api/endpoints/addList.js";
 
 const MAX_RATING = 10;
 
@@ -188,6 +189,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 gameId={game.id}
                 gameName={game.title}
                 onListItemClick={handleListItemClick}
+                onCreateNewList={async (name)=> await addList(name)}
               />
 
               <div className="sidebar_item flex">
