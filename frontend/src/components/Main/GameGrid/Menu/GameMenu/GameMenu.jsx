@@ -56,13 +56,35 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 };
 
 
-  const handleImageChange = useCallback((e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setGame(prevGame => new Game({ ...prevGame, newImageFile: file }));
-      e.target.value = null;
-    }
-  }, []);
+const handleImageChange = useCallback((e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const arrayBuffer = reader.result;
+    const uint8 = new Uint8Array(arrayBuffer);
+
+    setGame(prevGame => {
+      const updatedGame = new Game({
+        ...prevGame,
+        poster: uint8
+      });
+
+      // Call AFTER creating it
+      handleUpdateGame(updatedGame);
+
+      return updatedGame;
+    });
+
+    e.target.value = null;
+  };
+
+  reader.readAsArrayBuffer(file);
+}, [handleUpdateGame]);
+
+
 
   const handleFavoriteToggle = useCallback(async () => {
     const updatedGame = new Game({ ...game, favorite: game.favorite === 1 ? 0 : 1 });
@@ -219,7 +241,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 </div>
               </div>
 
-              <div className="sidebar_item flex">
+              <div className="sidebar_item flex" onClick={()=>fileInputRef.current?.click()}>
                 <div className="item_side">
                   <AddPhotoAlternateIcon className="sidebar_icon" />
                   <span className="sidebar_label">Change poster</span>
