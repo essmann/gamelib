@@ -170,9 +170,6 @@ const handleImageChange = useCallback((e) => {
     }
     return (
       <div className="action_buttons view_actions">
-        <button type="button" className="action_btn edit_btn" onClick={() => setEdit(true)}>
-          <EditIcon fontSize="small" /> Edit
-        </button>
         <button type="button" className="action_btn delete_btn" onClick={handleDelete}>
           <DeleteIcon fontSize="small" /> Delete
         </button>

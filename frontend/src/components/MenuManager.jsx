@@ -11,6 +11,7 @@ import { UserContext } from "../Context/UserContextProvider";
 import ProfileMenu from "./ProfileMenu";
 import logout from "../api/endpoints/auth/logout";
 import GameListMenu from "./GameListMenu";
+import addList from "../api/endpoints/addList";
 function MenuManager() {
   const {
     previewGameData,
@@ -32,6 +33,8 @@ function MenuManager() {
   useEffect(()=>{
     console.log("MenuManager re-rendered");
   })
+
+  
   return (
     <>
     
@@ -64,7 +67,10 @@ function MenuManager() {
       setUser={setUser}
       onLogout={logout}
       />}
-      {listMenu && <GameListMenu lists={lists} onClose={()=>setListMenu(false)}/>}
+      {listMenu && <GameListMenu lists={lists} onClose={()=>setListMenu(false)} onCreateList={async (name)=>{
+          let list = await addList(name);
+          setLists((prev)=>[...prev, list]);
+      }}/>}
 
       
     </>

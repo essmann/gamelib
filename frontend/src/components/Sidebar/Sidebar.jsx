@@ -67,7 +67,7 @@ function ListItem({
 
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const { lists, games, setListMenu } = useContext(GameContext);
   
   async function onImport() {

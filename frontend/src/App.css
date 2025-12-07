@@ -759,3 +759,15 @@ cursor: pointer;
 .submit_span:hover{
   background: rgb(51, 134, 25);
 }
+
+.game-lists-container{
+  background: var(--bg-primary);
+  border-radius: 8px;
+}
+.game-lists-container * {
+  
+}
+.tree-item{
+  color: var(--text-2);
+
+}
