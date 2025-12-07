@@ -15,7 +15,9 @@ import { GameContext } from "../../../../../Context/ContextProvider.jsx";
 import addToList from "../../../../../api/endpoints/addToList.js";
 import AddListMenu from "./AddListMenu.jsx";
 import addList from "../../../../../api/endpoints/addList.js";
-
+import CheckIcon from '@mui/icons-material/Check';
+import { ClickAwayListener } from "@mui/material";
+import updateGame from "../../../../../api/endpoints/updateGame.js";
 const MAX_RATING = 10;
 
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
@@ -24,12 +26,12 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const { setGames, lists } = useContext(GameContext);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
   // --- List menu state ---
   const [isListMenuOpen, setIsListMenuOpen] = useState(false);
   const [listMenuPosition, setListMenuPosition] = useState({ top: 0, left: 0 });
   const addToListRef = useRef(null);
 
+  const [prompt, setPrompt] = useState(null);
   // --- Reset state when gameData changes or exiting edit mode ---
   useEffect(() => {
     if (!edit) {
@@ -38,20 +40,21 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   }, [gameData, edit]);
 
   // --- Handlers ---
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setGame(prevGame => {
-      const updatedProps = { ...prevGame };
-      updatedProps[name] = value;
-      if (name === 'rating') {
-        let numValue = parseFloat(value);
-        if (isNaN(numValue) || numValue < 0) numValue = 0;
-        if (numValue > MAX_RATING) numValue = MAX_RATING;
-        updatedProps.rating = numValue;
-      }
-      return new Game(updatedProps);
-    });
-  }, []);
+  const handleUpdateGame = async (updatedGame) => {
+  try {
+    await updateGame(updatedGame);
+
+    setGames(prev =>
+      prev.map(game =>
+        game.id === updatedGame.id ? updatedGame : game
+      )
+    );
+  } catch (error) {
+    console.log(error);
+    console.log("Failed to update the game from gameMenu.");
+  }
+};
+
 
   const handleImageChange = useCallback((e) => {
     const file = e.target.files[0];
@@ -101,27 +104,34 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 
   // --- List Menu Handlers ---
 
-const handleToggleListMenu = () => {
-  if (addToListRef.current) {
-    const buttonRect = addToListRef.current.getBoundingClientRect();
-    const sidebarRect = document.querySelector('.vertical_sidebar')?.getBoundingClientRect();
-    
-    if (sidebarRect) {
-      // Position relative to the sidebar button
-      setListMenuPosition({ 
-        top: buttonRect.top - sidebarRect.top,
-        left: 0 // Will be positioned via CSS at left: 100%
-      });
+  const handleToggleListMenu = () => {
+    if (addToListRef.current) {
+      const buttonRect = addToListRef.current.getBoundingClientRect();
+      const sidebarRect = document.querySelector('.vertical_sidebar')?.getBoundingClientRect();
+
+      if (sidebarRect) {
+        // Position relative to the sidebar button
+        setListMenuPosition({
+          top: buttonRect.top - sidebarRect.top,
+          left: 0 // Will be positioned via CSS at left: 100%
+        });
+      }
     }
-  }
-  setIsListMenuOpen(prev => !prev);
-};
+    setIsListMenuOpen(prev => !prev);
+  };
 
   const handleListItemClick = async (list, gameId, gameName) => {
     console.log(`Added "${gameName}" to ${list.name}`);
     await addToList(list.id, gameId);
   };
 
+  async function setRatingHandler(value) {
+    let updatedGame = game;
+    updatedGame = {...updatedGame, rating: value};
+    updatedGame = new Game(updatedGame);
+    setGame(updatedGame);
+    await handleUpdateGame(updatedGame);
+  }
   // --- Sub-Components ---
   const ActionButtons = () => {
     if (edit) {
@@ -151,6 +161,7 @@ const handleToggleListMenu = () => {
   // --- Render ---
   return (
     <MenuContainer onClose={onClose} clickAwayExceptionClass={"game_card_image"}>
+      {prompt !== null && <Prompt type={prompt} onClose={() => setPrompt(null)} setValueHandler={setRatingHandler}/>}
       <div className={`game_menu ${edit ? 'edit_mode' : 'view_mode'}`}>
         <form className="game_menu_form" onSubmit={handleSubmit}>
           <header className="game_menu_header">
@@ -161,7 +172,7 @@ const handleToggleListMenu = () => {
           <div className="game_content_grid">
             <div className="poster_column">
               <div className={`poster_wrapper ${edit ? 'editable' : ''}`} onClick={() => edit && fileInputRef.current?.click()}>
-                <img src={game.getPosterURL()} alt={`${game.title} Poster`} className="poster_image" />
+                <img src={game?.getPosterURL()} alt={`${game.title} Poster`} className="poster_image" />
                 {edit && (
                   <div className="poster_upload_overlay">
                     <CloudUploadIcon fontSize="large" />
@@ -198,13 +209,13 @@ const handleToggleListMenu = () => {
                 gameId={game.id}
                 gameName={game.title}
                 onListItemClick={handleListItemClick}
-                onCreateNewList={async (name)=> await addList(name)}
+                onCreateNewList={async (name) => await addList(name)}
               />
 
-              <div className="sidebar_item flex">
-                <div className="item_side">
+              <div className="sidebar_item flex" onClick={() => setPrompt("rating")}>
+                <div className="item_side" >
                   <StarIcon className="sidebar_icon" />
-                  <span className="sidebar_label">Rate</span>
+                  <span className="sidebar_label" >Rate</span>
                 </div>
               </div>
 
@@ -226,4 +237,28 @@ const handleToggleListMenu = () => {
       </div>
     </MenuContainer>
   );
+}
+
+function Prompt({ type, setValueHandler, onClose }) {
+  const [value, setValue] = useState(null);
+  const inputRef = useRef(null);
+  
+  function onSubmit() {
+    if (type == "rating") {
+      console.log(value);
+      setValueHandler(value);
+      onClose();
+    }
+    console.log("setting " + value);
+  }
+  return (
+    <ClickAwayListener onClickAway={onClose}>
+      <div className="prompt flex">
+        <input type="text" placeholder={`Enter ${type}: `} onInput={(e) => setValue(e.target.value)} ref={inputRef} autoFocus/>
+        <span className="submit_span" onClick={onSubmit}>
+          <CheckIcon fontSize="small" />
+        </span>
+      </div>
+    </ClickAwayListener>
+  )
 }

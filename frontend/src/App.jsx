@@ -10,6 +10,7 @@ import SearchMenu from "./components/Main/GameGrid/Menu/SearchMenu";
 import MenuManager from "./components/MenuManager";
 
 
+import Prompt from "./components/Prompt";
 // API
 import { getGames } from "./api/endpoints/getGames";
 import deleteGame from "./api/endpoints/deleteGame";
@@ -134,6 +135,7 @@ function App() {
         indexEnum={SIDEBAR_INDEX}
         user={user}
       />
+
 
       <MainContent
         games={games}

@@ -732,3 +732,30 @@ cursor: pointer;
   color: var(--white);
 }
 
+
+.prompt{
+  position: absolute;
+  width: auto;
+  height: auto;
+  z-index: 10001;
+  background: rgb(22, 21, 21);
+  top: 50%;
+  left: 30%;
+    display: flex;
+  align-items: center;
+}
+.prompt > input{
+  width: 150px;
+}
+.prompt > button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit_span{
+  cursor: pointer;
+}
+.submit_span:hover{
+  background: rgb(51, 134, 25);
+}
