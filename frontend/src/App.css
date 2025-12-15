@@ -771,3 +771,7 @@ cursor: pointer;
   color: var(--text-2);
 
 }
+
+.list_menu_ul{
+  overflow-y: auto !important;
+}
