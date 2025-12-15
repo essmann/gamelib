@@ -6,7 +6,7 @@ import external_db from "./api/sqlite/connection/external_db";
 
 // --- Endpoints ---
 import addGame from "./api/endpoints/addGame";
-import importGames from "./api/endpoints/importGames";
+import importGames from "./api/endpoints/import_export/importGames";
 import { updateGame } from "./api/endpoints/updateGame";
 import { deleteGame } from "./api/endpoints/deleteGame";
 import { getGames } from "./api/endpoints/getGames";

@@ -1,5 +1,5 @@
 // api/endpoints/importGames.js
-import addGame from './addGame.js';
+import addGame from "../addGame";
 
 /**
  * Imports games: deletes all existing games and adds the new ones sequentially
