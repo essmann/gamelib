@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from "electron";
 import path from "path";
-import dotenv from "dotenv";
 import db from "./api/sqlite/connection/game_database";
 import external_db from "./api/sqlite/connection/external_db";
 
@@ -21,7 +20,6 @@ import deleteList from "./api/endpoints/lists/deleteList";
 
 import Game from "./api/game";
 
-dotenv.config();
 
 // --- Config ---
 const isDev = !app.isPackaged;

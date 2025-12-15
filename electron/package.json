@@ -2,7 +2,7 @@
   "name": "gamelib-backend",
   "version": "1.0.0",
   "description": "backend for gamelib",
-  "main": "main.js",
+  "main": "dist/ts/main.js",
   "scripts": {
     "start": "electron ./dist/ts/main.js",
     "test": "jest",
@@ -19,13 +19,13 @@
       "src/preload.js",
       "src/scripts/**/*",
       "dist/**/*",
-      "node_modules**/*",
-      "src/api/sqlite/games.db",
-      "src/api/sqlite/external_games.db"
+      "node_modules/**/*",
+      "src/api/sqlite/database/games.db",
+      "src/api/sqlite/database/external_games.db"
     ],
     "asarUnpack": [
-      "src/api/sqlite/games.db",
-      "src/api/sqlite/external_games.db"
+      "src/api/sqlite/database/games.db",
+      "src/api/sqlite/database/external_games.db"
     ],
     "directories": {
       "buildResources": "assets"
