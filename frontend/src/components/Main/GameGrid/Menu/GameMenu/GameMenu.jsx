@@ -23,7 +23,7 @@ const MAX_RATING = 10;
 export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
   const fileInputRef = useRef(null);
   const [game, setGame] = useState(() => new Game(gameData));
-  const { setGames, lists } = useContext(GameContext);
+  const { setGames, lists, setLists, games } = useContext(GameContext);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   // --- List menu state ---
@@ -41,48 +41,48 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
 
   // --- Handlers ---
   const handleUpdateGame = async (updatedGame) => {
-  try {
-    await updateGame(updatedGame);
+    try {
+      await updateGame(updatedGame);
 
-    setGames(prev =>
-      prev.map(game =>
-        game.id === updatedGame.id ? updatedGame : game
-      )
-    );
-  } catch (error) {
-    console.log(error);
-    console.log("Failed to update the game from gameMenu.");
-  }
-};
-
-
-const handleImageChange = useCallback((e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    const arrayBuffer = reader.result;
-    const uint8 = new Uint8Array(arrayBuffer);
-
-    setGame(prevGame => {
-      const updatedGame = new Game({
-        ...prevGame,
-        poster: uint8
-      });
-
-      // Call AFTER creating it
-      handleUpdateGame(updatedGame);
-
-      return updatedGame;
-    });
-
-    e.target.value = null;
+      setGames(prev =>
+        prev.map(game =>
+          game.id === updatedGame.id ? updatedGame : game
+        )
+      );
+    } catch (error) {
+      console.log(error);
+      console.log("Failed to update the game from gameMenu.");
+    }
   };
 
-  reader.readAsArrayBuffer(file);
-}, [handleUpdateGame]);
+
+  const handleImageChange = useCallback((e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const arrayBuffer = reader.result;
+      const uint8 = new Uint8Array(arrayBuffer);
+
+      setGame(prevGame => {
+        const updatedGame = new Game({
+          ...prevGame,
+          poster: uint8
+        });
+
+        // Call AFTER creating it
+        handleUpdateGame(updatedGame);
+
+        return updatedGame;
+      });
+
+      e.target.value = null;
+    };
+
+    reader.readAsArrayBuffer(file);
+  }, [handleUpdateGame]);
 
 
 
@@ -144,15 +144,55 @@ const handleImageChange = useCallback((e) => {
 
   const handleListItemClick = async (list, gameId, gameName) => {
     console.log(`Added "${gameName}" to ${list.name}`);
-    await addToList(list.id, gameId);
+
+    try {
+      await addToList(list.id, gameId);
+
+      // Update the lists state
+      setLists(prevLists => {
+        return prevLists.map(l => {
+          if (l.id === list.id) {
+            // Prevent duplicate entries
+            if (!l.games.some(g => g.id === gameId)) {
+              return {
+                ...l,
+                games: [
+                  ...l.games,
+                  {
+                    id: gameId,
+                    title: gameName,
+                    rating: game.rating,
+                    favorite: game.favorite,
+                    date_added: new Date().toISOString(), // or use actual returned date from backend
+                  }
+                ]
+              };
+            }
+          }
+          return l;
+        });
+      });
+    } catch (err) {
+      console.error("Failed to add game to list:", err);
+    }
   };
+
+  const handleCreateNewList = async (name) => {
+    await addList(name);
+    //update lists state with a new list (empty, no games added yet.);
+    let id = lists.length + 1;
+    let newList = lists;
+    newList.push({id: id, name: name, games: []});
+    setLists(newList);
+  }
 
   async function setRatingHandler(value) {
     let updatedGame = game;
-    updatedGame = {...updatedGame, rating: value};
+    updatedGame = { ...updatedGame, rating: value };
     updatedGame = new Game(updatedGame);
     setGame(updatedGame);
     await handleUpdateGame(updatedGame);
+
   }
   // --- Sub-Components ---
   const ActionButtons = () => {
@@ -180,7 +220,7 @@ const handleImageChange = useCallback((e) => {
   // --- Render ---
   return (
     <MenuContainer onClose={onClose} clickAwayExceptionClass={"game_card_image"}>
-      {prompt !== null && <Prompt type={prompt} onClose={() => setPrompt(null)} setValueHandler={setRatingHandler}/>}
+      {prompt !== null && <Prompt type={prompt} onClose={() => setPrompt(null)} setValueHandler={setRatingHandler} />}
       <div className={`game_menu ${edit ? 'edit_mode' : 'view_mode'}`}>
         <form className="game_menu_form" onSubmit={handleSubmit}>
           <header className="game_menu_header">
@@ -228,7 +268,7 @@ const handleImageChange = useCallback((e) => {
                 gameId={game.id}
                 gameName={game.title}
                 onListItemClick={handleListItemClick}
-                onCreateNewList={async (name) => await addList(name)}
+                onCreateNewList={handleCreateNewList}
               />
 
               <div className="sidebar_item flex" onClick={() => setPrompt("rating")}>
@@ -238,7 +278,7 @@ const handleImageChange = useCallback((e) => {
                 </div>
               </div>
 
-              <div className="sidebar_item flex" onClick={()=>fileInputRef.current?.click()}>
+              <div className="sidebar_item flex" onClick={() => fileInputRef.current?.click()}>
                 <div className="item_side">
                   <AddPhotoAlternateIcon className="sidebar_icon" />
                   <span className="sidebar_label">Change poster</span>
@@ -261,7 +301,7 @@ const handleImageChange = useCallback((e) => {
 function Prompt({ type, setValueHandler, onClose }) {
   const [value, setValue] = useState(null);
   const inputRef = useRef(null);
-  
+
   function onSubmit() {
     if (type == "rating") {
       console.log(value);
@@ -273,7 +313,7 @@ function Prompt({ type, setValueHandler, onClose }) {
   return (
     <ClickAwayListener onClickAway={onClose}>
       <div className="prompt flex">
-        <input type="text" placeholder={`Enter ${type}: `} onInput={(e) => setValue(e.target.value)} ref={inputRef} autoFocus/>
+        <input type="text" placeholder={`Enter ${type}: `} onInput={(e) => setValue(e.target.value)} ref={inputRef} autoFocus />
         <span className="submit_span" onClick={onSubmit}>
           <CheckIcon fontSize="small" />
         </span>

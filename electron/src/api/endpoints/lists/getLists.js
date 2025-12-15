@@ -6,16 +6,9 @@ export default function getLists(db) {
         lists.name AS list_name,
         games.id AS game_id,
         games.title AS game_title,
-        games.release,
-        games.description,
         games.rating,
         games.favorite,
-        games.isCustom,
-        games.date_added,
-        games.genres,
-        games.developers,
-        games.publishers,
-        games.categories
+        games.date_added
       FROM lists
       LEFT JOIN list_items ON lists.id = list_items.list_id
       LEFT JOIN games ON list_items.game_id = games.id
@@ -43,16 +36,9 @@ export default function getLists(db) {
           listsMap[row.list_id].games.push({
             id: row.game_id,
             title: row.game_title,
-            release: row.release,
-            description: row.description,
             rating: row.rating,
             favorite: row.favorite,
-            isCustom: row.isCustom,
             date_added: row.date_added,
-            genres: row.genres,
-            developers: row.developers,
-            publishers: row.publishers,
-            categories: row.categories
           });
         }
       });
