@@ -775,3 +775,12 @@ cursor: pointer;
 .list_menu_ul{
   overflow-y: auto !important;
 }
+
+.filter_menu{
+  width: 200px !important;
+  min-height: 200px !important;
+}
+
+.filter_container{
+  
+}

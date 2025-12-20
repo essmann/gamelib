@@ -14,10 +14,6 @@
     "appId": "com.my-electron-app",
     "productName": "MyElectronApp",
     "files": [
-      "src/api/**/*",
-      "src/main.js",
-      "src/preload.js",
-      "src/scripts/**/*",
       "dist/**/*",
       "node_modules/**/*",
       "src/api/sqlite/database/games.db",

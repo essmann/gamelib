@@ -5,6 +5,7 @@ import ReorderIcon from "@mui/icons-material/Reorder";
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Slider } from "@mui/material";
+import MenuContainer from "../MenuContainer.jsx";
 
 function MainContent({ games, setGames, sidebarIndex }) {
   const [search, setSearch] = useState("");
@@ -22,10 +23,12 @@ function MainContent({ games, setGames, sidebarIndex }) {
   return (
     <div className="main_content">
       <HeaderItem search={search} setSearch={setSearch} />
+      {/* <FilterMenu /> */}
+
       {sidebarIndex === 0 && <GameGrid games={games} setGames={setGames} search={debouncedSearch} />}
       {sidebarIndex === 1 && (
         <GameGrid
-          games={games.filter((game) => game.favorite && game.name.toLowerCase().includes(debouncedSearch.toLowerCase()))}
+          games={games.filter((game) => game.favorite && game.title?.toLowerCase().includes(debouncedSearch.toLowerCase()))}
           setGames={setGames}
           search={debouncedSearch}
         />
@@ -53,17 +56,18 @@ function HeaderItem({ search, setSearch }) {
         <button> Filter</button>
       </span>
 
-      <div className="display_btns">
-        <div className="header_slider">
-          <Slider size="small" color="" />
-        </div>
-        <span className="list_view selected">
-          <ReorderIcon fontSize="large" />
-        </span>
-        <span className="">
-          <WindowIcon fontSize="large" />
-        </span>
-      </div>
+     
     </div>
   );
+}
+
+function FilterMenu() {
+  return (
+    <MenuContainer className="filter_container">
+      <div className="filter_menu">
+
+        <div>Filter Menu</div>
+      </div>
+    </MenuContainer>
+  )
 }

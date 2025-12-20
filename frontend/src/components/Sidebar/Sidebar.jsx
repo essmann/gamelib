@@ -9,7 +9,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { GameContext } from "../../Context/ContextProvider";
-import exportGames from "../../api/exportGames";
+import exportData from "../../api/exportData";
 import importGames from "../../api/importGames";
 
 // List header component
@@ -78,6 +78,9 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
     }
   }
 
+   function handleExport(games, lists){
+      exportData(games, lists);
+  }
   return (
     <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar_items_container">
@@ -95,7 +98,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           
           <ListHeader title="Etc" />
           <ListItem title="Import" icon={DownloadIcon} index={101} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={onImport} />
-          <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportGames(games)} />
+          <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportData(games, lists)} />
         </div>
 
         <ListItem title="Settings" icon={SettingsIcon} index={indexEnum.settings || 99} currentIndex={currentIndex} setIndex={setIndex} count={false} />
