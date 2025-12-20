@@ -784,3 +784,137 @@ cursor: pointer;
 .filter_container{
   
 }
+
+/* Sort Header Item */
+.header_sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b0b0b0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.header_sort:hover {
+  color: #ffffff;
+}
+
+.header_sort button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.header_sort button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Sort Container */
+.sort_container {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+}
+
+/* Sort Menu */
+.sort_menu {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.sort_header {
+  font-size: 13px;
+  font-weight: 600;
+  color: #909090;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+/* Sort Options */
+.sort_options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.sort_option {
+  background: none;
+  border: none;
+  color: #d0d0d0;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.sort_option:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.sort_option.active {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  font-weight: 500;
+}
+
+/* Divider */
+.sort_divider {
+  height: 1px;
+  background-color: #2a2a2a;
+  margin: 8px 0;
+}
+
+/* Sort Order */
+.sort_order {
+  display: flex;
+  gap: 6px;
+}
+
+.sort_order_btn {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2a2a2a;
+  color: #d0d0d0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.sort_order_btn:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-color: #3a3a3a;
+  color: #ffffff;
+}
+
+.sort_order_btn.active {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-color: #3b82f6;
+  color: #60a5fa;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sort_menu {
+    min-width: 180px;
+  }
+}
