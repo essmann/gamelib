@@ -92,8 +92,8 @@ ipcMain.handle("get-external-games", async (event, prefix: string) => {
   }
 });
 
-ipcMain.handle('import-games', async (event, jsonString) => {
-  console.log('[IPC] import-games called');
+ipcMain.handle('import-data', async (event, jsonString) => {
+  console.log('[IPC] import-data called');
 
   const start = Date.now();
 
@@ -101,11 +101,11 @@ ipcMain.handle('import-games', async (event, jsonString) => {
     // Call your importData function with the JSON string
     await importData(jsonString);
 
-    console.log(`[IPC] import-games completed in ${(Date.now() - start) / 1000}s`);
+    console.log(`[IPC] import-data completed in ${(Date.now() - start) / 1000}s`);
 
     return { success: true };
   } catch (err) {
-    console.error('[IPC] import-games error:', err);
+    console.error('[IPC] import-data error:', err);
     throw err; // IPC will propagate this error to the renderer
   }
 });

@@ -10,7 +10,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { GameContext } from "../../Context/ContextProvider";
 import exportData from "../../api/exportData";
-import importGames from "../../api/importGames";
+import importData from "../../api/importData";
 
 // List header component
 function ListHeader({ title }) {
@@ -72,7 +72,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
   
   async function onImport() {
     try {
-      await importGames();
+      await importData();
     } catch (err) {
       console.error('Error during import:', err);
     }

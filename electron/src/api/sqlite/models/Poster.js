@@ -11,7 +11,7 @@ const Poster = sequelize.define('Poster', {
     type: DataTypes.INTEGER
   },
   poster: {
-    type: DataTypes.BLOB
+    type: DataTypes.BLOB('long')
   }
 }, {
   tableName: 'posters',

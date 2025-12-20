@@ -29,9 +29,9 @@ contextBridge.exposeInMainWorld('api', {
     console.log('[PRELOAD] login called:', formData);
     return ipcRenderer.invoke('login', formData);
   },
-  importGames: (games) => {
-    console.log('[PRELOAD] importGames called, count:', games.length);
-    return ipcRenderer.invoke('import-games', games);
+  importData: (jsonString) => {
+    console.log('[PRELOAD] importData called.:');
+    return ipcRenderer.invoke('import-data', jsonString);
   },
   addList: (name) => {
     console.log('[PRELOAD] addList called, name:', name);
