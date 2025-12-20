@@ -13,6 +13,12 @@ function MainContent({ games, setGames, sidebarIndex }) {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortBy, setSortBy] = useState("title");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [filters, setFilters] = useState({
+    platforms: [],
+    genres: [],
+    ratingRange: [0, 10],
+    yearRange: [1980, new Date().getFullYear()]
+  });
   
   // Debounce effect
   useEffect(() => {
@@ -30,12 +36,14 @@ function MainContent({ games, setGames, sidebarIndex }) {
         case "title":
           comparison = (a.title || "").localeCompare(b.title || "");
           break;
-       
+        case "releaseDate":
+          comparison = new Date(a.releaseDate || 0) - new Date(b.releaseDate || 0);
+          break;
         case "rating":
           comparison = (a.rating || 0) - (b.rating || 0);
           break;
         case "dateAdded":
-          comparison = new Date(a.date_added || 0) - new Date(b.date_added || 0);
+          comparison = new Date(a.dateAdded || 0) - new Date(b.dateAdded || 0);
           break;
         default:
           comparison = 0;
@@ -114,6 +122,8 @@ function HeaderItem({ search, setSearch, sortBy, setSortBy, sortOrder, setSortOr
 
 function SortMenu({ sortBy, setSortBy, sortOrder, setSortOrder, onClose }) {
   const sortOptions = [
+    { value: "title", label: "Title" },
+    { value: "releaseDate", label: "Release Date" },
     { value: "rating", label: "Rating" },
     { value: "dateAdded", label: "Date Added" }
   ];
