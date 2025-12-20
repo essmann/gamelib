@@ -1,50 +1,46 @@
-export default function getLists(db) {
-  return new Promise((resolve, reject) => {
-    const sql = `
-      SELECT 
-        lists.id AS list_id,
-        lists.name AS list_name,
-        games.id AS game_id,
-        games.title AS game_title,
-        games.rating,
-        games.favorite,
-        games.date_added
-      FROM lists
-      LEFT JOIN list_items ON lists.id = list_items.list_id
-      LEFT JOIN games ON list_items.game_id = games.id
-      ORDER BY lists.name ASC, games.title ASC
-    `;
+// api/endpoints/getLists.ts
+const { List, Game } = require('../../sqlite/models/index.js');
 
-    db.all(sql, [], (err, rows) => {
-      if (err) {
-        console.error('Error fetching lists with games:', err);
-        return reject(err);
-      }
-
-      // Transform rows into structured lists with games array
-      const listsMap = {};
-      rows.forEach(row => {
-        if (!listsMap[row.list_id]) {
-          listsMap[row.list_id] = {
-            id: row.list_id,
-            name: row.list_name,
-            games: []
-          };
+/**
+ * Fetch all lists with their associated games using Sequelize
+ * @returns {Promise<Array>} Array of lists, each containing an array of games
+ */
+async function getLists() {
+  try {
+    const lists = await List.findAll({
+      include: [
+        {
+          model: Game,
+          as: 'Games',          // must match the alias in models/index.js
+          attributes: ['id', 'title', 'rating', 'favorite', 'date_added'],
+          through: { attributes: [] }, // exclude ListItem fields
+          required: false       // LEFT JOIN
         }
-
-        if (row.game_id) { // some lists might be empty
-          listsMap[row.list_id].games.push({
-            id: row.game_id,
-            title: row.game_title,
-            rating: row.rating,
-            favorite: row.favorite,
-            date_added: row.date_added,
-          });
-        }
-      });
-
-      const lists = Object.values(listsMap);
-      resolve(lists);
+      ],
+      order: [
+        ['name', 'ASC'],
+        [{ model: Game, as: 'Games' }, 'title', 'ASC']
+      ]
     });
-  });
+
+    // Transform Sequelize instances into plain objects
+    const result = lists.map(list => ({
+      id: list.id,
+      name: list.name,
+      games: list.Games.map(game => ({
+        id: game.id,
+        title: game.title,
+        rating: game.rating,
+        favorite: game.favorite,
+        date_added: game.date_added
+      }))
+    }));
+
+    return result;
+  } catch (err) {
+    console.error('Error fetching lists via Sequelize:', err.message);
+    throw err;
+  }
 }
+
+module.exports = { getLists };
