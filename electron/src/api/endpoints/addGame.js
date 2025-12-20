@@ -1,78 +1,44 @@
-import Game from "../game";
+// api/endpoints/addGame.ts
+const { Game, Poster } = require('../sqlite/models/index');
 
 /**
- * Adds a new game to the database with its poster image
- * @param {Object} db - SQLite database connection
+ * Adds a new game to the database with its poster image using Sequelize
  * @param {Object} game - Game object containing all game details
  * @returns {Promise<Game>} The newly created Game instance
  */
-async function addGame(db, game) {
-  console.log("Test");
-
-  // Convert poster to Buffer if it's a Uint8Array
-  const posterBuffer = game.poster instanceof Uint8Array ? Buffer.from(game.poster) : null;
-
-  // Ensure date_added is always set
-  game.date_added = game.date_added || new Date().toISOString();
-
-  // Exclude poster and id from the `games` table insert
-  const { poster, id, ...gameData } = game;
-
-  const columns = Object.keys(gameData);
-  const placeholders = columns.map(() => '?').join(', ');
-  const values = Object.values(gameData);
-
-  console.log(
-    'Adding game:',
-    JSON.stringify(
-      { ...gameData, poster: posterBuffer ? `<Buffer ${posterBuffer.length} bytes>` : null },
-      null,
-      2
-    )
-  );
-
+async function addGame(game) {
   try {
-    // Insert game into games table
-    const gameId = await new Promise((resolve, reject) => {
-      const sql = `INSERT INTO games (${columns.join(', ')}) VALUES (${placeholders})`;
-      db.run(sql, values, function (err) {
-        if (err) {
-          console.error('Error inserting game:', err);
-          reject(err);
-        } else {
-          console.log(`Game added with ID: ${this.lastID} (${this.changes} row(s) affected)`);
-          resolve(this.lastID);
-        }
-      });
-    });
+    console.log('Adding new game via Sequelize...');
 
-    // Insert poster into posters table (if provided)
+    // Ensure date_added is always set
+    game.date_added = game.date_added || new Date().toISOString();
+
+    // Extract poster separately
+    const posterBuffer = game.poster instanceof Uint8Array ? Buffer.from(game.poster) : null;
+    const { poster, id, ...gameData } = game;
+
+    // Create the Game instance
+    const newGame = await Game.create(gameData);
+
+    // If poster exists, create associated Poster
     if (posterBuffer) {
-      await new Promise((resolve, reject) => {
-        db.run(
-          'INSERT INTO posters (game_id, poster) VALUES (?, ?)',
-          [gameId, posterBuffer],
-          function (err) {
-            if (err) {
-              console.error('Error inserting poster:', err);
-              reject(err);
-            } else {
-              console.log(`Poster added for game ID: ${gameId} (${this.changes} row(s) affected)`);
-              resolve();
-            }
-          }
-        );
+      await Poster.create({
+        game_id: newGame.id,
+        poster: posterBuffer
       });
+      console.log(`Poster added for game ID: ${newGame.id}`);
     } else {
-      console.log('No poster provided for game ID:', gameId);
+      console.log(`No poster provided for game ID: ${newGame.id}`);
     }
 
-    console.log(`✓ Successfully added game: "${game.title}" (ID: ${gameId})`);
-    return new Game({ ...game, id: gameId });
+    console.log(`✓ Successfully added game: "${newGame.title}" (ID: ${newGame.id})`);
+
+    // Return the Game instance with poster included if needed
+    return newGame;
   } catch (err) {
-    console.error('Failed to add game:', err.message);
+    console.error('Failed to add game via Sequelize:', err.message);
     throw new Error(`Failed to add game: ${err.message}`);
   }
 }
 
-export default addGame;
+module.exports = addGame;

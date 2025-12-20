@@ -1,59 +1,64 @@
-// backend/api/endpoints/getGames.js
+// api/endpoints/getGames.ts
+const { Game, Poster } = require('../sqlite/models/index');
 
-/**
- * Fetches all games with their posters from the database
- * @param {Object} db - SQLite database connection
- * @returns {Promise<Array>} Array of game objects with poster data
- */
-async function getGames(db) {
-  console.log(db);
+export async function getGames() {
   try {
-    
-    // Get all column names from the 'games' table dynamically
-    const columns = await new Promise((resolve, reject) => {
-      db.all(`PRAGMA table_info(games);`, [], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows.map(r => r.name));
-      });
-    });
+    console.log('[getGames] Fetching all games with posters...');
 
-    const columnList = columns.map(c => `games.${c}`).join(', ');
-
-    const rows = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT 
-          ${columnList},
-          posters.id AS poster_id,
-          posters.poster
-        FROM games
-        LEFT JOIN posters ON games.id = posters.game_id`,
-        [],
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
+    const games = await Game.findAll({
+      include: [
+        {
+          model: Poster,
+          as: 'Posters',              // MUST match association alias
+          attributes: ['id', 'poster'],
+          required: false             // LEFT JOIN
         }
-      );
+      ]
     });
 
-    console.log(`Fetched ${rows.length} game(s) from the database.`);
+    console.log(`[getGames] Fetched ${games.length} game(s)`);
 
-    const gamesForLogging = rows.map(game => ({
-      ...game,
-      poster: game.poster ? `<Buffer ${game.poster.length} bytes>` : null
-    }));
+    const result = games.map((game) => {
+      const gameData = game.toJSON();
 
-    // console.log('Games data:', JSON.stringify(gamesForLogging, null, 2));
+      // Safely grab first poster (if any)
+      const poster =
+        Array.isArray(gameData.Posters) && gameData.Posters.length > 0
+          ? gameData.Posters[0]
+          : null;
 
-    // Return results
-    return rows.map(row => ({
-      ...row,
-      poster: row.poster,
-    }));
+      return {
+        id: gameData.id,
+        title: gameData.title,
+        release: gameData.release,
+        description: gameData.description,
+        rating: gameData.rating,
+        favorite: gameData.favorite,
+        isCustom: gameData.isCustom,
+        date_added: gameData.date_added,
+        genres: gameData.genres,
+        developers: gameData.developers,
+        publishers: gameData.publishers,
+        categories: gameData.categories,
+        poster_id: poster ? poster.id : null,
+        poster: poster ? poster.poster : null
+      };
+    });
+
+    // Clean logging (no huge buffers)
+    if (result.length > 0) {
+      console.log('[getGames] Sample game:', {
+        ...result[0],
+        poster: result[0].poster
+          ? `<Buffer ${result[0].poster.length} bytes>`
+          : null
+      });
+    }
+
+    return result;
 
   } catch (err) {
-    console.error('Failed to fetch games:', err.message);
-    throw new Error(`Failed to fetch games: ${err.message}`);
+    console.error('[getGames] Failed:', err);
+    throw err; // let IPC handler deal with it
   }
 }
-
-module.exports = { getGames };

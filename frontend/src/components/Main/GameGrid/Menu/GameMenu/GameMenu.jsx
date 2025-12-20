@@ -182,7 +182,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
     //update lists state with a new list (empty, no games added yet.);
     let id = lists.length + 1;
     let newList = lists;
-    newList.push({id: id, name: name, games: []});
+    newList.push({ id: id, name: name, games: [] });
     setLists(newList);
   }
 
@@ -260,6 +260,7 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                 </div>
               </div>
 
+
               <AddListMenu
                 isOpen={isListMenuOpen}
                 onClose={() => setIsListMenuOpen(false)}
@@ -284,7 +285,12 @@ export default function GameMenu({ gameData, onClose, onSave, onDelete }) {
                   <span className="sidebar_label">Change poster</span>
                 </div>
               </div>
-
+              <div className="sidebar_item flex"  >
+                <div className="item_side">
+                  <AddIcon className="sidebar_icon" />
+                  <span className="sidebar_label">Add tag</span>
+                </div>
+              </div>
               <div className="sidebar_information">
                 <div className="item_side">
                   <span className="sidebar_label">Added at {game.getDate()}</span>
