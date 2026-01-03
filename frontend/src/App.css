@@ -1264,3 +1264,17 @@ cursor: pointer;
   }
 }
 
+
+.sidebar_item > input {
+  margin-left: 1rem;
+}
+
+
+.sidebar_item > textarea {
+  margin-left: 1rem;
+
+}
+
+.poster_empty > span{
+ text-align: center;
+}

@@ -4,7 +4,7 @@ const Game = require('./Game');
 const Poster = require('./Poster');
 const List = require('./List');
 const ListItem = require('./ListItem');
-
+const Tag = require("./Tag")
 /* =========================
    Associations (WITH ALIASES)
    ========================= */
@@ -19,6 +19,8 @@ Poster.belongsTo(Game, {
   foreignKey: 'game_id',
   as: 'Game'
 });
+
+// Game ↔ Tag
 
 // List ↔ ListItem
 List.hasMany(ListItem, {
