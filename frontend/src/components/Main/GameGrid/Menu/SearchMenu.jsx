@@ -10,19 +10,47 @@ function SearchMenu({ onClose }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [isSearching, setIsSearching] = useState(false);
   const debounceRef = useRef(null);
   const inputRef = useRef(null);
   const resultsRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const pendingRequestRef = useRef(null);
 
   const handleSearch = async (q) => {
     if (q == null || q === "") {
       setResults([]);
+      setIsSearching(false);
       return;
     }
-    const searchResponse = await getExternalGames(q);
-    console.log(searchResponse);
-    setResults(searchResponse);
-    setSelectedIndex(0);
+
+    // Mark this request as pending
+    const requestId = Date.now();
+    pendingRequestRef.current = requestId;
+
+    try {
+      setIsSearching(true);
+      const searchResponse = await getExternalGames(q);
+      
+      // Only update state if this is still the latest request and component is mounted
+      if (pendingRequestRef.current === requestId && isMountedRef.current) {
+        console.log(searchResponse);
+        // Limit results to maximum of 30 games
+        const limitedResults = searchResponse.slice(0, 30);
+        setResults(limitedResults);
+        setSelectedIndex(0);
+      }
+    } catch (err) {
+      console.error("Search error:", err);
+      // Still clear searching state even on error if component is mounted
+      if (isMountedRef.current) {
+        setIsSearching(false);
+      }
+    } finally {
+      if (isMountedRef.current && pendingRequestRef.current === requestId) {
+        setIsSearching(false);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -34,21 +62,23 @@ function SearchMenu({ onClose }) {
       await handleSearch(value);
     }, 300);
   };
+
   useEffect(() => {
-    const handleFocus = () => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
+    // Auto-focus on mount only
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
+    isMountedRef.current = true;
+
+    // Cleanup on unmount
+    return () => {
+      isMountedRef.current = false;
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      pendingRequestRef.current = null;
     };
-
-    // Focus on mount
-    handleFocus();
-
-    // Refocus if focus is lost
-    const interval = setInterval(handleFocus, 100);
-
-    return () => clearInterval(interval);
   }, []);
+
   const handleKeyDown = (e) => {
     console.log(e.key);
     if (results.length === 0) return;
@@ -69,18 +99,19 @@ function SearchMenu({ onClose }) {
     console.log("Selected game:", game);
     setAddGameMenu(game);
     onClose();
-    // Add your submission logic here
   };
 
+  // Scroll to selected item only, without smooth animation
   useEffect(() => {
     console.log("Selected index changed:", selectedIndex);
     if (selectedIndex >= 0 && resultsRef.current) {
       resultsRef.current.classList.add("selected");
       const items = resultsRef.current.querySelectorAll(".result_item");
       if (items[selectedIndex]) {
+        // Use auto instead of smooth to avoid animation frame locks
         items[selectedIndex].scrollIntoView({
           block: "nearest",
-          behavior: "smooth",
+          behavior: "auto",
         });
       }
     }
