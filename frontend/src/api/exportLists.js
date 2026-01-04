@@ -1,11 +1,19 @@
 export default function exportLists(lists) {
-  // Convert lists array to JSON string
-   lists = lists.map((game) => {
-    list = { ...game, poster: game.getPosterAsBase64() };
-    return game;
-  })
+  // Convert lists array, stripping IDs for fresh autoincrement on import
+  const processedLists = lists.map((list) => {
+    const { id, ...listWithoutId } = list; // Remove id
+    // Also remove game IDs from the games array in the list
+    const processedGames = (listWithoutId.games || []).map((game) => {
+      const { id: gameId, ...gameWithoutId } = game;
+      return gameWithoutId;
+    });
+    return {
+      ...listWithoutId,
+      games: processedGames
+    };
+  });
 
- const jsonString = JSON.stringify(lists, null, 2);
+  const jsonString = JSON.stringify(processedLists, null, 2);
   // Create a Blob from the JSON string
   const blob = new Blob([jsonString], { type: 'application/json' });
 

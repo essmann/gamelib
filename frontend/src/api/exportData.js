@@ -1,11 +1,13 @@
 export default function exportData(games, lists) {
-  // Convert games array with poster as base64
-  const processedGames = games.map((game) => ({
-    ...game,
-    poster: game.getPosterAsBase64()
-  }));
+  // Convert games array with poster as base64, stripping IDs for fresh autoincrement on import
+  const processedGames = games.map((game) => {
+    const { id, ...gameWithoutId } = game; // Remove id
+    return {
+      ...gameWithoutId,
+      poster: game.getPosterAsBase64()
+    };
+  });
 
- 
   // Combine both into a single object
   const exportData = {
     games: processedGames,

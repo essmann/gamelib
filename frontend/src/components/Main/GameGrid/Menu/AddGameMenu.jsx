@@ -15,7 +15,7 @@ const MAX_RATING = 10;
 export default function AddGameMenu({ data, onClose }) {
   const fileInputRef = useRef(null);
   const { setAddGameMenu, setGames } = useContext(GameContext);
-''
+
   const [posterFile, setPosterFile] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [game, setGame] = useState(() => {

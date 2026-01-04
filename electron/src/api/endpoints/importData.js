@@ -17,7 +17,7 @@ async function importData(jsonString) {
     // Start transaction for safety
     transaction = await sequelize.transaction();
 
-    console.log('Clearing existing games, posters, lists, and list items...');
+    console.log('[IMPORT] Clearing existing games, posters, lists, and list items...');
 
     // Clear old data safely (Order matters for Foreign Key constraints)
     await ListItem.destroy({ where: {}, transaction });
@@ -25,17 +25,45 @@ async function importData(jsonString) {
     await Game.destroy({ where: {}, transaction });
     await List.destroy({ where: {}, transaction });
 
-    console.log('Inserting new games and posters...');
+    console.log('[IMPORT] Resetting autoincrement sequences...');
+    
+    // Reset SQLite sequences to start from 1 by setting seq to 0
+    // This clears the sqlite_sequence table entries, allowing autoincrement to restart at 1
+    await sequelize.query('UPDATE sqlite_sequence SET seq = 0 WHERE name IN (?, ?, ?)', {
+      replacements: ['games', 'lists', 'posters'],
+      transaction
+    });
+    
+    // Also delete any rows that might not match (in case of different case or naming)
+    await sequelize.query('DELETE FROM sqlite_sequence WHERE name IN (?, ?, ?)', {
+      replacements: ['games', 'lists', 'posters'],
+      transaction
+    });
+    
+    // Verify reset by checking sqlite_sequence
+    const seqCheck = await sequelize.query('SELECT * FROM sqlite_sequence', { transaction });
+    console.log('[IMPORT] sqlite_sequence after reset:', seqCheck[0]);
+
+    console.log('[IMPORT] Inserting new games and posters...');
+
+    // Map old IDs to new IDs for list linkage
+    const idMap = {}; // Maps old game ID -> new game ID
 
     // Insert games and their posters
     for (const game of data.games) {
-      const { poster, ...gameData } = game;
+      const { poster, id: oldId, ...gameData } = game; // Extract and discard the old ID
 
       // Ensure date_added is set
       gameData.date_added = gameData.date_added || new Date().toISOString();
 
-      // Create Game
+      // Create Game - let Sequelize autoincrement the ID
       const newGame = await Game.create(gameData, { transaction });
+      
+      // Map old ID to new ID for later list linkage
+      if (oldId) {
+        idMap[oldId] = newGame.id;
+        console.log(`[IMPORT] Mapped game ID ${oldId} -> ${newGame.id}`);
+      }
 
       // Create Poster if exists
       if (poster) {
@@ -68,34 +96,39 @@ async function importData(jsonString) {
       }
     }
 
-    console.log('Inserting new lists...');
+    console.log('[IMPORT] Inserting new lists...');
 
     // Insert lists and link games
     for (const list of data.lists) {
-      const { games: listGames = [], ...listData } = list;
+      const { games: listGames = [], id: oldListId, ...listData } = list; // Remove old list ID
 
+      // Create new list with autoincremented ID
       const newList = await List.create(listData, { transaction });
+      
+      console.log(`[IMPORT] Created list "${newList.name}" with ID ${newList.id}` + (oldListId ? ` (mapped from ${oldListId})` : ''));
 
-      // Link games via ListItem
+      // Link games via ListItem using the ID map
       for (const entry of listGames) {
+        // Find the new game ID using the mapping
+        const newGameId = idMap[entry.id] || entry.id;
+        
         // Ensure the game exists in our newly created games
-        // entry.id should correspond to the IDs provided in the import data
-        const gameExists = await Game.findByPk(entry.id, { transaction });
+        const gameExists = await Game.findByPk(newGameId, { transaction });
         
         if (gameExists) {
           await ListItem.create(
-            { list_id: newList.id, game_id: entry.id },
+            { list_id: newList.id, game_id: newGameId },
             { transaction }
           );
         } else {
-          console.warn(`Warning: Game ID ${entry.id} not found. Skipping list entry.`);
+          console.warn(`[IMPORT] Warning: Game ID ${newGameId} (mapped from ${entry.id}) not found. Skipping list entry.`);
         }
       }
     }
 
     // Commit transaction
     await transaction.commit();
-    console.log('✓ Import completed successfully.');
+    console.log('[IMPORT] ✓ Import completed successfully. All IDs reset and autoincrement now starts at 1.');
   } catch (err) {
     // Rollback on any failure
     if (transaction) await transaction.rollback();
