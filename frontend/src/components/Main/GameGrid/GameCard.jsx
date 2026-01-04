@@ -29,7 +29,7 @@ function GameCard({ game }) {
       <div className="game_card " onClick={onClick}>
         <img
           className="game_card_image"
-          src={game.getPosterURL() || ""}
+          src={game?.getPosterURL() || ""}
           alt={game.title}
         />
         <div className="title_overlay">{game.title}</div>

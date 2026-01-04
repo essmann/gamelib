@@ -3,17 +3,17 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const addGame = async (game) => {
   console.log("Adding game:", game);
 
-  // Generate ID for custom games if missing
-  if (game.isCustom && game.id == null) {
-    game.id = Math.floor(Math.random() * 1_000_000);
-    console.log("Assigned new custom game ID:", game.id);
-  }
+  // Create a clean copy without ID from external source to ensure autoincrement
+  const gameToAdd = { ...game };
+  delete gameToAdd.id; // Remove any ID (especially from external games)
 
   // 1️⃣ Add locally
-  await localAdd(game);
+  const addedGame = await localAdd(gameToAdd);
 
   // 2️⃣ Add to backend
-  // await backendAdd(game);
+  // await backendAdd(gameToAdd);
+
+  return addedGame;
 };
 
 export default addGame;
@@ -21,10 +21,12 @@ export default addGame;
 // --- Local add ---
 async function localAdd(game) {
   try {
-    await window.api.addGame(game);
-    console.log("✅ Added locally.");
+    const addedGame = await window.api.addGame(game);
+    console.log("✅ Added locally with ID:", addedGame.id);
+    return addedGame;
   } catch (err) {
     console.warn("⚠️ Local add failed:", err);
+    throw err;
   }
 }
 

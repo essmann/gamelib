@@ -1,6 +1,6 @@
 import MenuContainer from "../../../MenuContainer";
 import AddIcon from "@mui/icons-material/Add";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import getExternalGames from "../../../../api/endpoints/getExternalGames";
 import getExternalGameById from "../../../../api/endpoints/getExternalGameById";
 import { useContext } from "react";
@@ -12,6 +12,7 @@ function SearchMenu({ onClose }) {
   const [results, setResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const debounceRef = useRef(null);
   const inputRef = useRef(null);
   const resultsRef = useRef(null);
@@ -96,8 +97,15 @@ function SearchMenu({ onClose }) {
     }
   };
 
-  const handleSubmit = async (game) => {
+  const handleSubmit = useCallback(async (game) => {
+    // Prevent multiple simultaneous submissions
+    if (isSubmitting) {
+      console.warn("Submission already in progress");
+      return;
+    }
+
     console.log("Selected game:", game);
+    setIsSubmitting(true);
     try {
       // Fetch full game details by ID
       const fullGame = await getExternalGameById(game.id);
@@ -111,9 +119,11 @@ function SearchMenu({ onClose }) {
     } catch (err) {
       console.error("Error fetching full game data:", err);
       setAddGameMenu(game);
+    } finally {
+      setIsSubmitting(false);
+      onClose();
     }
-    onClose();
-  };
+  }, [isSubmitting, setAddGameMenu, onClose]);
 
   // Scroll to selected item only, without smooth animation
   useEffect(() => {
@@ -158,6 +168,7 @@ function SearchMenu({ onClose }) {
           array={results}
           selectedIndex={selectedIndex}
           onSelect={handleSubmit}
+          isSubmitting={isSubmitting}
         />
       </div>
     </MenuContainer>
@@ -166,18 +177,19 @@ function SearchMenu({ onClose }) {
 
 export default SearchMenu;
 
-function Result({ game, isSelected, onClick }) {
+function Result({ game, isSelected, onClick, isDisabled }) {
   return (
     <div
-      className={`result_item ${isSelected ? "selected" : ""}`}
-      onClick={onClick}
+      className={`result_item ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""}`}
+      onClick={() => !isDisabled && onClick()}
+      style={{ pointerEvents: isDisabled ? "none" : "auto", opacity: isDisabled ? 0.6 : 1 }}
     >
       <div className="result_title">{game.title}</div>
     </div>
   );
 }
 
-function SearchResults({ array = [], selectedIndex, onSelect }) {
+function SearchResults({ array = [], selectedIndex, onSelect, isSubmitting }) {
   return (
     <div className="search_results">
       {array.map((game, i) => (
@@ -186,6 +198,7 @@ function SearchResults({ array = [], selectedIndex, onSelect }) {
           game={game}
           isSelected={i === selectedIndex}
           onClick={() => onSelect(game)}
+          isDisabled={isSubmitting}
         />
       ))}
     </div>

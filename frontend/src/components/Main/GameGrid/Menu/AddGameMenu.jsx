@@ -15,13 +15,15 @@ const MAX_RATING = 10;
 export default function AddGameMenu({ data, onClose }) {
   const fileInputRef = useRef(null);
   const { setAddGameMenu, setGames } = useContext(GameContext);
-
+''
   const [posterFile, setPosterFile] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [game, setGame] = useState(() => {
     if (typeof data === "object" && data !== null) {
       try {
-        return new Game(data);
+        // Create a copy without the external ID to ensure autoincrement on save
+        const { id, ...gameDataWithoutId } = data;
+        return new Game(gameDataWithoutId);
       } catch (err) {
         console.error("Invalid game data passed:", err);
       }
@@ -79,8 +81,9 @@ export default function AddGameMenu({ data, onClose }) {
 
     setIsSaving(true);
     try {
-      await addGame(game);
-      setGames(prev => [...prev, game]);
+      let newGame = await addGame(game);
+      newGame = new Game(newGame);
+      setGames(prev => [...prev, newGame]);
       setAddGameMenu(false);
     } catch (err) {
       console.error(err);

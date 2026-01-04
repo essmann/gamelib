@@ -4,7 +4,8 @@ const Game = require('./Game');
 const Poster = require('./Poster');
 const List = require('./List');
 const ListItem = require('./ListItem');
-const Tag = require("./Tag")
+const Tag = require("./Tag");
+
 /* =========================
    Associations (WITH ALIASES)
    ========================= */
@@ -64,16 +65,43 @@ List.belongsToMany(Game, {
 
 async function initDatabase() {
   try {
+    console.log('[INIT] Authenticating database connection...');
     await sequelize.authenticate();
-    console.log('Database connection established successfully.');
+    console.log('[INIT] Database connection established successfully.');
 
+    console.log('[INIT] Setting PRAGMA foreign_keys = ON...');
     await sequelize.query('PRAGMA foreign_keys = ON');
-    await sequelize.sync();
+    
+    console.log('[INIT] Starting model synchronization...');
+    console.log('[INIT] Models to sync:', [
+      'Game',
+      'Poster', 
+      'List',
+      'ListItem',
+      'Tag'
+    ]);
+    
+    // Sync all models
+    await sequelize.sync({ alter: false });
 
-    console.log('All models synchronized successfully.');
-    console.log('Game associations:', Object.keys(Game.associations));
+    console.log('[INIT] All models synchronized successfully.');
+    console.log('[INIT] Checking model definitions...');
+    
+    // Verify models are defined
+    const models = sequelize.models;
+    console.log('[INIT] Models registered:', Object.keys(models));
+    
+    if (models.Game) {
+      console.log('[INIT] Game model found - table name:', models.Game.tableName);
+      console.log('[INIT] Game attributes:', Object.keys(models.Game.rawAttributes));
+    } else {
+      console.warn('[INIT] Game model NOT found!');
+    }
+    
+    console.log('[INIT] Game associations:', Object.keys(Game.associations));
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('[INIT] Database initialization error:', error);
+    throw error;
   }
 }
 
@@ -83,5 +111,6 @@ module.exports = {
   Poster,
   List,
   ListItem,
+  Tag,
   initDatabase
 };
