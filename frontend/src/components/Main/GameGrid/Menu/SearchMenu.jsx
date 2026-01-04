@@ -2,6 +2,7 @@ import MenuContainer from "../../../MenuContainer";
 import AddIcon from "@mui/icons-material/Add";
 import { useState, useEffect, useRef } from "react";
 import getExternalGames from "../../../../api/endpoints/getExternalGames";
+import getExternalGameById from "../../../../api/endpoints/getExternalGameById";
 import { useContext } from "react";
 import { GameContext } from "../../../../Context/ContextProvider";
 
@@ -95,9 +96,22 @@ function SearchMenu({ onClose }) {
     }
   };
 
-  const handleSubmit = (game) => {
+  const handleSubmit = async (game) => {
     console.log("Selected game:", game);
-    setAddGameMenu(game);
+    try {
+      // Fetch full game details by ID
+      const fullGame = await getExternalGameById(game.id);
+      if (fullGame) {
+        console.log("Full game data:", fullGame);
+        setAddGameMenu(fullGame);
+      } else {
+        console.warn("Failed to fetch full game details, using search result");
+        setAddGameMenu(game);
+      }
+    } catch (err) {
+      console.error("Error fetching full game data:", err);
+      setAddGameMenu(game);
+    }
     onClose();
   };
 

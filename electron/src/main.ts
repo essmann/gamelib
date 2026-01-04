@@ -9,6 +9,7 @@ import { updateGame } from "./api/endpoints/updateGame";
 import { deleteGame } from "./api/endpoints/deleteGame";
 import { getGames } from "./api/endpoints/getGames";
 import { getExternalGames } from "./api/endpoints/getExternalGames";
+import { getExternalGameById } from "./api/endpoints/getExternalGameById";
 import { importData } from "./api/endpoints/importData";
 
 // // Lists
@@ -88,6 +89,19 @@ ipcMain.handle("get-external-games", async (event, prefix: string) => {
     return extGames;
   } catch (err) {
     console.error("[IPC] get-external-games error:", err);
+    throw err;
+  }
+});
+
+ipcMain.handle("get-external-game-by-id", async (event, id: number | string) => {
+  console.log("[IPC] get-external-game-by-id called with id:", id);
+  const start = Date.now();
+  try {
+    const game = await getExternalGameById(external_db, id);
+    console.log(`[IPC] get-external-game-by-id fetched game in ${(Date.now() - start) / 1000}s`);
+    return game;
+  } catch (err) {
+    console.error("[IPC] get-external-game-by-id error:", err);
     throw err;
   }
 });

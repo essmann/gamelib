@@ -21,6 +21,10 @@ contextBridge.exposeInMainWorld('api', {
     console.log('[PRELOAD] getExternalGames called, prefix:', prefix);
     return ipcRenderer.invoke('get-external-games', prefix);
   },
+  getExternalGameById: (id) => {
+    console.log('[PRELOAD] getExternalGameById called, id:', id);
+    return ipcRenderer.invoke('get-external-game-by-id', id);
+  },
   register: (formData) => {
     console.log('[PRELOAD] register called:', formData);
     return ipcRenderer.invoke('register', formData);
