@@ -83,6 +83,8 @@ export default function AddGameMenu({ data, onClose }) {
     try {
       let newGame = await addGame(game);
       newGame = new Game(newGame);
+      newGame.poster = game.poster; // Retain poster in the instance
+      console.log("Added new game:", newGame);
       setGames(prev => [...prev, newGame]);
       setAddGameMenu(false);
     } catch (err) {
