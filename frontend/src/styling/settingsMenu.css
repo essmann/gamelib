@@ -1,0 +1,290 @@
+.settings_container {
+  min-width: 700px;
+  margin: 0 auto;
+}
+
+.settings_menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  background: var(--color-dark);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-hover);
+  min-height: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Header */
+.settings_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-hover);
+  flex-shrink: 0;
+}
+
+.settings_header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.settings_icon {
+  color: var(--rating-pink);
+  font-size: 28px;
+}
+
+/* Main Content Area */
+.settings_main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Sidebar */
+.settings_sidebar {
+  width: 200px;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--color-hover);
+  padding: 12px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.settings_nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings_nav_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.settings_nav_item:hover {
+  background: var(--color-hover);
+  color: var(--text-1);
+}
+
+.settings_nav_item.active {
+  background: var(--rating-pink);
+  color: var(--white);
+}
+
+.settings_nav_item .nav_icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* Content Area */
+.settings_content {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings_content_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings_content_section h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* Group */
+.settings_group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings_label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Select */
+.settings_select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  background: var(--color-dark);
+  color: var(--white);
+  border: 1px solid var(--color-hover);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings_select:hover {
+  border-color: var(--rating-pink);
+}
+
+.settings_select:focus {
+  border-color: var(--rating-pink);
+  box-shadow: 0 0 0 3px rgba(252, 99, 153, 0.1);
+}
+
+.settings_select option {
+  background: var(--color-dark);
+  color: var(--white);
+}
+
+/* Checkbox */
+.settings_checkbox_label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-1);
+  transition: color 0.2s;
+}
+
+.settings_checkbox_label:hover {
+  color: var(--white);
+}
+
+.settings_checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--rating-pink);
+}
+
+/* Button */
+.settings_button {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--rating-pink);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings_button:hover {
+  background: var(--darker-pink);
+  transform: translateY(-1px);
+}
+
+.settings_button:active {
+  transform: translateY(0);
+}
+
+.clear_cache_btn {
+  width: 100%;
+  background: var(--darker-pink);
+}
+
+.clear_cache_btn:hover {
+  background: #d63a5a;
+}
+
+/* Info */
+.settings_info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings_info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-1);
+}
+
+.settings_info_secondary {
+  color: #6b7280;
+}
+
+/* Footer */
+.settings_footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-hover);
+  background: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.settings_close_button {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  background: transparent;
+  border: 1px solid var(--color-hover);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.settings_close_button:hover {
+  background: var(--color-hover);
+  color: var(--white);
+  border-color: var(--rating-pink);
+}
+
+.settings_close_button:active {
+  transform: translateY(1px);
+}
+
+/* Scrollbar Styling */
+.settings_sidebar::-webkit-scrollbar,
+.settings_content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.settings_sidebar::-webkit-scrollbar-track,
+.settings_content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings_sidebar::-webkit-scrollbar-thumb,
+.settings_content::-webkit-scrollbar-thumb {
+  background: var(--color-hover);
+  border-radius: 4px;
+}
+
+.settings_sidebar::-webkit-scrollbar-thumb:hover,
+.settings_content::-webkit-scrollbar-thumb:hover {
+  background: var(--rating-pink);
+}

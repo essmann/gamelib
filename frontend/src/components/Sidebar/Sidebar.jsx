@@ -68,7 +68,7 @@ function ListItem({
 // Main sidebar component
 function Sidebar({ setIndex, currentIndex, indexEnum }) {
   const [collapsed, setCollapsed] = useState(true);
-  const { lists, games, setListMenu } = useContext(GameContext);
+  const { lists, games, setListMenu, setSettingsMenu } = useContext(GameContext);
   
   async function onImport() {
     try {
@@ -101,7 +101,7 @@ function Sidebar({ setIndex, currentIndex, indexEnum }) {
           <ListItem title="Export" icon={UploadIcon} index={102} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={() => exportData(games, lists)} />
         </div>
 
-        <ListItem title="Settings" icon={SettingsIcon} index={indexEnum.settings || 99} currentIndex={currentIndex} setIndex={setIndex} count={false} />
+        <ListItem title="Settings" icon={SettingsIcon} index={indexEnum.settings || 99} currentIndex={currentIndex} setIndex={setIndex} count={false} onClick={()=>setSettingsMenu(true)} />
       </div>
     </div>
   );

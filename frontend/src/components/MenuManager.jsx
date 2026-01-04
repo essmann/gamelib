@@ -11,12 +11,14 @@ import { UserContext } from "../Context/UserContextProvider";
 import ProfileMenu from "./ProfileMenu";
 import logout from "../api/endpoints/auth/logout";
 import GameListMenu from "./GameListMenu";
+import SettingsMenu from "./SettingsMenu";
 import addList from "../api/endpoints/addList";
 function MenuManager() {
   const {
     previewGameData,
     setPreviewGameData,
     addGameMenu,
+    setAddGameMenu,
     searchMenu,
     setSearchMenu,
     loginMenu, setLoginMenu,
@@ -24,6 +26,7 @@ function MenuManager() {
     profileMenu, setProfileMenu,
     listMenu, setListMenu,
     lists, setLists,
+    settingsMenu, setSettingsMenu,
   } = useContext(GameContext);
   const handleCloseGameMenu = () => {
     setPreviewGameData(null);
@@ -38,7 +41,7 @@ function MenuManager() {
   return (
     <>
     
-      {addGameMenu && <AddGameMenu data={addGameMenu} />}
+      {addGameMenu && <AddGameMenu data={addGameMenu} onClose={()=>setAddGameMenu(false)} />}
       {previewGameData && (
         <GameMenu
           gameData={previewGameData}
@@ -71,6 +74,7 @@ function MenuManager() {
           let list = await addList(name);
           setLists((prev)=>[...prev, list]);
       }}/>}
+      {settingsMenu && <SettingsMenu onClose={()=>setSettingsMenu(false)} />}
 
       
     </>
