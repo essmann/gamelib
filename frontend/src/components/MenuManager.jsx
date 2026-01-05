@@ -13,6 +13,7 @@ import logout from "../api/endpoints/auth/logout";
 import GameListMenu from "./GameListMenu";
 import SettingsMenu from "./SettingsMenu";
 import addList from "../api/endpoints/addList";
+import deleteList from "../api/endpoints/deleteList";
 function MenuManager() {
   const {
     previewGameData,
@@ -73,6 +74,10 @@ function MenuManager() {
       {listMenu && <GameListMenu lists={lists} onClose={()=>setListMenu(false)} onCreateList={async (name)=>{
           let list = await addList(name);
           setLists((prev)=>[...prev, list]);
+      }}
+      onDeleteList={async (id)=>{
+        await deleteList(id);
+        setLists((prev)=>prev.filter((list)=>list.id !== id));
       }}/>}
       {settingsMenu && <SettingsMenu onClose={()=>setSettingsMenu(false)} />}
 

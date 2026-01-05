@@ -46,7 +46,7 @@ function GameListMenu({ lists, onClose, onCreateList, onDeleteList }) {
                         <div className="empty-state">No lists yet</div>
                     ) : (
                         lists.map((list) => (
-                            <GameList key={list.id} list={list} onDelete={onDeleteList} />
+                            <GameList key={list.id} list={list} onDelete={() => onDeleteList(list.id)} />
                         ))
                     )}
 
