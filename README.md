@@ -1,48 +1,7 @@
 # Gamelib
 
 A desktop application for managing your video game library with a modern, intuitive interface built with Electron, React, and SQLite.
-
-![Project Banner](https://cdn.discordapp.com/attachments/1408187040302104586/1432638163024609300/image.png?ex=6901c7c3&is=69007643&hm=eb9f21bdc2be1a0bc6bbc40cbc0a65c0b2280d212fd265ba70578be8505e1855&)
-
-## Features
-
-- 🎮 **Game Management**: Add, update, delete, and organize your game collection
-- 📋 **Custom Lists**: Create and manage personalized game lists
-- 🔐 **User Authentication**: Register and login to maintain your personal library
-- 🌐 **External Game Integration**: Import games from external sources
-- 💾 **Data Persistence**: Local SQLite database for offline access
-- 📤 **Import/Export**: Import and export your game library data
-- 🎨 **Modern UI**: Clean and responsive interface powered by Material-UI
-
-## Project Structure
-
-```
-gamelib/
-├── electron/                 # Backend (Electron main process)
-│   ├── src/
-│   │   ├── main.ts          # Electron main process entry
-│   │   ├── preload.js       # Preload script for IPC bridge
-│   │   └── api/
-│   │       ├── game.ts      # Game API handlers
-│   │       ├── endpoints/   # API endpoints
-│   │       ├── helper/      # Utility functions
-│   │       └── sqlite/      # Database configuration & models
-│   └── __tests__/           # Backend tests
-│
-├── frontend/                # Frontend (React + Vite)
-│   ├── src/
-│   │   ├── main.jsx         # Entry point
-│   │   ├── App.jsx          # Main component
-│   │   ├── components/      # React components
-│   │   ├── api/             # Frontend API calls
-│   │   ├── Context/         # React context providers
-│   │   └── styling/         # CSS modules
-│   └── public/              # Static assets
-│
-├── package.json             # Root configuration
-├── tsconfig.json            # TypeScript configuration
-└── README.md               # This file
-```
+<img width="1920" height="983" alt="image" src="https://github.com/user-attachments/assets/9b24e094-b33c-4043-b9a8-344c4f7fe8df" />
 
 ## Tech Stack
 
@@ -139,10 +98,6 @@ The preload script (`electron/src/preload.js`) exposes the following API methods
 - `api.deleteGame(id)` - Delete a game
 - `api.getExternalGames(prefix)` - Fetch external game data
 
-### User Authentication
-- `api.register(formData)` - Register new user
-- `api.login(formData)` - Login user
-
 ### List Management
 - `api.addList(name)` - Create a new list
 - `api.getLists()` - Retrieve all lists
@@ -157,7 +112,7 @@ The preload script (`electron/src/preload.js`) exposes the following API methods
 
 The application uses SQLite for local data persistence:
 - `games.db` - Main game library database
-- `external_games.db` - External game data
+- `external_games.db` - External game data for autocomplete and such
 
 Database schema includes models for:
 - **Game**: Game information, metadata, and user ratings
@@ -186,14 +141,6 @@ essmann
 
 [GitHub - essmann/gamelib](https://github.com/essmann/gamelib)
 
-## Known Issues & Future Work
-
-- Database optimization needed (see TODO.txt)
-- Consider reducing database bloat by storing minimal game information
-
----
-
-**Happy gaming!** 🎮
 
 
 
