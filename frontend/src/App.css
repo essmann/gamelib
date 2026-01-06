@@ -1278,3 +1278,6 @@ cursor: pointer;
 .poster_empty > span{
  text-align: center;
 }
+textarea:focus, input:focus{
+    outline: none !important;
+}
