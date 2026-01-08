@@ -13,13 +13,25 @@ function MainContent({ games, setGames, sidebarIndex }) {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortBy, setSortBy] = useState("title");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [viewGames, setViewGames] = useState(games);
+
   const [filters, setFilters] = useState({
     platforms: [],
     genres: [],
     ratingRange: [0, 10],
     yearRange: [1980, new Date().getFullYear()]
   });
-  
+  useEffect(() => {
+    setViewGames(games);
+  }, [games])
+  useEffect(() => {
+    console.log("Sort called: " + sortBy);
+    console.log("Sorting games...");
+    const sorted = sortGames(viewGames);
+    setViewGames(sorted);
+    console.log("Games sorted.");
+  }, [sortBy, sortOrder]);
+
   // Debounce effect
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -28,15 +40,13 @@ function MainContent({ games, setGames, sidebarIndex }) {
     return () => clearTimeout(handler);
   }, [search]);
 
-  useEffect(() => {
- console.log("Rendered MainContent");
-},[]);
+
   //takes very little time, returns immediately an array of the sorted games.
   const sortGames = (gamesToSort) => {
     let sort_start = Date.now() * 1000;
     let sorted_games = [...gamesToSort].sort((a, b) => {
       let comparison = 0;
-      
+
       switch (sortBy) {
         case "title":
           comparison = (a.title || "").localeCompare(b.title || "");
@@ -55,7 +65,7 @@ function MainContent({ games, setGames, sidebarIndex }) {
       }
       return sortOrder === "asc" ? comparison : -comparison;
     });
-    
+
     console.log("added sort time:", Date.now() * 1000 - sort_start);
     console.log("sorted games:", sorted_games);
     return sorted_games;
@@ -63,8 +73,8 @@ function MainContent({ games, setGames, sidebarIndex }) {
 
   return (
     <div className="main_content">
-      <HeaderItem 
-        search={search} 
+      <HeaderItem
+        search={search}
         setSearch={setSearch}
         sortBy={sortBy}
         setSortBy={setSortBy}
@@ -72,15 +82,15 @@ function MainContent({ games, setGames, sidebarIndex }) {
         setSortOrder={setSortOrder}
       />
       {sidebarIndex === 0 && (
-        <GameGrid 
-          games={sortGames(games)} 
-          setGames={setGames} 
-          search={debouncedSearch} 
+        <GameGrid
+          games={viewGames}
+          setGames={setGames}
+          search={debouncedSearch}
         />
       )}
       {sidebarIndex === 1 && (
         <GameGrid
-          games={sortGames(games.filter((game) => game.favorite && game.title?.toLowerCase().includes(debouncedSearch.toLowerCase())))}
+          games={viewGames.filter((game) => game.favorite && game.title?.toLowerCase().includes(debouncedSearch.toLowerCase()))}
           setGames={setGames}
           search={debouncedSearch}
         />
@@ -115,7 +125,7 @@ function HeaderItem({ search, setSearch, sortBy, setSortBy, sortOrder, setSortOr
           Sort
         </button>
         {sortMenuOpen && (
-          <SortMenu 
+          <SortMenu
             sortBy={sortBy}
             setSortBy={setSortBy}
             sortOrder={sortOrder}
