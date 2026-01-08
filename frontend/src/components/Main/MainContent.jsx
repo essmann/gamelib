@@ -28,8 +28,13 @@ function MainContent({ games, setGames, sidebarIndex }) {
     return () => clearTimeout(handler);
   }, [search]);
 
+  useEffect(() => {
+ console.log("Rendered MainContent");
+},[]);
+  //takes very little time, returns immediately an array of the sorted games.
   const sortGames = (gamesToSort) => {
-    return [...gamesToSort].sort((a, b) => {
+    let sort_start = Date.now() * 1000;
+    let sorted_games = [...gamesToSort].sort((a, b) => {
       let comparison = 0;
       
       switch (sortBy) {
@@ -48,9 +53,12 @@ function MainContent({ games, setGames, sidebarIndex }) {
         default:
           comparison = 0;
       }
-      
       return sortOrder === "asc" ? comparison : -comparison;
     });
+    
+    console.log("added sort time:", Date.now() * 1000 - sort_start);
+    console.log("sorted games:", sorted_games);
+    return sorted_games;
   };
 
   return (

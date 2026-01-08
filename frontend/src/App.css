@@ -1281,3 +1281,15 @@ cursor: pointer;
 textarea:focus, input:focus{
     outline: none !important;
 }
+
+.sidebar_item >.list_item_icon {
+  color: rgb(219, 215, 215) !important;
+}
+.sidebar_item{
+  color: rgb(219, 215, 215) !important;
+
+}
+.Settings {
+  border: none !important;
+  margin-left: 0.75rem !important;
+}
